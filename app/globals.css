@@ -1,0 +1,207 @@
+@import "tailwindcss";
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(215 69% 20%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(215 69% 20%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(215 69% 20%);
+  --primary: hsl(215 69% 20%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(215 30% 96%);
+  --secondary-foreground: hsl(215 69% 20%);
+  --muted: hsl(215 30% 96%);
+  --muted-foreground: hsl(215 16% 47%);
+  --accent: hsl(215 30% 96%);
+  --accent-foreground: hsl(215 69% 20%);
+  --destructive: hsl(0 100% 50%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(215 32% 91%);
+  --input: hsl(215 32% 91%);
+  --ring: hsl(215 69% 20%);
+  --radius: 0.75rem;
+  --chart-1: hsl(0 100% 50%);
+  --chart-2: hsl(215 69% 20%);
+  --chart-3: hsl(215 69% 35%);
+  --chart-4: hsl(215 50% 50%);
+  --chart-5: hsl(0 70% 60%);
+}
+
+.dark {
+  --background: hsl(222.2 84% 4.9%);
+  --foreground: hsl(210 40% 98%);
+  --card: hsl(222.2 84% 4.9%);
+  --card-foreground: hsl(210 40% 98%);
+  --popover: hsl(222.2 84% 4.9%);
+  --popover-foreground: hsl(210 40% 98%);
+  --primary: hsl(210 40% 98%);
+  --primary-foreground: hsl(222.2 47.4% 11.2%);
+  --secondary: hsl(217.2 32.6% 17.5%);
+  --secondary-foreground: hsl(210 40% 98%);
+  --muted: hsl(217.2 32.6% 17.5%);
+  --muted-foreground: hsl(215 20.2% 65.1%);
+  --accent: hsl(217.2 32.6% 17.5%);
+  --accent-foreground: hsl(210 40% 98%);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(217.2 32.6% 17.5%);
+  --input: hsl(217.2 32.6% 17.5%);
+  --ring: hsl(212.7 26.8% 83.9%);
+  --chart-1: hsl(220 70% 50%);
+  --chart-2: hsl(160 60% 45%);
+  --chart-3: hsl(30 80% 55%);
+  --chart-4: hsl(280 65% 60%);
+  --chart-5: hsl(340 75% 55%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-white: hsl(0 0% 100%);
+  --color-black: hsl(0 0% 0%);
+
+  /* Vastgoed Exclusief Primary Blue: #102c54 */
+  --color-brand: hsl(215 69% 20%);
+  --color-brand-50: hsl(215 69% 97%);
+  --color-brand-100: hsl(215 69% 93%);
+  --color-brand-200: hsl(215 69% 85%);
+  --color-brand-300: hsl(215 69% 70%);
+  --color-brand-400: hsl(215 69% 55%);
+  --color-brand-500: hsl(215 69% 40%);
+  --color-brand-600: hsl(215 69% 30%);
+  --color-brand-700: hsl(215 69% 20%);
+  --color-brand-800: hsl(215 69% 15%);
+  --color-brand-900: hsl(215 69% 10%);
+
+  /* Vastgoed Exclusief Accent Red: #FF0000 */
+  --color-accent-red: hsl(0 100% 50%);
+  --color-accent-red-50: hsl(0 100% 97%);
+  --color-accent-red-100: hsl(0 100% 93%);
+  --color-accent-red-200: hsl(0 100% 85%);
+  --color-accent-red-300: hsl(0 100% 70%);
+  --color-accent-red-400: hsl(0 100% 60%);
+  --color-accent-red-500: hsl(0 100% 50%);
+  --color-accent-red-600: hsl(0 90% 45%);
+  --color-accent-red-700: hsl(0 80% 40%);
+
+  --color-slate-50: hsl(210 40% 98%);
+  --color-slate-100: hsl(210 40% 96.1%);
+  --color-slate-200: hsl(214.3 31.8% 91.4%);
+  --color-slate-300: hsl(212.7 26.8% 83.9%);
+  --color-slate-400: hsl(215.4 16.3% 46.9%);
+  --color-slate-500: hsl(215.3 19.3% 34.5%);
+  --color-slate-600: hsl(215.3 25% 26.7%);
+  --color-slate-700: hsl(215.3 19.3% 20.9%);
+  --color-slate-800: hsl(217.2 32.6% 17.5%);
+  --color-slate-900: hsl(222.2 47.4% 11.2%);
+  --color-slate-950: hsl(222.2 84% 4.9%);
+
+  --color-gray-50: hsl(210 40% 98%);
+  --color-gray-100: hsl(210 40% 96.1%);
+  --color-gray-200: hsl(214.3 31.8% 91.4%);
+  --color-gray-300: hsl(212.7 26.8% 83.9%);
+  --color-gray-400: hsl(215.4 16.3% 46.9%);
+  --color-gray-500: hsl(215.3 19.3% 34.5%);
+  --color-gray-600: hsl(215.3 25% 26.7%);
+  --color-gray-700: hsl(215.3 19.3% 20.9%);
+  --color-gray-800: hsl(217.2 32.6% 17.5%);
+  --color-gray-900: hsl(222.2 47.4% 11.2%);
+
+  --color-green-50: hsl(138.5 76.5% 96.7%);
+  --color-green-100: hsl(140.6 84.2% 92.5%);
+  --color-green-200: hsl(141 78.9% 85.1%);
+  --color-green-500: hsl(142.1 76.2% 36.3%);
+  --color-green-600: hsl(142.1 70.6% 29.2%);
+  --color-green-700: hsl(142.4 71.8% 22.2%);
+
+  --color-red-50: hsl(0 85.7% 97.3%);
+  --color-red-100: hsl(0 93.3% 94.1%);
+  --color-red-200: hsl(0 96.3% 89.4%);
+  --color-red-500: hsl(0 84.2% 60.2%);
+  --color-red-600: hsl(0 72.2% 50.6%);
+  --color-red-700: hsl(0 73.7% 41.8%);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@layer base{
+* {
+  border-color: var(--border);
+}
+
+html, body {
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+}
+
+/* Print styles for A4 PDF reports */
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  html, body {
+    overflow: visible !important;
+    height: auto !important;
+    width: 210mm !important;
+  }
+
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Report container optimization for A4 */
+  .report-container {
+    width: 190mm !important;
+    max-width: 190mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+
+  /* Prevent page breaks inside cards and tables */
+  .card, table, .chart-container {
+    page-break-inside: avoid;
+  }
+
+  /* Reduce font sizes for better A4 fit */
+  h1 { font-size: 20pt !important; }
+  h2 { font-size: 14pt !important; }
+  h3 { font-size: 12pt !important; }
+  p, td, th, li { font-size: 10pt !important; }
+
+  /* Chart sizes for print */
+  .recharts-wrapper {
+    max-height: 180px !important;
+  }
+}
