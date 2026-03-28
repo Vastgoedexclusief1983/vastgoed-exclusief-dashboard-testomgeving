@@ -1,429 +1,683 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import type { FormEvent } from 'react';
 import {
+  ArrowRight,
+  BadgeCheck,
   Camera,
-  Megaphone,
-  ImageIcon,
-  Sparkles,
-  CheckCircle2,
-  TrendingUp,
-  Users,
-  Home,
-  BadgeEuro,
-  Send,
   Crown,
+  Image as ImageIcon,
+  Instagram,
+  Megaphone,
+  Send,
+  Sparkles,
   Star,
+  Target,
+  TrendingUp,
 } from 'lucide-react';
 
-type ServiceCardProps = {
+type ServiceKey =
+  | 'fotografie'
+  | 'social-campagne'
+  | 'homepage-uitlichting'
+  | 'premium-presentatie';
+
+type PromotionService = {
+  key: ServiceKey;
   title: string;
+  shortTitle: string;
+  accentClass: string;
+  badgeClass: string;
+  icon: React.ComponentType<{ className?: string }>;
+  subtitle: string;
   description: string;
-  points: string[];
-  badge?: string;
-  icon: React.ReactNode;
+  priceLabel: string;
+  highlight: string;
+  bullets: string[];
+  autoNotes: string;
 };
 
-type InfoCardProps = {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-};
-
-function ServiceCard({ title, description, points, badge, icon }: ServiceCardProps) {
-  return (
-    <div className="group relative overflow-hidden rounded-[28px] border border-[#1f3b63] bg-gradient-to-br from-[#0f2342] via-[#112b52] to-[#183764] p-6 text-white shadow-[0_20px_60px_rgba(7,23,47,0.22)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(7,23,47,0.30)]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.14),transparent_32%)]" />
-
-      <div className="relative">
-        <div className="mb-5 flex items-start justify-between gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/10 text-[#f3e7b3]">
-            {icon}
-          </div>
-
-          {badge ? (
-            <span className="rounded-full border border-[#d4af37]/30 bg-[#d4af37]/12 px-3 py-1 text-xs font-semibold text-[#f3e7b3]">
-              {badge}
-            </span>
-          ) : null}
-        </div>
-
-        <h3 className="text-xl font-semibold tracking-tight text-white">{title}</h3>
-        <p className="mt-3 text-sm leading-7 text-white/78">{description}</p>
-
-        <ul className="mt-5 space-y-3">
-          {points.map((point, index) => (
-            <li key={`${title}-${index}`} className="flex items-start gap-2.5 text-sm text-white/86">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#f3e7b3]" />
-              <span>{point}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-}
-
-function InfoCard({ title, description, icon }: InfoCardProps) {
-  return (
-    <div className="rounded-[26px] border border-[#d7deea] bg-white p-5 shadow-[0_10px_30px_rgba(16,44,84,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(16,44,84,0.12)]">
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef3fb] text-[#102c54]">
-        {icon}
-      </div>
-
-      <h3 className="text-base font-semibold text-[#102c54]">{title}</h3>
-      <p className="mt-2 text-sm leading-7 text-slate-600">{description}</p>
-    </div>
-  );
-}
-
-function Input({
-  label,
-  placeholder,
-  name,
-  type = 'text',
-  required = false,
-}: {
-  label: string;
-  placeholder: string;
-  name: string;
-  type?: string;
-  required?: boolean;
-}) {
-  return (
-    <div>
-      <label className="mb-2 block text-sm font-medium text-[#102c54]">{label}</label>
-      <input
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        required={required}
-        className="w-full rounded-2xl border border-[#d7deea] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#102c54] focus:ring-2 focus:ring-[#102c54]/10"
-      />
-    </div>
-  );
-}
+const SERVICES: PromotionService[] = [
+  {
+    key: 'fotografie',
+    title: 'Professionele woningfotografie',
+    shortTitle: 'Fotografie',
+    accentClass:
+      'from-slate-900 via-[#123766] to-[#214f8d] border-white/10',
+    badgeClass:
+      'bg-white/10 text-white border border-white/10',
+    icon: Camera,
+    subtitle: 'Sterke eerste indruk voor exclusieve woningen',
+    description:
+      'Professionele fotografie verhoogt de kwaliteit van de presentatie en zorgt voor meer vertrouwen, klikgedrag en attentiewaarde.',
+    priceLabel: 'Premium basispakket',
+    highlight: 'Geschikt voor hoogwaardige woningpresentatie',
+    bullets: [
+      'Sterkere eerste indruk op het platform',
+      'Meer vertrouwen en hogere kwaliteitsbeleving',
+      'Ideaal als basis voor verdere promotiecampagnes',
+    ],
+    autoNotes:
+      'Interesse in professionele woningfotografie voor een exclusieve presentatie. Graag voorstel voor planning, beeldstijl en oplevering.',
+  },
+  {
+    key: 'social-campagne',
+    title: 'Social media campagne',
+    shortTitle: 'Social campagne',
+    accentClass:
+      'from-fuchsia-700 via-pink-600 to-orange-500 border-pink-300/20',
+    badgeClass:
+      'bg-gradient-to-r from-pink-500/20 to-orange-400/20 text-white border border-white/10',
+    icon: Instagram,
+    subtitle: 'Extra bereik via Instagram en social campagnes',
+    description:
+      'Zet een woning extra krachtig in de markt via social media promotie, visuele advertenties en extra exposure buiten reguliere woningzoekers.',
+    priceLabel: 'Instagram + campagne',
+    highlight: 'Bereik via 18K+ volgers en extra zichtbaarheid',
+    bullets: [
+      'Meer exposure buiten het reguliere platformverkeer',
+      'Sterk voor merkbeleving, aandacht en exclusiviteit',
+      'Geschikt voor lancering, nieuwe listing of prijsmoment',
+    ],
+    autoNotes:
+      'Interesse in een social media campagne voor deze woning, inclusief Instagram-zichtbaarheid en extra bereik richting relevante doelgroep.',
+  },
+  {
+    key: 'homepage-uitlichting',
+    title: 'Homepage-uitlichting',
+    shortTitle: 'Homepage',
+    accentClass:
+      'from-[#0c2342] via-[#102c54] to-[#1e4d88] border-[#d4af37]/20',
+    badgeClass:
+      'bg-[#d4af37]/15 text-[#f3df9b] border border-[#d4af37]/20',
+    icon: TrendingUp,
+    subtitle: 'Meer zichtbaarheid op het platform',
+    description:
+      'Geef een woning een prominente plaatsing op de homepage van Vastgoed Exclusief en vergroot de kans op extra aandacht van bezoekers.',
+    priceLabel: 'Prominente plaatsing',
+    highlight: 'Meer zichtbaarheid op het juiste moment',
+    bullets: [
+      'Direct zichtbaarder voor bezoekers op het platform',
+      'Versterkt positionering en exclusieve uitstraling',
+      'Zeer geschikt voor nieuwe of onderscheidende woningen',
+    ],
+    autoNotes:
+      'Interesse in homepage-uitlichting om deze woning prominenter zichtbaar te maken op Vastgoed Exclusief.',
+  },
+  {
+    key: 'premium-presentatie',
+    title: 'Premium presentatie',
+    shortTitle: 'Premium',
+    accentClass:
+      'from-[#0d1f3a] via-[#183d73] to-[#2d5fa6] border-[#c7a74a]/30',
+    badgeClass:
+      'bg-[#c7a74a]/15 text-[#f2e0a3] border border-[#c7a74a]/30',
+    icon: Crown,
+    subtitle: 'Luxe presentatie voor woningen met extra uitstraling',
+    description:
+      'Een uitgebreidere en luxere presentatievorm voor woningen die meer onderscheid, commerciële kracht en exclusieve positionering verdienen.',
+    priceLabel: 'High-end presentatie',
+    highlight: 'Meer allure, meer aandacht, sterker onderscheid',
+    bullets: [
+      'Luxe uitstraling passend bij het hogere segment',
+      'Sterkere commerciële positionering',
+      'Ideaal voor woningen met unieke architectuur of ligging',
+    ],
+    autoNotes:
+      'Interesse in een premium presentatie met extra luxe uitstraling, sterkere positionering en aanvullende zichtbaarheid.',
+  },
+];
 
 export default function PresentatiePromotiePage() {
+  const [selectedServiceKey, setSelectedServiceKey] =
+    useState<ServiceKey>('social-campagne');
+
+  const [form, setForm] = useState({
+    companyName: '',
+    contactName: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    preferredService: 'Social media campagne',
+    notes:
+      'Interesse in een social media campagne voor deze woning, inclusief Instagram-zichtbaarheid en extra bereik richting relevante doelgroep.',
+  });
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
+  const selectedService =
+    SERVICES.find((service) => service.key === selectedServiceKey) ?? SERVICES[0];
+
+  const serviceMetrics = useMemo(
+    () => [
+      {
+        label: 'Instagram bereik',
+        value: '18K+',
+        sub: 'Volgers & zichtbaarheid',
+        icon: Instagram,
+        tone: 'from-pink-500/20 to-orange-400/20 text-white',
+      },
+      {
+        label: 'Positionering',
+        value: 'Premium',
+        sub: 'Hogere segment woningen',
+        icon: Crown,
+        tone: 'from-[#d4af37]/15 to-[#d4af37]/5 text-white',
+      },
+      {
+        label: 'Doel',
+        value: 'Meer bereik',
+        sub: 'Meer aandacht en uitstraling',
+        icon: Target,
+        tone: 'from-blue-500/20 to-cyan-400/20 text-white',
+      },
+    ],
+    []
+  );
+
+  function updateField(name: keyof typeof form, value: string) {
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function applyService(service: PromotionService) {
+    setSelectedServiceKey(service.key);
+    setForm((prev) => ({
+      ...prev,
+      preferredService: service.title,
+      notes: service.autoNotes,
+    }));
     setSuccess(false);
     setError('');
+  }
 
-    const form = new FormData(e.currentTarget);
-
-    const data = {
-      propertyAddress: form.get('propertyAddress'),
-      city: form.get('city'),
-      packageType: form.get('packageType'),
-      notes: form.get('notes'),
-    };
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess(false);
 
     try {
-      const res = await fetch('/api/promotion-request', {
+      const response = await fetch('/api/promotion-request', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          companyName: form.companyName,
+          contactName: form.contactName,
+          email: form.email,
+          phone: form.phone,
+          propertyAddress: form.address,
+          city: form.city,
+          packageType: form.preferredService,
+          notes: form.notes,
+        }),
       });
 
-      const json = await res.json().catch(() => null);
-
-      if (!res.ok) {
-        setError(json?.error || 'Er ging iets mis bij het verzenden van de aanvraag.');
-        return;
+      if (!response.ok) {
+        const result = await response
+          .json()
+          .catch(() => ({ error: 'Er ging iets mis bij het verzenden.' }));
+        throw new Error(result.error || 'Er ging iets mis bij het verzenden.');
       }
 
       setSuccess(true);
-      e.currentTarget.reset();
-    } catch {
-      setError('Netwerkfout. Probeer het opnieuw.');
+      setForm((prev) => ({
+        ...prev,
+        notes: selectedService.autoNotes,
+      }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Onbekende fout.');
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-6">
-      <section className="relative overflow-hidden rounded-[34px] bg-gradient-to-br from-[#081a33] via-[#0d2648] to-[#133763] text-white shadow-[0_25px_80px_rgba(6,21,44,0.28)]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.08),transparent_25%)]" />
-
-        <div className="relative grid gap-8 px-6 py-8 md:px-8 md:py-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-          <div>
-            <div className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-[#f3e7b3]">
+    <div className="space-y-8">
+      {/* Hero */}
+      <section className="overflow-hidden rounded-[32px] border border-[#163a69] bg-gradient-to-br from-[#0c2342] via-[#102c54] to-[#1a4c87] text-white shadow-[0_30px_80px_rgba(16,44,84,0.22)]">
+        <div className="grid gap-8 px-8 py-8 lg:grid-cols-[1.3fr_420px] lg:px-10 lg:py-10">
+          <div className="relative">
+            <div className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white/90 backdrop-blur">
+              <Sparkles className="mr-2 h-4 w-4 text-[#e7cc7a]" />
               Multimedia • Presentatie & Promotie
             </div>
 
-            <h1 className="mt-5 max-w-3xl text-3xl font-semibold tracking-tight text-white md:text-5xl">
+            <h1 className="mt-6 max-w-4xl text-4xl font-semibold leading-tight md:text-6xl">
               Vergroot de zichtbaarheid van exclusieve woningen
             </h1>
 
-            <p className="mt-4 max-w-2xl text-sm leading-8 text-white/78 md:text-base">
-              Zet een woning extra in de markt via professionele woningfotografie, social media promotie,
-              homepage-uitlichting en premium presentatie via Vastgoed Exclusief.
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-white/85">
+              Kies een promotievorm die past bij de woning, doelgroep en gewenste
+              uitstraling. Vanuit deze pagina kan de makelaar direct een
+              promotiedienst aanvragen met een luxere, slimmere en meer
+              geautomatiseerde flow.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white/90">
-                Gericht op exclusief vastgoed
-              </div>
-              <div className="rounded-2xl border border-[#d4af37]/30 bg-[#d4af37]/12 px-4 py-3 text-sm font-medium text-[#f3e7b3]">
-                Premium uitstraling
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white/90">
-                16.000+ volgers op Instagram
-              </div>
+              <span className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white/90">
+                Exclusief vastgoed
+              </span>
+              <span className="rounded-full border border-[#d4af37]/20 bg-[#d4af37]/10 px-4 py-2 text-sm text-[#f3df9b]">
+                Instagram 18K+
+              </span>
+              <span className="rounded-full border border-fuchsia-300/20 bg-fuchsia-500/10 px-4 py-2 text-sm text-white">
+                Social media campagnes
+              </span>
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-            <div className="rounded-[26px] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
-              <div className="flex items-center gap-2 text-sm text-white/65">
-                <Users className="h-4 w-4 text-[#f3e7b3]" />
-                Social bereik
-              </div>
-              <div className="mt-2 text-3xl font-semibold text-white">16K+</div>
-              <div className="mt-1 text-sm text-white/75">Volgers op Instagram</div>
-            </div>
-
-            <div className="rounded-[26px] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
-              <div className="flex items-center gap-2 text-sm text-white/65">
-                <Crown className="h-4 w-4 text-[#f3e7b3]" />
-                Positionering
-              </div>
-              <div className="mt-2 text-3xl font-semibold text-white">Premium</div>
-              <div className="mt-1 text-sm text-white/75">Voor het hogere segment</div>
-            </div>
-
-            <div className="rounded-[26px] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
-              <div className="flex items-center gap-2 text-sm text-white/65">
-                <Star className="h-4 w-4 text-[#f3e7b3]" />
-                Doel
-              </div>
-              <div className="mt-2 text-3xl font-semibold text-white">Meer</div>
-              <div className="mt-1 text-sm text-white/75">Bereik, uitstraling en zichtbaarheid</div>
-            </div>
+          <div className="grid gap-4">
+            {serviceMetrics.map((metric) => {
+              const Icon = metric.icon;
+              return (
+                <div
+                  key={metric.label}
+                  className={`rounded-[28px] border border-white/10 bg-gradient-to-br ${metric.tone} p-6 backdrop-blur`}
+                >
+                  <div className="mb-3 flex items-center gap-3 text-white/80">
+                    <Icon className="h-5 w-5" />
+                    <span className="text-sm font-medium">{metric.label}</span>
+                  </div>
+                  <div className="text-4xl font-semibold">{metric.value}</div>
+                  <div className="mt-2 text-base text-white/80">{metric.sub}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      <section className="mt-10">
-        <div className="mb-5">
-          <h2 className="text-3xl font-semibold tracking-tight text-[#102c54]">Diensten</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Kies een dienst die aansluit bij de woning, doelgroep en gewenste zichtbaarheid.
+      {/* Diensten */}
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-3xl font-semibold text-[#102c54]">Promotiediensten</h2>
+          <p className="mt-2 max-w-3xl text-base leading-7 text-slate-600">
+            Klik op een dienst om direct de aanvraag slim voor te vullen. Zo hoeft
+            de makelaar minder handmatig in te voeren en wordt de juiste promotievorm
+            sneller gekozen.
           </p>
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
-          <ServiceCard
-            title="Woningfotografie pakket"
-            description="Professionele fotografie voor een hoogwaardige eerste indruk en een sterkere woningpresentatie."
-            badge="Op aanvraag"
-            icon={<Camera className="h-5 w-5" />}
-            points={[
-              'Geschikt voor exclusieve woningen',
-              'Sterkere presentatie op platform en socials',
-              'Meer beleving en hogere attentiewaarde',
-            ]}
-          />
+        <div className="grid gap-5 xl:grid-cols-4 md:grid-cols-2">
+          {SERVICES.map((service) => {
+            const Icon = service.icon;
+            const active = selectedServiceKey === service.key;
 
-          <ServiceCard
-            title="Instagram promotie"
-            description="Laat een woning extra zichtbaar maken via krachtige social media content en presentatie."
-            badge="Populair"
-            icon={<Megaphone className="h-5 w-5" />}
-            points={[
-              'Extra bereik buiten reguliere woningzoekers',
-              'Sterk voor merkbeleving en exposure',
-              'Inzetbaar via jullie kanaal met 16K+ volgers',
-            ]}
-          />
+            return (
+              <button
+                key={service.key}
+                type="button"
+                onClick={() => applyService(service)}
+                className={[
+                  'group rounded-[30px] border p-6 text-left transition-all duration-200',
+                  'shadow-[0_12px_35px_rgba(16,44,84,0.08)]',
+                  active
+                    ? `bg-gradient-to-br ${service.accentClass} text-white shadow-[0_22px_60px_rgba(16,44,84,0.20)]`
+                    : 'border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_18px_40px_rgba(16,44,84,0.12)]',
+                ].join(' ')}
+              >
+                <div
+                  className={[
+                    'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold',
+                    active
+                      ? service.badgeClass
+                      : 'border border-slate-200 bg-slate-50 text-slate-600',
+                  ].join(' ')}
+                >
+                  {service.priceLabel}
+                </div>
 
-          <ServiceCard
-            title="Homepage uitlichting"
-            description="Geef een woning prominente zichtbaarheid op de homepage van Vastgoed Exclusief."
-            badge="Premium"
-            icon={<Home className="h-5 w-5" />}
-            points={[
-              'Prominente plaatsing op het platform',
-              'Meer aandacht voor geselecteerde woningen',
-              'Versterkt positionering en exclusiviteit',
-            ]}
-          />
+                <div className="mt-5 flex items-start justify-between gap-4">
+                  <div>
+                    <h3
+                      className={[
+                        'text-2xl font-semibold leading-tight',
+                        active ? 'text-white' : 'text-[#102c54]',
+                      ].join(' ')}
+                    >
+                      {service.title}
+                    </h3>
+                    <p
+                      className={[
+                        'mt-3 text-base leading-7',
+                        active ? 'text-white/85' : 'text-slate-600',
+                      ].join(' ')}
+                    >
+                      {service.subtitle}
+                    </p>
+                  </div>
 
-          <ServiceCard
-            title="Premium presentatie"
-            description="Een krachtigere presentatievorm voor woningen die extra uitstraling en onderscheid nodig hebben."
-            badge="Exclusief"
-            icon={<Sparkles className="h-5 w-5" />}
-            points={[
-              'Luxe presentatie en extra zichtbaarheid',
-              'Sterkere commerciële positionering',
-              'Ideaal in een competitieve markt',
-            ]}
-          />
+                  <div
+                    className={[
+                      'rounded-2xl p-3',
+                      active
+                        ? 'bg-white/10 text-white'
+                        : 'bg-[#102c54]/5 text-[#102c54]',
+                    ].join(' ')}
+                  >
+                    <Icon className="h-6 w-6" />
+                  </div>
+                </div>
+
+                <p
+                  className={[
+                    'mt-5 text-sm leading-7',
+                    active ? 'text-white/80' : 'text-slate-600',
+                  ].join(' ')}
+                >
+                  {service.description}
+                </p>
+
+                <ul className="mt-5 space-y-3">
+                  {service.bullets.map((bullet) => (
+                    <li
+                      key={bullet}
+                      className={[
+                        'flex items-start gap-3 text-sm leading-6',
+                        active ? 'text-white/90' : 'text-slate-700',
+                      ].join(' ')}
+                    >
+                      <BadgeCheck
+                        className={[
+                          'mt-0.5 h-4 w-4 shrink-0',
+                          active ? 'text-[#f3df9b]' : 'text-[#102c54]',
+                        ].join(' ')}
+                      />
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div
+                  className={[
+                    'mt-6 inline-flex items-center text-sm font-semibold',
+                    active ? 'text-white' : 'text-[#102c54]',
+                  ].join(' ')}
+                >
+                  Kies deze dienst
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </div>
+              </button>
+            );
+          })}
         </div>
       </section>
 
-      <section className="mt-12">
-        <div className="mb-5">
-          <h2 className="text-3xl font-semibold tracking-tight text-[#102c54]">Waarom extra promotie inzetten?</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Extra zichtbaarheid kan bijdragen aan een sterkere presentatie, meer bereik en betere positionering van de woning.
-          </p>
-        </div>
-
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          <InfoCard
-            title="Waarom op de homepage staan?"
-            description="Een prominente homepage-positie geeft een woning direct meer attentiewaarde en helpt om sneller op te vallen binnen het exclusieve segment."
-            icon={<TrendingUp className="h-5 w-5" />}
-          />
-
-          <InfoCard
-            title="Waarom op social media?"
-            description="Social media vergroot het bereik buiten het reguliere woningplatform en versterkt de beleving rond een woningpresentatie."
-            icon={<Users className="h-5 w-5" />}
-          />
-
-          <InfoCard
-            title="Waarom professionele content?"
-            description="Sterke fotografie en presentatie zorgen voor een betere eerste indruk, hogere waargenomen kwaliteit en meer betrokkenheid."
-            icon={<ImageIcon className="h-5 w-5" />}
-          />
-
-          <InfoCard
-            title="Waarom via Vastgoed Exclusief?"
-            description="Vastgoed Exclusief richt zich op het hogere segment en biedt een omgeving die past bij de uitstraling van exclusieve woningen."
-            icon={<Sparkles className="h-5 w-5" />}
-          />
-        </div>
+      {/* Waarde */}
+      <section className="grid gap-5 xl:grid-cols-4 md:grid-cols-2">
+        {[
+          {
+            title: 'Waarom op de homepage staan?',
+            text: 'Een prominente homepage-positie geeft een woning direct meer attentiewaarde en helpt om sneller op te vallen binnen het exclusieve segment.',
+            icon: TrendingUp,
+          },
+          {
+            title: 'Waarom op social media?',
+            text: 'Social media vergroot het bereik buiten het reguliere woningplatform en versterkt de beleving rond een woningpresentatie.',
+            icon: Instagram,
+          },
+          {
+            title: 'Waarom professionele content?',
+            text: 'Sterke fotografie en presentatie zorgen voor een betere eerste indruk, hogere waargenomen kwaliteit en meer betrokkenheid.',
+            icon: ImageIcon,
+          },
+          {
+            title: 'Waarom via Vastgoed Exclusief?',
+            text: 'Vastgoed Exclusief richt zich op het hogere segment en biedt een omgeving die past bij de uitstraling van exclusieve woningen.',
+            icon: Star,
+          },
+        ].map((item) => {
+          const Icon = item.icon;
+          return (
+            <div
+              key={item.title}
+              className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_12px_30px_rgba(16,44,84,0.07)]"
+            >
+              <div className="mb-5 inline-flex rounded-2xl bg-[#102c54]/5 p-4 text-[#102c54]">
+                <Icon className="h-6 w-6" />
+              </div>
+              <h3 className="text-2xl font-semibold text-[#102c54]">{item.title}</h3>
+              <p className="mt-4 text-base leading-8 text-slate-600">{item.text}</p>
+            </div>
+          );
+        })}
       </section>
 
-      <section className="mt-12 rounded-[34px] border border-[#d7deea] bg-gradient-to-br from-white via-[#fbfcff] to-[#f3f7fd] p-6 shadow-[0_18px_50px_rgba(16,44,84,0.10)]">
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+      {/* Form + slimme info */}
+      <section className="rounded-[34px] border border-slate-200 bg-white p-6 shadow-[0_14px_40px_rgba(16,44,84,0.08)] lg:p-8">
+        <div className="grid gap-8 lg:grid-cols-[1.2fr_420px]">
           <div>
-            <div className="inline-flex items-center rounded-full bg-[#eef3fb] px-3 py-1 text-xs font-semibold text-[#102c54]">
+            <div className="inline-flex rounded-full bg-[#102c54]/6 px-4 py-2 text-sm font-semibold text-[#102c54]">
               Aanvraagformulier
             </div>
 
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c54]">
+            <h2 className="mt-5 text-4xl font-semibold text-[#102c54]">
               Vraag een promotiedienst aan
             </h2>
-
-            <p className="mt-2 text-sm leading-7 text-slate-600">
-              Dien hieronder eenvoudig een aanvraag in voor woningfotografie, social media promotie,
-              homepage-uitlichting of premium presentatie.
+            <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+              Vul hieronder de gegevens in. De geselecteerde dienst zet automatisch
+              de juiste richting en toelichting klaar. Zo werk je sneller en
+              consistenter.
             </p>
 
-            {success && (
-              <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-                Aanvraag succesvol verzonden.
-              </div>
-            )}
-
-            {error && (
-              <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="mt-6">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Input label="Naam makelaar" placeholder="Bijv. Raisa Geschiere" name="agentName" />
-                <Input label="Kantoornaam" placeholder="Bijv. Vastgoed Exclusief Partner" name="officeName" />
-                <Input label="E-mailadres" placeholder="naam@kantoor.nl" name="email" type="email" />
-                <Input label="Telefoonnummer" placeholder="Bijv. 06 12345678" name="phone" />
-                <Input label="Woningadres" placeholder="Straat + huisnummer" name="propertyAddress" required />
-                <Input label="Plaats" placeholder="Bijv. Bloemendaal" name="city" required />
-              </div>
-
-              <div className="mt-4">
-                <label className="mb-2 block text-sm font-medium text-[#102c54]">Gewenste dienst</label>
-                <select
-                  name="packageType"
-                  required
-                  className="w-full rounded-2xl border border-[#d7deea] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#102c54] focus:ring-2 focus:ring-[#102c54]/10"
-                >
-                  <option value="">Maak een keuze</option>
-                  <option value="fotografie">Woningfotografie pakket</option>
-                  <option value="instagram">Instagram promotie</option>
-                  <option value="homepage">Homepage uitlichting</option>
-                  <option value="compleet">Premium presentatie / compleet pakket</option>
-                </select>
-              </div>
-
-              <div className="mt-4">
-                <label className="mb-2 block text-sm font-medium text-[#102c54]">Toelichting</label>
-                <textarea
-                  name="notes"
-                  rows={5}
-                  placeholder="Beschrijf kort de woning, gewenste promotie en eventuele wensen of timing."
-                  className="w-full rounded-2xl border border-[#d7deea] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#102c54] focus:ring-2 focus:ring-[#102c54]/10"
+            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field
+                  label="Naam makelaar"
+                  placeholder="Bijv. Raisa Geschiere"
+                  value={form.contactName}
+                  onChange={(value) => updateField('contactName', value)}
+                />
+                <Field
+                  label="Kantoornaam"
+                  placeholder="Bijv. Vastgoed Exclusief Partner"
+                  value={form.companyName}
+                  onChange={(value) => updateField('companyName', value)}
                 />
               </div>
 
-              <div className="mt-5 flex flex-wrap gap-3">
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field
+                  label="E-mailadres"
+                  type="email"
+                  placeholder="naam@kantoor.nl"
+                  value={form.email}
+                  onChange={(value) => updateField('email', value)}
+                />
+                <Field
+                  label="Telefoonnummer"
+                  placeholder="Bijv. 06 12345678"
+                  value={form.phone}
+                  onChange={(value) => updateField('phone', value)}
+                />
+              </div>
+
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field
+                  label="Woningadres"
+                  placeholder="Straat + huisnummer"
+                  value={form.address}
+                  onChange={(value) => updateField('address', value)}
+                />
+                <Field
+                  label="Plaats"
+                  placeholder="Bijv. Bloemendaal"
+                  value={form.city}
+                  onChange={(value) => updateField('city', value)}
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-[#102c54]">
+                  Gewenste dienst
+                </label>
+                <select
+                  value={selectedServiceKey}
+                  onChange={(e) =>
+                    applyService(
+                      SERVICES.find((service) => service.key === e.target.value)!,
+                    )
+                  }
+                  className="h-14 w-full rounded-2xl border border-slate-300 bg-white px-5 text-base text-[#102c54] outline-none transition focus:border-[#102c54]"
+                >
+                  {SERVICES.map((service) => (
+                    <option key={service.key} value={service.key}>
+                      {service.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-[#102c54]">
+                  Toelichting
+                </label>
+                <textarea
+                  value={form.notes}
+                  onChange={(e) => updateField('notes', e.target.value)}
+                  placeholder="Beschrijf kort de woning, gewenste promotie en eventuele wensen of timing."
+                  rows={6}
+                  className="w-full rounded-3xl border border-slate-300 bg-white px-5 py-4 text-base text-[#102c54] outline-none transition focus:border-[#102c54]"
+                />
+              </div>
+
+              {success && (
+                <div className="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                  De aanvraag is succesvol verzonden.
+                </div>
+              )}
+
+              {error && (
+                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-3">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center justify-center rounded-2xl bg-[#102c54] px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(16,44,84,0.20)] transition hover:bg-[#0c2342] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex items-center rounded-2xl bg-[#102c54] px-6 py-4 text-base font-semibold text-white transition hover:bg-[#0c2342] disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   <Send className="mr-2 h-4 w-4" />
-                  {loading ? 'Aanvraag verzenden...' : 'Aanvraag verzenden'}
+                  {loading ? 'Bezig met verzenden...' : 'Aanvraag verzenden'}
                 </button>
 
                 <button
                   type="button"
-                  className="inline-flex items-center justify-center rounded-2xl border border-[#d4af37]/30 bg-[#d4af37]/12 px-5 py-3 text-sm font-semibold text-[#8a6a08] transition hover:bg-[#d4af37]/20"
+                  onClick={() => applyService(selectedService)}
+                  className="inline-flex items-center rounded-2xl border border-[#d4af37]/30 bg-[#d4af37]/10 px-6 py-4 text-base font-semibold text-[#8e6a00] transition hover:bg-[#d4af37]/20"
                 >
-                  <BadgeEuro className="mr-2 h-4 w-4" />
-                  Prijsinformatie opvragen
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Dienstdetails opnieuw invullen
                 </button>
               </div>
             </form>
           </div>
 
-          <div className="rounded-[28px] border border-[#dbe4f2] bg-white/90 p-5 shadow-[0_12px_35px_rgba(16,44,84,0.08)]">
-            <h3 className="text-xl font-semibold text-[#102c54]">Waarom deze pagina waardevol is</h3>
-
-            <div className="mt-5 space-y-4">
-              <div className="rounded-2xl border border-[#e3eaf5] bg-[#f8fbff] p-4">
-                <div className="text-sm font-semibold text-[#102c54]">Homepage-uitlichting</div>
-                <p className="mt-2 text-sm leading-7 text-slate-600">
-                  Een plaatsing op de homepage geeft een woning meer zichtbaarheid, versterkt exclusiviteit en trekt sneller de aandacht van bezoekers op het platform.
-                </p>
+          <div className="space-y-4">
+            <div className="rounded-[30px] border border-slate-200 bg-slate-50 p-6">
+              <div className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                Geselecteerde dienst
               </div>
+              <h3 className="mt-3 text-3xl font-semibold text-[#102c54]">
+                {selectedService.title}
+              </h3>
+              <p className="mt-4 text-base leading-7 text-slate-600">
+                {selectedService.description}
+              </p>
+            </div>
 
-              <div className="rounded-2xl border border-[#e3eaf5] bg-[#f8fbff] p-4">
-                <div className="text-sm font-semibold text-[#102c54]">Social media promotie</div>
-                <p className="mt-2 text-sm leading-7 text-slate-600">
-                  Met een bereik van 16.000+ volgers op Instagram kan social media bijdragen aan extra exposure, merkbeleving en aanvullend bereik buiten traditionele woningzoekers.
-                </p>
-              </div>
+            <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_10px_25px_rgba(16,44,84,0.06)]">
+              <h4 className="text-2xl font-semibold text-[#102c54]">
+                Waarom deze pagina waardevoller is
+              </h4>
 
-              <div className="rounded-2xl border border-[#e3eaf5] bg-[#f8fbff] p-4">
-                <div className="text-sm font-semibold text-[#102c54]">Professionele presentatie</div>
-                <p className="mt-2 text-sm leading-7 text-slate-600">
-                  Sterke beelden en een premium presentatie verhogen de kwaliteit van de eerste indruk en ondersteunen de positionering van exclusieve woningen.
-                </p>
+              <div className="mt-5 space-y-4">
+                {[
+                  {
+                    title: 'Minder dubbele informatie',
+                    text: 'De uitleg is samengebracht in duidelijke dienstkeuzes en voordeelblokken, zodat de pagina rustiger en sterker leest.',
+                  },
+                  {
+                    title: 'Meer automatisering',
+                    text: 'Bij het kiezen van een dienst wordt de aanvraag automatisch voorgevuld met de juiste dienst en bijpassende toelichting.',
+                  },
+                  {
+                    title: 'Social media campagne toegevoegd',
+                    text: 'Naast fotografie, homepage-uitlichting en premium presentatie is nu ook een campagne-optie toegevoegd voor makelaars.',
+                  },
+                  {
+                    title: 'Sterkere premium uitstraling',
+                    text: 'Door kleuraccenten, duidelijke hiërarchie en compactere blokken oogt de pagina luxer en professioneler.',
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.title}
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4"
+                  >
+                    <div className="text-lg font-semibold text-[#102c54]">
+                      {item.title}
+                    </div>
+                    <p className="mt-2 text-sm leading-7 text-slate-600">
+                      {item.text}
+                    </p>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              <div className="rounded-2xl border border-[#e3eaf5] bg-[#f8fbff] p-4">
-                <div className="text-sm font-semibold text-[#102c54]">Commerciële meerwaarde</div>
-                <p className="mt-2 text-sm leading-7 text-slate-600">
-                  Deze module maakt het voor makelaars eenvoudig om aanvullende promotiediensten direct binnen het dashboard aan te vragen, zonder externe tools of losse formulieren.
-                </p>
+            <div className="rounded-[30px] border border-pink-200 bg-gradient-to-br from-pink-50 via-white to-orange-50 p-6">
+              <div className="flex items-center gap-3 text-[#102c54]">
+                <Instagram className="h-6 w-6 text-pink-600" />
+                <div className="text-lg font-semibold">Instagram & campagnes</div>
               </div>
+              <div className="mt-4 text-4xl font-semibold text-[#102c54]">
+                18K+
+              </div>
+              <p className="mt-2 text-base leading-7 text-slate-600">
+                In te zetten voor extra zichtbaarheid, merkbeleving, bereik buiten
+                reguliere woningzoekers en campagnegerichte promotie voor makelaars.
+              </p>
             </div>
           </div>
         </div>
       </section>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  placeholder,
+  value,
+  onChange,
+  type = 'text',
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+  type?: string;
+}) {
+  return (
+    <div>
+      <label className="mb-2 block text-sm font-semibold text-[#102c54]">
+        {label}
+      </label>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="h-14 w-full rounded-2xl border border-slate-300 bg-white px-5 text-base text-[#102c54] outline-none transition focus:border-[#102c54]"
+      />
     </div>
   );
 }
