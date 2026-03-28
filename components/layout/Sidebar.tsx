@@ -57,31 +57,32 @@ export function Sidebar({ role }: SidebarProps) {
   const isAdmin = roleNormalized === 'admin';
 
   const ROUTES = {
-    // Waardebepaling
-    aiAsk: '/ai-vraag',
     dashboard: isAdmin ? '/admin/dashboard' : '/dashboard',
+
+    aiAsk: '/ai-vraag',
     properties: isAdmin ? '/admin/properties' : '/properties',
     valuation: isAdmin ? '/admin/property-valuation' : '/property-valuation',
 
-    // Marktanalyse
     aiAnalysis: '/ai-assistent',
 
-    // Multimedia
     aiMultimedia: '/ai-multimedia',
     presentatiePromotie: '/presentatie-promotie',
 
-    // Website
     website: '/website',
 
-    // Admin
     adminAgents: '/admin/agents',
     adminAccess: '/admin/toegang',
     adminAiUsage: '/admin/ai-usage',
   } as const;
 
+  // 🔥 NIEUW: OVERZICHT (Dashboard bovenaan)
+  const overviewItems: NavItem[] = [
+    { href: ROUTES.dashboard, label: t('dashboard'), icon: LayoutDashboard },
+  ];
+
+  // ❗ Dashboard hier verwijderd
   const waardebepalingItems: NavItem[] = [
     { href: ROUTES.aiAsk, label: 'Basisprijs', icon: Bot },
-    { href: ROUTES.dashboard, label: t('dashboard'), icon: LayoutDashboard },
     { href: ROUTES.properties, label: t('properties'), icon: Building2 },
     { href: ROUTES.valuation, label: t('valuation'), icon: Calculator },
   ];
@@ -109,7 +110,7 @@ export function Sidebar({ role }: SidebarProps) {
 
   return (
     <aside className="flex h-screen w-[270px] flex-col bg-[#102c54] text-white shadow-lg">
-      {/* Header / Logo */}
+      {/* Header */}
       <div className="border-b border-white/10 px-4 py-4">
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-white">
@@ -132,8 +133,19 @@ export function Sidebar({ role }: SidebarProps) {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        {/* WAARDEBEPALING */}
+
+        {/* 🔥 NIEUW: OVERZICHT */}
         <div className="px-2 pt-2 text-[11px] font-semibold uppercase tracking-wide text-white/60">
+          Overzicht
+        </div>
+        <div className="mt-2 space-y-1">
+          {overviewItems.map((item) => (
+            <NavLink key={item.href} {...item} active={isActive(item.href)} />
+          ))}
+        </div>
+
+        {/* WAARDEBEPALING */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/60">
           Waardebepaling
         </div>
         <div className="mt-2 space-y-1">
@@ -177,27 +189,18 @@ export function Sidebar({ role }: SidebarProps) {
           <DashboardHelpDialog />
           <DisclaimerDialog />
 
-          <Link
-            href="/legal/voorwaarden"
-            className="ml-9 mt-1 block text-xs text-white/60 underline hover:text-white"
-          >
+          <Link href="/legal/voorwaarden" className="ml-9 mt-1 block text-xs text-white/60 underline hover:text-white">
             Algemene voorwaarden
           </Link>
-          <Link
-            href="/legal/privacy"
-            className="ml-9 mt-1 block text-xs text-white/60 underline hover:text-white"
-          >
+          <Link href="/legal/privacy" className="ml-9 mt-1 block text-xs text-white/60 underline hover:text-white">
             Privacy
           </Link>
-          <Link
-            href="/legal/verwerkersovereenkomst"
-            className="ml-9 mt-1 block text-xs text-white/60 underline hover:text-white"
-          >
+          <Link href="/legal/verwerkersovereenkomst" className="ml-9 mt-1 block text-xs text-white/60 underline hover:text-white">
             Verwerkersovereenkomst
           </Link>
         </div>
 
-        {/* PLATFORM BEHEER */}
+        {/* ADMIN */}
         {isAdmin && (
           <>
             <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/60">
