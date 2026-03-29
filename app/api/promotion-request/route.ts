@@ -261,7 +261,7 @@ export async function POST(req: Request) {
               </tr>
               <tr>
                 <td style="font-weight:700;">Akkoord</td>
-                <td>Ja, makelaar heeft akkoord gegeven op kosten en uitvoering.</td>
+                <td>Ja, de aanvrager heeft expliciet akkoord gegeven op de algemene voorwaarden en privacyverklaring en opdracht gegeven tot uitvoering van deze dienst tegen de vermelde prijs.</td>
               </tr>
             </table>
 
