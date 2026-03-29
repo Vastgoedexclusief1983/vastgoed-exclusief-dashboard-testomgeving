@@ -226,19 +226,16 @@ export default function PresentatiePromotiePage() {
         icon: Sparkles,
       },
       {
-        label: 'Zekerheid',
+        label: 'Zakelijk',
         value: 'B2B',
-        sub: 'Zakelijke aanvraagflow',
+        sub: 'Aanvraagflow',
         icon: ShieldCheck,
       },
     ],
     [],
   );
 
-  function updateField(
-    name: keyof typeof form,
-    value: string | boolean,
-  ) {
+  function updateField(name: keyof typeof form, value: string | boolean) {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
@@ -247,8 +244,7 @@ export default function PresentatiePromotiePage() {
     setForm((prev) => ({
       ...prev,
       notes:
-        prev.notes.trim() === '' ||
-        prev.notes === selectedService.autoNotes
+        prev.notes.trim() === '' || prev.notes === selectedService.autoNotes
           ? service.autoNotes
           : prev.notes,
     }));
@@ -291,9 +287,7 @@ export default function PresentatiePromotiePage() {
     try {
       const response = await fetch('/api/promotion-request', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           companyName: form.companyName,
           contactName: form.contactName,
@@ -336,33 +330,33 @@ export default function PresentatiePromotiePage() {
   return (
     <div className="space-y-6">
       <section className="overflow-hidden rounded-[34px] border border-slate-200 bg-[#07111f] shadow-[0_26px_80px_rgba(8,15,30,0.22)]">
-        <div className="grid lg:grid-cols-[1.12fr_0.88fr]">
-          <div className="relative min-h-[420px] overflow-hidden">
-            <Image
-              src="/01-Duinvilla-Bosch-en-Duin-IMG_6625-2-2048x1366.jpg"
-              alt="Luxe avondfotografie villa"
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#06101d]/96 via-[#07111f]/84 to-[#07111f]/35" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+        <div className="relative min-h-[520px] overflow-hidden">
+          <Image
+            src="/01-Duinvilla-Bosch-en-Duin-IMG_6625-2-2048x1366.jpg"
+            alt="Luxe villa avondfotografie"
+            fill
+            priority
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#06101d]/96 via-[#07111f]/78 to-[#07111f]/38" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
 
-            <div className="relative z-10 flex h-full flex-col justify-between px-7 py-7 lg:px-9 lg:py-9">
+          <div className="relative z-10 grid min-h-[520px] gap-8 px-7 py-7 lg:grid-cols-[1.1fr_340px] lg:px-10 lg:py-10">
+            <div className="flex flex-col justify-between">
               <div>
                 <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white/95 backdrop-blur">
                   <Sparkles className="mr-2 h-4 w-4 text-[#f3df9b]" />
                   Multimedia • Presentatie & Promotie
                 </div>
 
-                <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-tight text-white md:text-5xl">
+                <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-tight text-white md:text-6xl">
                   Promotie & zichtbaarheid
                 </h1>
 
-                <p className="mt-5 max-w-2xl text-base leading-7 text-white/85">
-                  Kies een pakket en verzend direct een zakelijke aanvraag. De
-                  mail bevat de makelaarsgegevens, het gekozen pakket, de prijs
-                  en de pakketinhoud.
+                <p className="mt-5 max-w-2xl text-base leading-8 text-white/85 md:text-lg">
+                  Kies een pakket en verzend direct een zakelijke aanvraag.
+                  Professionele fotografie, social campagnes en premium
+                  zichtbaarheid voor exclusieve woningen.
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-3">
@@ -378,7 +372,7 @@ export default function PresentatiePromotiePage() {
                 </div>
               </div>
 
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
                 {heroCards.map((card) => {
                   const Icon = card.icon;
                   return (
@@ -402,70 +396,54 @@ export default function PresentatiePromotiePage() {
                 })}
               </div>
             </div>
-          </div>
 
-          <div className="grid gap-3 bg-[#07111f] p-3 sm:grid-cols-2 sm:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:p-4">
-            <div className="relative min-h-[205px] overflow-hidden rounded-[28px] border border-white/10">
-              <Image
-                src="/High-end-real-estate-avondfotografie-IMG_0214-1280x720.jpg"
-                alt="Luxe woning avondfoto entree"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
-                  Avondfotografie
-                </div>
-                <div className="mt-3 text-xl font-semibold text-white">
-                  High-end uitstraling
+            <div className="flex flex-col gap-4 lg:justify-end">
+              <div className="overflow-hidden rounded-[28px] border border-white/12 bg-black/20 backdrop-blur-md">
+                <div className="relative h-[185px]">
+                  <Image
+                    src="/High-end-real-estate-avondfotografie-IMG_0214-1280x720.jpg"
+                    alt="Avondfotografie luxe woning"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+                      Avondfotografie
+                    </div>
+                    <div className="mt-3 text-xl font-semibold text-white">
+                      High-end uitstraling
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="relative min-h-[205px] overflow-hidden rounded-[28px] border border-white/10">
-              <Image
-                src="/High-end-real-estate-avondfotografie-IMG_5863-1280x720.jpg"
-                alt="Luxe interieur fotografie"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
-                  Interieur
-                </div>
-                <div className="mt-3 text-xl font-semibold text-white">
-                  Beleving & detail
+              <div className="overflow-hidden rounded-[28px] border border-white/12 bg-black/20 backdrop-blur-md">
+                <div className="relative h-[185px]">
+                  <Image
+                    src="/High-end-real-estate-avondfotografie-IMG_5863-1280x720.jpg"
+                    alt="Luxe interieur fotografie"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+                      Interieur
+                    </div>
+                    <div className="mt-3 text-xl font-semibold text-white">
+                      Beleving & detail
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="relative min-h-[205px] overflow-hidden rounded-[28px] border border-white/10 sm:col-span-2">
-              <Image
-                src="/01-Duinvilla-Bosch-en-Duin-IMG_6625-2-2048x1366.jpg"
-                alt="Exclusieve villa promotie"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/68 via-black/28 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 flex flex-wrap items-end justify-between gap-4 p-5">
-                <div>
-                  <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
-                    Vastgoed Exclusief
-                  </div>
-                  <div className="mt-3 text-2xl font-semibold text-white">
-                    Luxe presentatie voor het hogere segment
-                  </div>
-                  <p className="mt-2 max-w-xl text-sm leading-6 text-white/82">
-                    Professionele fotografie, social campagnes en premium
-                    zichtbaarheid in één stijlvolle presentatie.
-                  </p>
-                </div>
-
-                <div className="rounded-[22px] border border-white/12 bg-white/10 px-5 py-4 text-white backdrop-blur-md">
-                  <div className="text-sm text-white/80">Instagram bereik</div>
-                  <div className="mt-1 text-3xl font-semibold">18K+</div>
+              <div className="rounded-[24px] border border-white/12 bg-white/10 p-5 text-white backdrop-blur-md">
+                <div className="text-sm text-white/75">Instagram bereik</div>
+                <div className="mt-2 text-4xl font-semibold">18K+</div>
+                <div className="mt-2 text-sm leading-6 text-white/80">
+                  Gericht inzetbaar voor merkbeleving, zichtbaarheid en extra
+                  aandacht in het hogere segment.
                 </div>
               </div>
             </div>
