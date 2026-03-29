@@ -211,30 +211,6 @@ export default function PresentatiePromotiePage() {
     }));
   }, [selectedService.autoNotes, selectedServiceKey]);
 
-  const heroCards = useMemo(
-    () => [
-      {
-        label: 'Instagram bereik',
-        value: '18K+',
-        sub: 'Volgers & zichtbaarheid',
-        icon: Instagram,
-      },
-      {
-        label: 'Promotievormen',
-        value: '5',
-        sub: 'Direct inzetbaar',
-        icon: Sparkles,
-      },
-      {
-        label: 'Zakelijk',
-        value: 'B2B',
-        sub: 'Aanvraagflow',
-        icon: ShieldCheck,
-      },
-    ],
-    [],
-  );
-
   function updateField(name: keyof typeof form, value: string | boolean) {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
@@ -342,7 +318,7 @@ export default function PresentatiePromotiePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
 
           <div className="relative z-10 grid min-h-[520px] gap-8 px-7 py-7 lg:grid-cols-[1.1fr_340px] lg:px-10 lg:py-10">
-            <div className="flex flex-col justify-between">
+            <div className="flex flex-col justify-center">
               <div>
                 <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white/95 backdrop-blur">
                   <Sparkles className="mr-2 h-4 w-4 text-[#f3df9b]" />
@@ -358,42 +334,6 @@ export default function PresentatiePromotiePage() {
                   Professionele fotografie, social campagnes en premium
                   zichtbaarheid voor exclusieve woningen.
                 </p>
-
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/95 backdrop-blur">
-                    Luxe presentatie
-                  </span>
-                  <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/95 backdrop-blur">
-                    Instagram campagnes
-                  </span>
-                  <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/95 backdrop-blur">
-                    Directe aanvraagflow
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                {heroCards.map((card) => {
-                  const Icon = card.icon;
-                  return (
-                    <div
-                      key={card.label}
-                      className="rounded-[24px] border border-white/12 bg-white/10 p-4 text-white backdrop-blur-md"
-                    >
-                      <div className="mb-3 flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/12">
-                          <Icon className="h-5 w-5 text-white" />
-                        </div>
-                        <span className="text-sm font-medium text-white/80">
-                          {card.label}
-                        </span>
-                      </div>
-
-                      <div className="text-3xl font-semibold">{card.value}</div>
-                      <div className="mt-1 text-sm text-white/78">{card.sub}</div>
-                    </div>
-                  );
-                })}
               </div>
             </div>
 
@@ -438,12 +378,21 @@ export default function PresentatiePromotiePage() {
                 </div>
               </div>
 
-              <div className="rounded-[24px] border border-white/12 bg-white/10 p-5 text-white backdrop-blur-md">
-                <div className="text-sm text-white/75">Instagram bereik</div>
-                <div className="mt-2 text-4xl font-semibold">18K+</div>
-                <div className="mt-2 text-sm leading-6 text-white/80">
-                  Gericht inzetbaar voor merkbeleving, zichtbaarheid en extra
-                  aandacht in het hogere segment.
+              <div className="overflow-hidden rounded-[28px] border border-white/12 bg-black/20 backdrop-blur-md">
+                <div className="relative h-[220px]">
+                  <Image
+                    src="/High-end-real-estate-avondfotografie-IMG_5652-1280x720.jpg"
+                    alt="Instagram bereik luxe presentatie"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+                    <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+                      Instagram bereik
+                    </div>
+                    <div className="mt-3 text-2xl font-semibold">18K+</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -741,36 +690,6 @@ export default function PresentatiePromotiePage() {
                   </li>
                 ))}
               </ul>
-            </div>
-
-            <div className="rounded-[26px] border border-slate-200 bg-[#07111f] p-0 shadow-[0_20px_60px_rgba(8,15,30,0.16)] overflow-hidden">
-              <div className="relative h-[220px]">
-                <Image
-                  src="/High-end-real-estate-avondfotografie-IMG_0214-1280x720.jpg"
-                  alt="Instagram bereik luxe woning"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#07111f]/90 via-[#07111f]/30 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/12 backdrop-blur">
-                      <Instagram className="h-5 w-5 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-white/85">
-                        Instagram & campagnes
-                      </div>
-                      <div className="text-2xl font-semibold">18K+ bereik</div>
-                    </div>
-                  </div>
-
-                  <p className="mt-3 text-sm leading-6 text-white/88">
-                    Ideaal voor extra zichtbaarheid, merkbeleving en gerichte
-                    promotie voor makelaars in het hogere segment.
-                  </p>
-                </div>
-              </div>
             </div>
 
             <div className="rounded-[26px] border border-slate-200 bg-white p-5 shadow-[0_10px_25px_rgba(16,44,84,0.05)]">
