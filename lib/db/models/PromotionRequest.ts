@@ -11,22 +11,70 @@ const PromotionRequestSchema = new Schema(
     propertyAddress: {
       type: String,
       required: true,
+      default: 'Niet van toepassing - promotieaanvraag',
     },
 
     city: {
       type: String,
       required: true,
+      default: 'Niet van toepassing',
     },
 
     packageType: {
       type: String,
-      enum: ['homepage', 'instagram', 'fotografie', 'compleet'],
+      enum: [
+        'high-end-mediapakket',
+        'homepage-banner-socials',
+        'uitgelichte-woning-homepage',
+        'social-media-campagne',
+        'vermelding-online-magazine',
+      ],
       required: true,
+    },
+
+    packageTitle: {
+      type: String,
+      default: '',
+    },
+
+    packagePrice: {
+      type: String,
+      default: '',
+    },
+
+    contactName: {
+      type: String,
+      default: '',
+    },
+
+    companyName: {
+      type: String,
+      default: '',
+    },
+
+    email: {
+      type: String,
+      default: '',
+    },
+
+    phone: {
+      type: String,
+      default: '',
+    },
+
+    packageBullets: {
+      type: [String],
+      default: [],
     },
 
     notes: {
       type: String,
       default: '',
+    },
+
+    agreed: {
+      type: Boolean,
+      default: false,
     },
 
     status: {
