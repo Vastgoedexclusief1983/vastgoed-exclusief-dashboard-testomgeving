@@ -339,14 +339,14 @@ export default function PresentatiePromotiePage() {
         <div className="grid lg:grid-cols-[1.12fr_0.88fr]">
           <div className="relative min-h-[420px] overflow-hidden">
             <Image
-              src="/images/presentatie-promotie/avondvilla-1.jpg"
+              src="/01-Duinvilla-Bosch-en-Duin-IMG_6625-2-2048x1366.jpg"
               alt="Luxe avondfotografie villa"
               fill
               className="object-cover"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#06101d]/95 via-[#07111f]/82 to-[#07111f]/35" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#06101d]/96 via-[#07111f]/84 to-[#07111f]/35" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
 
             <div className="relative z-10 flex h-full flex-col justify-between px-7 py-7 lg:px-9 lg:py-9">
               <div>
@@ -407,14 +407,14 @@ export default function PresentatiePromotiePage() {
           <div className="grid gap-3 bg-[#07111f] p-3 sm:grid-cols-2 sm:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:p-4">
             <div className="relative min-h-[205px] overflow-hidden rounded-[28px] border border-white/10">
               <Image
-                src="/images/presentatie-promotie/avondvilla-2.jpg"
+                src="/High-end-real-estate-avondfotografie-IMG_0214-1280x720.jpg"
                 alt="Luxe woning avondfoto entree"
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
-                <div className="rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur inline-flex">
+                <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
                   Avondfotografie
                 </div>
                 <div className="mt-3 text-xl font-semibold text-white">
@@ -425,14 +425,14 @@ export default function PresentatiePromotiePage() {
 
             <div className="relative min-h-[205px] overflow-hidden rounded-[28px] border border-white/10">
               <Image
-                src="/images/presentatie-promotie/interieur-luxe.jpg"
+                src="/High-end-real-estate-avondfotografie-IMG_5863-1280x720.jpg"
                 alt="Luxe interieur fotografie"
                 fill
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
-                <div className="rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur inline-flex">
+                <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
                   Interieur
                 </div>
                 <div className="mt-3 text-xl font-semibold text-white">
@@ -443,15 +443,15 @@ export default function PresentatiePromotiePage() {
 
             <div className="relative min-h-[205px] overflow-hidden rounded-[28px] border border-white/10 sm:col-span-2">
               <Image
-                src="/images/presentatie-promotie/avondvilla-1.jpg"
+                src="/01-Duinvilla-Bosch-en-Duin-IMG_6625-2-2048x1366.jpg"
                 alt="Exclusieve villa promotie"
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/18 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/68 via-black/28 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 flex flex-wrap items-end justify-between gap-4 p-5">
                 <div>
-                  <div className="rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur inline-flex">
+                  <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
                     Vastgoed Exclusief
                   </div>
                   <div className="mt-3 text-2xl font-semibold text-white">
@@ -768,7 +768,7 @@ export default function PresentatiePromotiePage() {
             <div className="rounded-[26px] border border-slate-200 bg-[#07111f] p-0 shadow-[0_20px_60px_rgba(8,15,30,0.16)] overflow-hidden">
               <div className="relative h-[220px]">
                 <Image
-                  src="/images/presentatie-promotie/avondvilla-2.jpg"
+                  src="/High-end-real-estate-avondfotografie-IMG_0214-1280x720.jpg"
                   alt="Instagram bereik luxe woning"
                   fill
                   className="object-cover"
