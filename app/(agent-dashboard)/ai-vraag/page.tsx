@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -240,43 +241,57 @@ export default function AiVraagPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-6">
-      <section className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-gradient-to-br from-[#0f2747] via-[#153a69] to-[#214f8e] px-6 py-7 text-white shadow-[0_30px_90px_rgba(15,39,71,0.18)] md:px-8 md:py-8">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.10),transparent_26%)]" />
-        <div className="relative grid gap-6 lg:grid-cols-[1.5fr_0.9fr] lg:items-end">
-          <div>
-            <div className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium tracking-wide text-white/90 backdrop-blur">
-              Indicatieve prijsanalyse voor exclusief vastgoed
+      <section className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-[#0b1830] shadow-[0_30px_90px_rgba(15,39,71,0.18)]">
+        <div className="absolute inset-0">
+          <Image
+            src="/01-Duinvilla-Bosch-en-Duin-IMG_6625-2-2048x1366.jpg"
+            alt="Luxe villa achtergrond"
+            fill
+            priority
+            className="object-cover"
+          />
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-r from-[#08162d]/92 via-[#102c54]/82 to-[#17365f]/68" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_24%)]" />
+
+        <div className="relative px-6 py-7 md:px-8 md:py-8">
+          <div className="grid gap-6 lg:grid-cols-[1.5fr_0.9fr] lg:items-end">
+            <div>
+              <div className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium tracking-wide text-white/90 backdrop-blur-xl">
+                Indicatieve prijsanalyse voor exclusief vastgoed
+              </div>
+
+              <h1 className="mt-5 text-3xl font-semibold tracking-tight text-white md:text-5xl">
+                Basisprijs bepalen
+              </h1>
+
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-white/85 md:text-base">
+                Bepaal een indicatieve richtprijs voor woningen in het hogere segment. Deze module is
+                bedoeld als premium startpunt voor de waardebepaling en geeft een AI-ondersteunde
+                inschatting op basis van ingevoerde woningkenmerken, locatie en marktcontext.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <StatusPill label="Richtprijs miljoenenwoning" />
+                <StatusPill label="Bandbreedte & prijs per m²" />
+                <StatusPill label="Indicatief resultaat" />
+              </div>
             </div>
 
-            <h1 className="mt-5 text-3xl font-semibold tracking-tight md:text-5xl">
-              Basisprijs bepalen
-            </h1>
+            <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+              <div className="text-sm font-medium text-white/80">Positionering van deze module</div>
+              <div className="mt-3 text-2xl font-semibold text-white">Basisprijs / richtprijs</div>
+              <p className="mt-3 text-sm leading-6 text-white/80">
+                Gebruik deze pagina als eerste stap binnen de waardebepaling. Het resultaat is
+                nadrukkelijk indicatief en geen officieel taxatierapport.
+              </p>
 
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-white/85 md:text-base">
-              Bepaal een indicatieve richtprijs voor woningen in het hogere segment. Deze module is
-              bedoeld als premium startpunt voor de waardebepaling en geeft een AI-ondersteunde
-              inschatting op basis van ingevoerde woningkenmerken, locatie en marktcontext.
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <StatusPill label="Richtprijs miljoenenwoning" />
-              <StatusPill label="Bandbreedte & prijs per m²" />
-              <StatusPill label="Indicatief resultaat" />
-            </div>
-          </div>
-
-          <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 backdrop-blur-xl">
-            <div className="text-sm font-medium text-white/80">Positionering van deze module</div>
-            <div className="mt-3 text-2xl font-semibold">Basisprijs / richtprijs</div>
-            <p className="mt-3 text-sm leading-6 text-white/80">
-              Gebruik deze pagina als eerste stap binnen de waardebepaling. Het resultaat is
-              nadrukkelijk indicatief en geen officieel taxatierapport.
-            </p>
-
-            <div className="mt-5 grid gap-3">
-              <FeatureRow text="Geschikt voor exclusieve woningen vanaf circa €1.000.000" />
-              <FeatureRow text="Geeft richting voor bandbreedte, positionering en prijs per m²" />
-              <FeatureRow text="Kan later worden gebruikt binnen dashboard en waardering" />
+              <div className="mt-5 grid gap-3">
+                <FeatureRow text="Geschikt voor exclusieve woningen vanaf circa €1.000.000" />
+                <FeatureRow text="Geeft richting voor bandbreedte, positionering en prijs per m²" />
+                <FeatureRow text="Kan later worden gebruikt binnen dashboard en waardering" />
+              </div>
             </div>
           </div>
         </div>
@@ -723,7 +738,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function StatusPill({ label }: { label: string }) {
   return (
-    <div className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-white/90 backdrop-blur">
+    <div className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-white/90 backdrop-blur-xl">
       {label}
     </div>
   );
@@ -731,7 +746,7 @@ function StatusPill({ label }: { label: string }) {
 
 function FeatureRow({ text }: { text: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white/90">
+    <div className="rounded-2xl border border-white/12 bg-white/10 px-4 py-3 text-sm text-white/90 backdrop-blur-xl">
       {text}
     </div>
   );
