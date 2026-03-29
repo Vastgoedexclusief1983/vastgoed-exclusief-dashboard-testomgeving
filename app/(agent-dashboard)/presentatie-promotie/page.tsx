@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import {
   ArrowRight,
@@ -217,27 +218,18 @@ export default function PresentatiePromotiePage() {
         value: '18K+',
         sub: 'Volgers & zichtbaarheid',
         icon: Instagram,
-        cardClass:
-          'from-fuchsia-700 via-pink-600 to-orange-500 text-white shadow-[0_20px_60px_rgba(236,72,153,0.30)]',
-        iconWrapClass: 'bg-white/20 text-white',
       },
       {
         label: 'Promotievormen',
         value: '5',
         sub: 'Direct inzetbaar',
         icon: Sparkles,
-        cardClass:
-          'from-[#0f172a] via-[#102c54] to-[#2563eb] text-white shadow-[0_20px_60px_rgba(37,99,235,0.26)]',
-        iconWrapClass: 'bg-white/15 text-[#dbeafe]',
       },
       {
         label: 'Zekerheid',
         value: 'B2B',
         sub: 'Zakelijke aanvraagflow',
         icon: ShieldCheck,
-        cardClass:
-          'from-[#111827] via-[#7c3aed] to-[#ec4899] text-white shadow-[0_20px_60px_rgba(124,58,237,0.24)]',
-        iconWrapClass: 'bg-white/15 text-[#f5d0fe]',
       },
     ],
     [],
@@ -343,61 +335,140 @@ export default function PresentatiePromotiePage() {
 
   return (
     <div className="space-y-6">
-      <section className="overflow-hidden rounded-[30px] border border-fuchsia-300/20 bg-gradient-to-br from-fuchsia-700 via-pink-600 to-orange-500 text-white shadow-[0_26px_80px_rgba(236,72,153,0.26)]">
-        <div className="grid gap-6 px-7 py-7 lg:grid-cols-[1.35fr_400px] lg:px-8 lg:py-8">
-          <div>
-            <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white/95 backdrop-blur">
-              <Sparkles className="mr-2 h-4 w-4 text-[#fff1b8]" />
-              Multimedia • Presentatie & Promotie
-            </div>
+      <section className="overflow-hidden rounded-[34px] border border-slate-200 bg-[#07111f] shadow-[0_26px_80px_rgba(8,15,30,0.22)]">
+        <div className="grid lg:grid-cols-[1.12fr_0.88fr]">
+          <div className="relative min-h-[420px] overflow-hidden">
+            <Image
+              src="/images/presentatie-promotie/avondvilla-1.jpg"
+              alt="Luxe avondfotografie villa"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#06101d]/95 via-[#07111f]/82 to-[#07111f]/35" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
 
-            <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight md:text-5xl">
-              Promotie & zichtbaarheid
-            </h1>
+            <div className="relative z-10 flex h-full flex-col justify-between px-7 py-7 lg:px-9 lg:py-9">
+              <div>
+                <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white/95 backdrop-blur">
+                  <Sparkles className="mr-2 h-4 w-4 text-[#f3df9b]" />
+                  Multimedia • Presentatie & Promotie
+                </div>
 
-            <p className="mt-4 max-w-3xl text-base leading-7 text-white/90">
-              Kies een pakket en verzend direct een zakelijke aanvraag. De mail
-              bevat de makelaarsgegevens, het gekozen pakket, de prijs en de
-              pakketinhoud.
-            </p>
+                <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-tight text-white md:text-5xl">
+                  Promotie & zichtbaarheid
+                </h1>
 
-            <div className="mt-5 flex flex-wrap gap-3">
-              <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/95">
-                Luxe presentatie
-              </span>
-              <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/95">
-                Instagram campagnes
-              </span>
-              <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/95">
-                Directe aanvraagflow
-              </span>
+                <p className="mt-5 max-w-2xl text-base leading-7 text-white/85">
+                  Kies een pakket en verzend direct een zakelijke aanvraag. De
+                  mail bevat de makelaarsgegevens, het gekozen pakket, de prijs
+                  en de pakketinhoud.
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/95 backdrop-blur">
+                    Luxe presentatie
+                  </span>
+                  <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/95 backdrop-blur">
+                    Instagram campagnes
+                  </span>
+                  <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/95 backdrop-blur">
+                    Directe aanvraagflow
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                {heroCards.map((card) => {
+                  const Icon = card.icon;
+                  return (
+                    <div
+                      key={card.label}
+                      className="rounded-[24px] border border-white/12 bg-white/10 p-4 text-white backdrop-blur-md"
+                    >
+                      <div className="mb-3 flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/12">
+                          <Icon className="h-5 w-5 text-white" />
+                        </div>
+                        <span className="text-sm font-medium text-white/80">
+                          {card.label}
+                        </span>
+                      </div>
+
+                      <div className="text-3xl font-semibold">{card.value}</div>
+                      <div className="mt-1 text-sm text-white/78">{card.sub}</div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          <div className="grid gap-3">
-            {heroCards.map((card) => {
-              const Icon = card.icon;
-              return (
-                <div
-                  key={card.label}
-                  className={`rounded-[24px] border border-white/10 bg-gradient-to-br p-5 backdrop-blur ${card.cardClass}`}
-                >
-                  <div className="mb-3 flex items-center gap-3">
-                    <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-2xl ${card.iconWrapClass}`}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <span className="text-sm font-medium text-white/85">
-                      {card.label}
-                    </span>
-                  </div>
-
-                  <div className="text-3xl font-semibold">{card.value}</div>
-                  <div className="mt-1 text-sm text-white/85">{card.sub}</div>
+          <div className="grid gap-3 bg-[#07111f] p-3 sm:grid-cols-2 sm:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:p-4">
+            <div className="relative min-h-[205px] overflow-hidden rounded-[28px] border border-white/10">
+              <Image
+                src="/images/presentatie-promotie/avondvilla-2.jpg"
+                alt="Luxe woning avondfoto entree"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <div className="rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur inline-flex">
+                  Avondfotografie
                 </div>
-              );
-            })}
+                <div className="mt-3 text-xl font-semibold text-white">
+                  High-end uitstraling
+                </div>
+              </div>
+            </div>
+
+            <div className="relative min-h-[205px] overflow-hidden rounded-[28px] border border-white/10">
+              <Image
+                src="/images/presentatie-promotie/interieur-luxe.jpg"
+                alt="Luxe interieur fotografie"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <div className="rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur inline-flex">
+                  Interieur
+                </div>
+                <div className="mt-3 text-xl font-semibold text-white">
+                  Beleving & detail
+                </div>
+              </div>
+            </div>
+
+            <div className="relative min-h-[205px] overflow-hidden rounded-[28px] border border-white/10 sm:col-span-2">
+              <Image
+                src="/images/presentatie-promotie/avondvilla-1.jpg"
+                alt="Exclusieve villa promotie"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/18 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 flex flex-wrap items-end justify-between gap-4 p-5">
+                <div>
+                  <div className="rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur inline-flex">
+                    Vastgoed Exclusief
+                  </div>
+                  <div className="mt-3 text-2xl font-semibold text-white">
+                    Luxe presentatie voor het hogere segment
+                  </div>
+                  <p className="mt-2 max-w-xl text-sm leading-6 text-white/82">
+                    Professionele fotografie, social campagnes en premium
+                    zichtbaarheid in één stijlvolle presentatie.
+                  </p>
+                </div>
+
+                <div className="rounded-[22px] border border-white/12 bg-white/10 px-5 py-4 text-white backdrop-blur-md">
+                  <div className="text-sm text-white/80">Instagram bereik</div>
+                  <div className="mt-1 text-3xl font-semibold">18K+</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -694,23 +765,34 @@ export default function PresentatiePromotiePage() {
               </ul>
             </div>
 
-            <div className="rounded-[26px] border border-fuchsia-200 bg-gradient-to-br from-fuchsia-700 via-pink-600 to-orange-500 p-5 text-white shadow-[0_20px_60px_rgba(236,72,153,0.22)]">
-              <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15">
-                  <Instagram className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-white/85">
-                    Instagram & campagnes
+            <div className="rounded-[26px] border border-slate-200 bg-[#07111f] p-0 shadow-[0_20px_60px_rgba(8,15,30,0.16)] overflow-hidden">
+              <div className="relative h-[220px]">
+                <Image
+                  src="/images/presentatie-promotie/avondvilla-2.jpg"
+                  alt="Instagram bereik luxe woning"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#07111f]/90 via-[#07111f]/30 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/12 backdrop-blur">
+                      <Instagram className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-white/85">
+                        Instagram & campagnes
+                      </div>
+                      <div className="text-2xl font-semibold">18K+ bereik</div>
+                    </div>
                   </div>
-                  <div className="text-2xl font-semibold">18K+ bereik</div>
+
+                  <p className="mt-3 text-sm leading-6 text-white/88">
+                    Ideaal voor extra zichtbaarheid, merkbeleving en gerichte
+                    promotie voor makelaars in het hogere segment.
+                  </p>
                 </div>
               </div>
-
-              <p className="mt-3 text-sm leading-6 text-white/92">
-                Ideaal voor extra zichtbaarheid, merkbeleving en gerichte
-                promotie voor makelaars in het hogere segment.
-              </p>
             </div>
 
             <div className="rounded-[26px] border border-slate-200 bg-white p-5 shadow-[0_10px_25px_rgba(16,44,84,0.05)]">
