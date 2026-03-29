@@ -10,7 +10,6 @@ import {
   Camera,
   CheckCircle2,
   Crown,
-  Globe,
   Instagram,
   Newspaper,
   Send,
@@ -165,6 +164,20 @@ export default function PresentatiePromotiePage() {
   const [selectedServiceKey, setSelectedServiceKey] =
     useState<ServiceKey>('social-media-campagne');
 
+  const [form, setForm] = useState({
+    companyName: '',
+    contactName: '',
+    email: '',
+    phone: '',
+    notes:
+      'Interesse in Social media campagne. Graag deze woning promoten via Instagram en gerichte doelgroepcampagne.',
+    agreedToTerms: false,
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
   const selectedService =
     SERVICES.find((service) => service.key === selectedServiceKey) ?? SERVICES[0];
 
@@ -175,20 +188,6 @@ export default function PresentatiePromotiePage() {
 
   const kantoorNaam = sessionUser.companyName || sessionUser.officeName || '';
 
-  const [form, setForm] = useState({
-    companyName: '',
-    contactName: '',
-    email: '',
-    phone: '',
-    preferredService: selectedService.title,
-    notes: selectedService.autoNotes,
-    agreedToTerms: false,
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
-
   useEffect(() => {
     setForm((prev) => ({
       ...prev,
@@ -196,9 +195,22 @@ export default function PresentatiePromotiePage() {
       companyName: prev.companyName || kantoorNaam,
       email: prev.email || sessionUser.email || '',
     }));
-  }, [makelaarNaam, kantoorNaam, sessionUser.email]);
+  }, [kantoorNaam, makelaarNaam, sessionUser.email]);
 
-  const heroMetrics = useMemo(
+  useEffect(() => {
+    setForm((prev) => ({
+      ...prev,
+      notes:
+        prev.notes.trim() === '' ||
+        prev.notes ===
+          (SERVICES.find((service) => service.key === selectedServiceKey)?.autoNotes ??
+            '')
+          ? selectedService.autoNotes
+          : prev.notes,
+    }));
+  }, [selectedService.autoNotes, selectedServiceKey]);
+
+  const heroCards = useMemo(
     () => [
       {
         label: 'Instagram bereik',
@@ -231,7 +243,10 @@ export default function PresentatiePromotiePage() {
     [],
   );
 
-  function updateField(name: keyof typeof form, value: string | boolean) {
+  function updateField(
+    name: keyof typeof form,
+    value: string | boolean,
+  ) {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
@@ -239,11 +254,9 @@ export default function PresentatiePromotiePage() {
     setSelectedServiceKey(service.key);
     setForm((prev) => ({
       ...prev,
-      preferredService: service.title,
       notes:
         prev.notes.trim() === '' ||
-        prev.notes === selectedService.autoNotes ||
-        prev.preferredService === selectedService.title
+        prev.notes === selectedService.autoNotes
           ? service.autoNotes
           : prev.notes,
     }));
@@ -257,9 +270,27 @@ export default function PresentatiePromotiePage() {
     setSuccess(false);
     setError('');
 
+    if (!form.contactName.trim()) {
+      setError('Naam makelaar is verplicht.');
+      setLoading(false);
+      return;
+    }
+
+    if (!form.companyName.trim()) {
+      setError('Kantoornaam is verplicht.');
+      setLoading(false);
+      return;
+    }
+
+    if (!form.email.trim()) {
+      setError('E-mailadres is verplicht.');
+      setLoading(false);
+      return;
+    }
+
     if (!form.agreedToTerms) {
       setError(
-        'U dient akkoord te gaan met de algemene voorwaarden en privacyverklaring.',
+        'Akkoord met de algemene voorwaarden en privacyverklaring is verplicht.',
       );
       setLoading(false);
       return;
@@ -278,8 +309,9 @@ export default function PresentatiePromotiePage() {
           phone: form.phone,
           propertyAddress: 'Niet van toepassing - promotieaanvraag',
           city: 'Niet van toepassing',
-          packageType: selectedService.title,
+          packageType: selectedService.key,
           packageKey: selectedService.key,
+          packageTitle: selectedService.title,
           packagePrice: selectedService.priceLabel,
           packageBullets: selectedService.bullets,
           notes: form.notes,
@@ -343,27 +375,26 @@ export default function PresentatiePromotiePage() {
           </div>
 
           <div className="grid gap-3">
-            {heroMetrics.map((metric) => {
-              const Icon = metric.icon;
-
+            {heroCards.map((card) => {
+              const Icon = card.icon;
               return (
                 <div
-                  key={metric.label}
-                  className={`rounded-[24px] border border-white/10 bg-gradient-to-br p-5 backdrop-blur ${metric.cardClass}`}
+                  key={card.label}
+                  className={`rounded-[24px] border border-white/10 bg-gradient-to-br p-5 backdrop-blur ${card.cardClass}`}
                 >
                   <div className="mb-3 flex items-center gap-3">
                     <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-2xl ${metric.iconWrapClass}`}
+                      className={`flex h-10 w-10 items-center justify-center rounded-2xl ${card.iconWrapClass}`}
                     >
                       <Icon className="h-5 w-5" />
                     </div>
                     <span className="text-sm font-medium text-white/85">
-                      {metric.label}
+                      {card.label}
                     </span>
                   </div>
 
-                  <div className="text-3xl font-semibold">{metric.value}</div>
-                  <div className="mt-1 text-sm text-white/85">{metric.sub}</div>
+                  <div className="text-3xl font-semibold">{card.value}</div>
+                  <div className="mt-1 text-sm text-white/85">{card.sub}</div>
                 </div>
               );
             })}
@@ -426,7 +457,7 @@ export default function PresentatiePromotiePage() {
 
                 <h3
                   className={[
-                    'mt-5 text-[2rem] font-semibold leading-tight',
+                    'mt-5 text-[1.85rem] font-semibold leading-tight',
                     active ? 'text-white' : 'text-[#102c54]',
                   ].join(' ')}
                 >
