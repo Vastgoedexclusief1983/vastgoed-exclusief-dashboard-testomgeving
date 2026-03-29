@@ -2,19 +2,21 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
+import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import {
   ArrowRight,
   BadgeCheck,
   Camera,
+  CheckCircle2,
   Crown,
   Globe,
   Instagram,
   Newspaper,
   Send,
+  ShieldCheck,
   Sparkles,
   TrendingUp,
-  Video,
 } from 'lucide-react';
 
 type ServiceKey =
@@ -57,8 +59,7 @@ const SERVICES: PromotionService[] = [
     icon: Camera,
     accentClass:
       'from-[#0f172a] via-[#102c54] to-[#2563eb] border-white/10',
-    badgeClass:
-      'border border-white/15 bg-white/10 text-white',
+    badgeClass: 'border border-white/15 bg-white/10 text-white',
     bullets: [
       'High-end fotografie incl. bewerking',
       'Avondfotografie',
@@ -72,7 +73,7 @@ const SERVICES: PromotionService[] = [
       'Excl. btw / reiskosten ex Utrecht €0,35 per km',
     ],
     autoNotes:
-      'Interesse in het High-end mediapakket voor deze woning. Graag planning, voorstel en verdere afstemming.',
+      'Interesse in het High-end mediapakket. Graag planning, voorstel en verdere afstemming.',
   },
   {
     key: 'homepage-banner-socials',
@@ -83,9 +84,8 @@ const SERVICES: PromotionService[] = [
       'Maximale zichtbaarheid op de homepagebanner inclusief logo, directe doorklik en extra social media exposure.',
     icon: TrendingUp,
     accentClass:
-      'from-[#0f172a] via-[#1d4ed8] to-[#22c55e] border-cyan-300/20',
-    badgeClass:
-      'border border-white/15 bg-white/10 text-white',
+      'from-[#1e3a8a] via-[#2563eb] to-[#06b6d4] border-cyan-300/20',
+    badgeClass: 'border border-white/15 bg-white/10 text-white',
     bullets: [
       'Maximale zichtbaarheid bij kopers in het hogere segment',
       'Uitgelichte woning op de homepagebanner',
@@ -105,9 +105,8 @@ const SERVICES: PromotionService[] = [
       'Een krachtige extra plaatsing op de homepage voor meer attentiewaarde en snellere zichtbaarheid binnen het exclusieve segment.',
     icon: Crown,
     accentClass:
-      'from-[#0f172a] via-[#7c3aed] to-[#ec4899] border-fuchsia-300/20',
-    badgeClass:
-      'border border-white/15 bg-white/10 text-white',
+      'from-[#581c87] via-[#7c3aed] to-[#ec4899] border-fuchsia-300/20',
+    badgeClass: 'border border-white/15 bg-white/10 text-white',
     bullets: [
       'Maximale zichtbaarheid bij kopers in het hogere segment',
       'Woning uitgelicht op de homepage',
@@ -126,8 +125,7 @@ const SERVICES: PromotionService[] = [
     icon: Instagram,
     accentClass:
       'from-fuchsia-700 via-pink-600 to-orange-500 border-pink-300/20',
-    badgeClass:
-      'border border-white/15 bg-white/10 text-white',
+    badgeClass: 'border border-white/15 bg-white/10 text-white',
     bullets: [
       'Betaalde campagne via Instagram @vastgoedexclusief.nl',
       'Bereik via doelgroep geïnteresseerd in exclusief vastgoed',
@@ -148,8 +146,7 @@ const SERVICES: PromotionService[] = [
     icon: Newspaper,
     accentClass:
       'from-[#052e16] via-[#166534] to-[#0ea5e9] border-emerald-300/20',
-    badgeClass:
-      'border border-white/15 bg-white/10 text-white',
+    badgeClass: 'border border-white/15 bg-white/10 text-white',
     bullets: [
       'Maximale zichtbaarheid bij kopers in het hogere segment',
       'Woning uitgelicht in online magazine',
@@ -183,10 +180,9 @@ export default function PresentatiePromotiePage() {
     contactName: '',
     email: '',
     phone: '',
-    address: '',
-    city: '',
     preferredService: selectedService.title,
     notes: selectedService.autoNotes,
+    agreedToTerms: false,
   });
 
   const [loading, setLoading] = useState(false);
@@ -210,32 +206,32 @@ export default function PresentatiePromotiePage() {
         sub: 'Volgers & zichtbaarheid',
         icon: Instagram,
         cardClass:
-          'from-fuchsia-700 via-pink-600 to-orange-500 text-white shadow-[0_24px_70px_rgba(236,72,153,0.35)]',
+          'from-fuchsia-700 via-pink-600 to-orange-500 text-white shadow-[0_20px_60px_rgba(236,72,153,0.30)]',
         iconWrapClass: 'bg-white/20 text-white',
       },
       {
         label: 'Promotievormen',
         value: '5',
-        sub: 'Direct aan te vragen',
+        sub: 'Direct inzetbaar',
         icon: Sparkles,
         cardClass:
-          'from-[#0f172a] via-[#102c54] to-[#2563eb] text-white shadow-[0_24px_70px_rgba(37,99,235,0.28)]',
+          'from-[#0f172a] via-[#102c54] to-[#2563eb] text-white shadow-[0_20px_60px_rgba(37,99,235,0.26)]',
         iconWrapClass: 'bg-white/15 text-[#dbeafe]',
       },
       {
-        label: 'Doel',
-        value: 'Meer bereik',
-        sub: 'Meer aandacht voor exclusieve woningen',
-        icon: Globe,
+        label: 'Zekerheid',
+        value: 'B2B',
+        sub: 'Zakelijke aanvraagflow',
+        icon: ShieldCheck,
         cardClass:
-          'from-[#111827] via-[#7c3aed] to-[#ec4899] text-white shadow-[0_24px_70px_rgba(124,58,237,0.28)]',
+          'from-[#111827] via-[#7c3aed] to-[#ec4899] text-white shadow-[0_20px_60px_rgba(124,58,237,0.24)]',
         iconWrapClass: 'bg-white/15 text-[#f5d0fe]',
       },
     ],
-    []
+    [],
   );
 
-  function updateField(name: keyof typeof form, value: string) {
+  function updateField(name: keyof typeof form, value: string | boolean) {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
@@ -261,6 +257,14 @@ export default function PresentatiePromotiePage() {
     setSuccess(false);
     setError('');
 
+    if (!form.agreedToTerms) {
+      setError(
+        'U dient akkoord te gaan met de algemene voorwaarden en privacyverklaring.',
+      );
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch('/api/promotion-request', {
         method: 'POST',
@@ -272,13 +276,14 @@ export default function PresentatiePromotiePage() {
           contactName: form.contactName,
           email: form.email,
           phone: form.phone,
-          propertyAddress: form.address,
-          city: form.city,
+          propertyAddress: 'Niet van toepassing - promotieaanvraag',
+          city: 'Niet van toepassing',
           packageType: selectedService.title,
           packageKey: selectedService.key,
           packagePrice: selectedService.priceLabel,
           packageBullets: selectedService.bullets,
           notes: form.notes,
+          agreed: form.agreedToTerms,
         }),
       });
 
@@ -292,9 +297,8 @@ export default function PresentatiePromotiePage() {
       setForm((prev) => ({
         ...prev,
         phone: '',
-        address: '',
-        city: '',
         notes: selectedService.autoNotes,
+        agreedToTerms: false,
       }));
     } catch (err) {
       setError(
@@ -306,27 +310,26 @@ export default function PresentatiePromotiePage() {
   }
 
   return (
-    <div className="space-y-8">
-      <section className="overflow-hidden rounded-[34px] border border-fuchsia-300/20 bg-gradient-to-br from-fuchsia-700 via-pink-600 to-orange-500 text-white shadow-[0_32px_90px_rgba(236,72,153,0.28)]">
-        <div className="grid gap-8 px-8 py-8 lg:grid-cols-[1.3fr_430px] lg:px-10 lg:py-10">
+    <div className="space-y-6">
+      <section className="overflow-hidden rounded-[30px] border border-fuchsia-300/20 bg-gradient-to-br from-fuchsia-700 via-pink-600 to-orange-500 text-white shadow-[0_26px_80px_rgba(236,72,153,0.26)]">
+        <div className="grid gap-6 px-7 py-7 lg:grid-cols-[1.35fr_400px] lg:px-8 lg:py-8">
           <div>
             <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white/95 backdrop-blur">
               <Sparkles className="mr-2 h-4 w-4 text-[#fff1b8]" />
               Multimedia • Presentatie & Promotie
             </div>
 
-            <h1 className="mt-6 max-w-4xl text-4xl font-semibold leading-tight md:text-6xl">
+            <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight md:text-5xl">
               Promotie & zichtbaarheid
             </h1>
 
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-white/90">
-              Kies een pakket en vergroot direct het bereik van uw woning. De
-              geselecteerde dienst wordt direct meegestuurd naar
-              info@vastgoedexclusief.nl, inclusief makelaarsgegevens,
-              woninggegevens en pakketinhoud.
+            <p className="mt-4 max-w-3xl text-base leading-7 text-white/90">
+              Kies een pakket en verzend direct een zakelijke aanvraag. De mail
+              bevat de makelaarsgegevens, het gekozen pakket, de prijs en de
+              pakketinhoud.
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap gap-3">
               <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/95">
                 Luxe presentatie
               </span>
@@ -339,17 +342,18 @@ export default function PresentatiePromotiePage() {
             </div>
           </div>
 
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             {heroMetrics.map((metric) => {
               const Icon = metric.icon;
+
               return (
                 <div
                   key={metric.label}
-                  className={`rounded-[28px] border border-white/10 bg-gradient-to-br p-6 backdrop-blur ${metric.cardClass}`}
+                  className={`rounded-[24px] border border-white/10 bg-gradient-to-br p-5 backdrop-blur ${metric.cardClass}`}
                 >
-                  <div className="mb-4 flex items-center gap-3">
+                  <div className="mb-3 flex items-center gap-3">
                     <div
-                      className={`flex h-11 w-11 items-center justify-center rounded-2xl ${metric.iconWrapClass}`}
+                      className={`flex h-10 w-10 items-center justify-center rounded-2xl ${metric.iconWrapClass}`}
                     >
                       <Icon className="h-5 w-5" />
                     </div>
@@ -358,8 +362,8 @@ export default function PresentatiePromotiePage() {
                     </span>
                   </div>
 
-                  <div className="text-4xl font-semibold">{metric.value}</div>
-                  <div className="mt-2 text-base text-white/85">{metric.sub}</div>
+                  <div className="text-3xl font-semibold">{metric.value}</div>
+                  <div className="mt-1 text-sm text-white/85">{metric.sub}</div>
                 </div>
               );
             })}
@@ -367,19 +371,18 @@ export default function PresentatiePromotiePage() {
         </div>
       </section>
 
-      <section className="space-y-4">
+      <section className="space-y-3">
         <div>
           <h2 className="text-3xl font-semibold text-[#102c54]">
             Kies een promotiepakket
           </h2>
-          <p className="mt-2 max-w-3xl text-base leading-7 text-slate-600">
-            Klik op een pakket om direct de juiste aanvraag voor te vullen. Zo
-            zien jullie intern meteen welke makelaar welke dienst aanvraagt, met
-            de juiste prijs en exacte pakketinhoud.
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+            Compact overzicht met de prijs, inhoud en directe selectie van het
+            juiste pakket.
           </p>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {SERVICES.map((service) => {
             const Icon = service.icon;
             const active = selectedServiceKey === service.key;
@@ -390,14 +393,14 @@ export default function PresentatiePromotiePage() {
                 type="button"
                 onClick={() => applyService(service)}
                 className={[
-                  'group rounded-[30px] border p-6 text-left transition-all duration-200',
-                  'shadow-[0_12px_35px_rgba(16,44,84,0.08)]',
+                  'group rounded-[26px] border p-5 text-left transition-all duration-200',
+                  'shadow-[0_10px_28px_rgba(16,44,84,0.07)]',
                   active
-                    ? `bg-gradient-to-br ${service.accentClass} text-white shadow-[0_24px_70px_rgba(16,44,84,0.22)]`
-                    : 'border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_18px_40px_rgba(16,44,84,0.14)]',
+                    ? `bg-gradient-to-br ${service.accentClass} text-white shadow-[0_22px_60px_rgba(16,44,84,0.18)]`
+                    : 'border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_16px_36px_rgba(16,44,84,0.12)]',
                 ].join(' ')}
               >
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-3">
                   <div
                     className={[
                       'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold',
@@ -411,7 +414,7 @@ export default function PresentatiePromotiePage() {
 
                   <div
                     className={[
-                      'flex h-12 w-12 items-center justify-center rounded-2xl',
+                      'flex h-11 w-11 items-center justify-center rounded-2xl',
                       active
                         ? 'bg-white/12 text-white'
                         : 'bg-[#102c54]/5 text-[#102c54]',
@@ -423,7 +426,7 @@ export default function PresentatiePromotiePage() {
 
                 <h3
                   className={[
-                    'mt-6 text-[2rem] font-semibold leading-tight',
+                    'mt-5 text-[2rem] font-semibold leading-tight',
                     active ? 'text-white' : 'text-[#102c54]',
                   ].join(' ')}
                 >
@@ -432,25 +435,25 @@ export default function PresentatiePromotiePage() {
 
                 <p
                   className={[
-                    'mt-4 text-base leading-7',
+                    'mt-3 text-sm leading-6',
                     active ? 'text-white/88' : 'text-slate-600',
                   ].join(' ')}
                 >
                   {service.description}
                 </p>
 
-                <ul className="mt-5 space-y-3">
+                <ul className="mt-4 space-y-2.5">
                   {service.bullets.map((bullet) => (
                     <li
                       key={bullet}
                       className={[
-                        'flex items-start gap-3 text-sm leading-6',
+                        'flex items-start gap-2.5 text-sm leading-6',
                         active ? 'text-white/92' : 'text-slate-700',
                       ].join(' ')}
                     >
                       <BadgeCheck
                         className={[
-                          'mt-0.5 h-4 w-4 shrink-0',
+                          'mt-1 h-4 w-4 shrink-0',
                           active ? 'text-[#fff1b8]' : 'text-[#102c54]',
                         ].join(' ')}
                       />
@@ -461,7 +464,7 @@ export default function PresentatiePromotiePage() {
 
                 <div
                   className={[
-                    'mt-6 inline-flex items-center text-sm font-semibold',
+                    'mt-5 inline-flex items-center text-sm font-semibold',
                     active ? 'text-white' : 'text-[#102c54]',
                   ].join(' ')}
                 >
@@ -474,25 +477,24 @@ export default function PresentatiePromotiePage() {
         </div>
       </section>
 
-      <section className="rounded-[34px] border border-slate-200 bg-white p-6 shadow-[0_14px_40px_rgba(16,44,84,0.08)] lg:p-8">
-        <div className="grid gap-8 lg:grid-cols-[1.15fr_420px]">
+      <section className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_14px_36px_rgba(16,44,84,0.07)] lg:p-6">
+        <div className="grid gap-5 lg:grid-cols-[1.15fr_380px]">
           <div>
             <div className="inline-flex rounded-full bg-[#102c54]/6 px-4 py-2 text-sm font-semibold text-[#102c54]">
-              Aanvraagformulier
+              Zakelijke aanvraag
             </div>
 
-            <h2 className="mt-5 text-4xl font-semibold text-[#102c54]">
+            <h2 className="mt-4 text-3xl font-semibold text-[#102c54]">
               Vraag direct een promotiedienst aan
             </h2>
 
-            <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
-              De aanvraag wordt verzonden naar info@vastgoedexclusief.nl met
-              daarin de naam van de makelaar, het kantoor, e-mailadres,
-              woningadres, gekozen pakket, prijs en pakketinhoud.
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
+              Alleen de noodzakelijke bedrijfsgegevens worden gevraagd. De
+              aanvraag wordt verzonden inclusief pakketkeuze, prijs en akkoord.
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-              <div className="grid gap-5 md:grid-cols-2">
+            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
                 <Field
                   label="Naam makelaar"
                   placeholder="Bijv. Raisa Geschiere"
@@ -501,13 +503,13 @@ export default function PresentatiePromotiePage() {
                 />
                 <Field
                   label="Kantoornaam"
-                  placeholder="Bijv. Vastgoed Exclusief Partner"
+                  placeholder="Bijv. Vastgoed Nederland"
                   value={form.companyName}
                   onChange={(value) => updateField('companyName', value)}
                 />
               </div>
 
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-2">
                 <Field
                   label="E-mailadres"
                   type="email"
@@ -523,21 +525,6 @@ export default function PresentatiePromotiePage() {
                 />
               </div>
 
-              <div className="grid gap-5 md:grid-cols-2">
-                <Field
-                  label="Woningadres"
-                  placeholder="Straat + huisnummer"
-                  value={form.address}
-                  onChange={(value) => updateField('address', value)}
-                />
-                <Field
-                  label="Plaats"
-                  placeholder="Bijv. Bloemendaal"
-                  value={form.city}
-                  onChange={(value) => updateField('city', value)}
-                />
-              </div>
-
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#102c54]">
                   Gekozen pakket
@@ -549,7 +536,7 @@ export default function PresentatiePromotiePage() {
                       SERVICES.find((service) => service.key === e.target.value)!,
                     )
                   }
-                  className="h-14 w-full rounded-2xl border border-slate-300 bg-white px-5 text-base text-[#102c54] outline-none transition focus:border-[#102c54]"
+                  className="h-13 w-full rounded-2xl border border-slate-300 bg-white px-4 text-sm text-[#102c54] outline-none transition focus:border-[#102c54]"
                 >
                   {SERVICES.map((service) => (
                     <option key={service.key} value={service.key}>
@@ -566,15 +553,54 @@ export default function PresentatiePromotiePage() {
                 <textarea
                   value={form.notes}
                   onChange={(e) => updateField('notes', e.target.value)}
-                  placeholder="Beschrijf kort de woning, timing en wensen voor deze promotiedienst."
-                  rows={6}
-                  className="w-full rounded-3xl border border-slate-300 bg-white px-5 py-4 text-base text-[#102c54] outline-none transition focus:border-[#102c54]"
+                  placeholder="Beschrijf kort de gewenste inzet of planning."
+                  rows={4}
+                  className="w-full rounded-[22px] border border-slate-300 bg-white px-4 py-3 text-sm text-[#102c54] outline-none transition focus:border-[#102c54]"
                 />
+              </div>
+
+              <div className="rounded-[22px] border border-slate-200 bg-slate-50 px-4 py-4">
+                <div className="flex items-start gap-3">
+                  <input
+                    id="agreedToTerms"
+                    type="checkbox"
+                    checked={form.agreedToTerms}
+                    onChange={(e) =>
+                      updateField('agreedToTerms', e.target.checked)
+                    }
+                    className="mt-1 h-4 w-4 rounded border-slate-300 text-[#102c54] focus:ring-[#102c54]"
+                    required
+                  />
+
+                  <label
+                    htmlFor="agreedToTerms"
+                    className="text-sm leading-6 text-slate-700"
+                  >
+                    Ik verklaar bevoegd te zijn om namens het kantoor deze
+                    aanvraag te doen en ga akkoord met de{' '}
+                    <Link
+                      href="/algemene-voorwaarden"
+                      className="font-semibold text-[#102c54] underline underline-offset-2"
+                    >
+                      algemene voorwaarden
+                    </Link>{' '}
+                    en{' '}
+                    <Link
+                      href="/privacyverklaring"
+                      className="font-semibold text-[#102c54] underline underline-offset-2"
+                    >
+                      privacyverklaring
+                    </Link>
+                    . Deze aanvraag geldt als zakelijke opdracht voor het
+                    geselecteerde pakket en de bijbehorende kosten.
+                  </label>
+                </div>
               </div>
 
               {success && (
                 <div className="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-                  De aanvraag is succesvol verzonden naar info@vastgoedexclusief.nl.
+                  De aanvraag is succesvol verzonden naar
+                  info@vastgoedexclusief.nl.
                 </div>
               )}
 
@@ -584,11 +610,11 @@ export default function PresentatiePromotiePage() {
                 </div>
               )}
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 pt-1">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center rounded-2xl bg-[#102c54] px-6 py-4 text-base font-semibold text-white transition hover:bg-[#0c2342] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="inline-flex items-center rounded-2xl bg-[#102c54] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0c2342] disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   <Send className="mr-2 h-4 w-4" />
                   {loading ? 'Bezig met verzenden...' : 'Aanvraag verzenden'}
@@ -597,7 +623,7 @@ export default function PresentatiePromotiePage() {
                 <button
                   type="button"
                   onClick={() => applyService(selectedService)}
-                  className="inline-flex items-center rounded-2xl border border-fuchsia-200 bg-gradient-to-r from-fuchsia-50 via-pink-50 to-orange-50 px-6 py-4 text-base font-semibold text-[#9d174d] transition hover:from-fuchsia-100 hover:via-pink-100 hover:to-orange-100"
+                  className="inline-flex items-center rounded-2xl border border-fuchsia-200 bg-gradient-to-r from-fuchsia-50 via-pink-50 to-orange-50 px-5 py-3 text-sm font-semibold text-[#9d174d] transition hover:from-fuchsia-100 hover:via-pink-100 hover:to-orange-100"
                 >
                   <Sparkles className="mr-2 h-4 w-4" />
                   Pakket opnieuw invullen
@@ -607,74 +633,74 @@ export default function PresentatiePromotiePage() {
           </div>
 
           <div className="space-y-4">
-            <div className="rounded-[30px] border border-slate-200 bg-slate-50 p-6">
-              <div className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            <div className="rounded-[26px] border border-slate-200 bg-slate-50 p-5">
+              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 Geselecteerd pakket
               </div>
 
-              <h3 className="mt-3 text-3xl font-semibold text-[#102c54]">
+              <h3 className="mt-2 text-2xl font-semibold text-[#102c54]">
                 {selectedService.title}
               </h3>
 
-              <div className="mt-3 inline-flex rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-[#102c54]">
+              <div className="mt-3 inline-flex rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-[#102c54]">
                 {selectedService.priceLabel}
               </div>
 
-              <p className="mt-4 text-base leading-7 text-slate-600">
+              <p className="mt-3 text-sm leading-6 text-slate-600">
                 {selectedService.description}
               </p>
 
-              <ul className="mt-5 space-y-3">
-                {selectedService.bullets.map((bullet) => (
+              <ul className="mt-4 space-y-2.5">
+                {selectedService.bullets.slice(0, 6).map((bullet) => (
                   <li
                     key={bullet}
-                    className="flex items-start gap-3 text-sm leading-6 text-slate-700"
+                    className="flex items-start gap-2.5 text-sm leading-6 text-slate-700"
                   >
-                    <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#102c54]" />
+                    <BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-[#102c54]" />
                     <span>{bullet}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="rounded-[30px] border border-fuchsia-200 bg-gradient-to-br from-fuchsia-700 via-pink-600 to-orange-500 p-6 text-white shadow-[0_24px_70px_rgba(236,72,153,0.24)]">
+            <div className="rounded-[26px] border border-fuchsia-200 bg-gradient-to-br from-fuchsia-700 via-pink-600 to-orange-500 p-5 text-white shadow-[0_20px_60px_rgba(236,72,153,0.22)]">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
-                  <Instagram className="h-6 w-6 text-white" />
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15">
+                  <Instagram className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <div className="text-sm font-medium text-white/85">
                     Instagram & campagnes
                   </div>
-                  <div className="text-xl font-semibold">18K+ bereik</div>
+                  <div className="text-2xl font-semibold">18K+ bereik</div>
                 </div>
               </div>
 
-              <p className="mt-4 text-sm leading-7 text-white/92">
-                Ideaal voor extra zichtbaarheid, merkbeleving, gerichte exposure
-                buiten het reguliere platform en krachtige promotie voor makelaars
-                in het hogere segment.
+              <p className="mt-3 text-sm leading-6 text-white/92">
+                Ideaal voor extra zichtbaarheid, merkbeleving en gerichte
+                promotie voor makelaars in het hogere segment.
               </p>
             </div>
 
-            <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_10px_25px_rgba(16,44,84,0.06)]">
-              <h4 className="text-2xl font-semibold text-[#102c54]">
-                Wat ontvangen jullie per mail?
-              </h4>
+            <div className="rounded-[26px] border border-slate-200 bg-white p-5 shadow-[0_10px_25px_rgba(16,44,84,0.05)]">
+              <div className="flex items-center gap-2 text-[#102c54]">
+                <CheckCircle2 className="h-5 w-5" />
+                <h4 className="text-xl font-semibold">Per mail ontvangen</h4>
+              </div>
 
-              <div className="mt-5 space-y-4">
+              <div className="mt-4 space-y-3">
                 {[
                   'Naam van de makelaar',
-                  'Kantoornaam en e-mailadres',
+                  'Kantoornaam',
+                  'E-mailadres',
                   'Telefoonnummer',
-                  'Woningadres en plaats',
                   'Gekozen pakket + prijs',
-                  'Volledige pakketinhoud',
-                  'Extra toelichting van de makelaar',
+                  'Pakketinhoud',
+                  'Akkoord op voorwaarden',
                 ].map((item) => (
                   <div
                     key={item}
-                    className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-medium text-slate-700"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700"
                   >
                     {item}
                   </div>
@@ -711,7 +737,7 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-14 w-full rounded-2xl border border-slate-300 bg-white px-5 text-base text-[#102c54] outline-none transition focus:border-[#102c54]"
+        className="h-14 w-full rounded-2xl border border-slate-300 bg-white px-4 text-sm text-[#102c54] outline-none transition focus:border-[#102c54]"
       />
     </div>
   );
