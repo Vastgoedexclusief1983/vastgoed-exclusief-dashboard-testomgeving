@@ -557,96 +557,82 @@ export default function WebsitePageClient({
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(29,78,216,0.08),_transparent_28%),linear-gradient(180deg,#f4f7fb_0%,#eef3f9_100%)]">
       <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 lg:px-8">
-        <section className="relative overflow-hidden rounded-[32px] border border-white/60 bg-gradient-to-br from-[#0f274f] via-[#14386f] to-[#1c4c8f] text-white shadow-[0_25px_90px_rgba(16,44,84,0.24)]">
-          <div className="absolute -right-10 top-0 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
-          <div className="absolute bottom-0 left-0 h-40 w-40 rounded-full bg-[#60a5fa]/10 blur-2xl" />
+        <section className="mb-6 overflow-hidden rounded-[30px] border border-white/70 bg-white/45 shadow-[0_20px_60px_rgba(16,44,84,0.08)] backdrop-blur-2xl">
+          <div className="relative p-6 md:p-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="max-w-3xl">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/60 px-4 py-2 text-xs font-medium text-[#153c75] shadow-sm backdrop-blur-xl">
+                  <Sparkles className="h-4 w-4" />
+                  Centrale beheeromgeving voor aangesloten makelaars
+                </div>
 
-          <div className="relative grid gap-8 px-6 py-8 md:grid-cols-[1.25fr_0.75fr] md:px-10 md:py-10">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm backdrop-blur">
-                <Sparkles className="h-4 w-4" />
-                Premium workflow voor aangesloten makelaars
+                <h1 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c54] md:text-4xl xl:text-5xl">
+                  Website beheer
+                </h1>
+
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-[#5b6b82] md:text-base">
+                  Beheer je woningaanmeldingen, wijzigingen en statusupdates vanuit
+                  één overzichtelijke premium pagina.
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <GlassStatPill
+                    icon={<Home className="h-4 w-4" />}
+                    text="Woningen beheren"
+                  />
+                  <GlassStatPill
+                    icon={<Tag className="h-4 w-4" />}
+                    text="Snelle statusupdates"
+                  />
+                  <GlassStatPill
+                    icon={<FileImage className="h-4 w-4" />}
+                    text="Foto’s en intake"
+                  />
+                </div>
               </div>
 
-              <h1 className="mt-5 text-3xl font-semibold tracking-tight md:text-5xl">
-                Website beheer
-              </h1>
-
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-white/85 md:text-base">
-                Eén centrale luxe beheerpagina om woningen aan te melden,
-                bestaande woningen zichtbaar te houden en wijzigingen met snelle
-                knoppen door te geven. Minder handmatig werk, meer overzicht en
-                een premium gebruikerservaring voor makelaars.
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <StatPill
-                  icon={<Home className="h-4 w-4" />}
-                  text="Centrale woningacties"
-                />
-                <StatPill
-                  icon={<FileImage className="h-4 w-4" />}
-                  text="Live woningdata"
-                />
-                <StatPill
-                  icon={<Landmark className="h-4 w-4" />}
-                  text="Woningkaarten met acties"
-                />
-              </div>
-
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[360px]">
                 <button
                   type="button"
                   onClick={() => {
                     setActiveAction('aanmelden');
                     scrollToForm();
                   }}
-                  className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#102c54] shadow-lg transition hover:scale-[1.02]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#102c54] to-[#1b4b8f] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_40px_rgba(16,44,84,0.22)] transition hover:scale-[1.02]"
                 >
-                  Start met aanmelden
+                  <PlusCircle className="h-4 w-4" />
+                  Woning aanmelden
                 </button>
 
                 <button
                   type="button"
                   onClick={scrollToForm}
-                  className="rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/70 bg-white/70 px-5 py-3 text-sm font-semibold text-[#153c75] shadow-sm backdrop-blur transition hover:bg-white"
                 >
-                  Open beheerformulier
+                  <ArrowRight className="h-4 w-4" />
+                  Beheerformulier
                 </button>
-              </div>
-            </div>
 
-            <div className="rounded-[28px] border border-white/15 bg-white/10 p-5 backdrop-blur-md">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm text-white/70">Actieve module</p>
-                  <h2 className="mt-2 text-2xl font-semibold">
-                    {activeConfig?.title}
-                  </h2>
+                <div className="rounded-[24px] border border-white/70 bg-white/55 p-4 shadow-sm backdrop-blur xl:col-span-2">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-[#6b7b93]">
+                        Actieve module
+                      </p>
+                      <h2 className="mt-1 text-xl font-semibold text-[#102c54]">
+                        {activeConfig?.title}
+                      </h2>
+                    </div>
+
+                    <span className="rounded-full border border-[#d7e3f3] bg-[#f8fbff] px-3 py-1 text-xs font-medium text-[#153c75]">
+                      {activeConfig?.badge}
+                    </span>
+                  </div>
+
+                  <p className="mt-3 text-sm leading-6 text-[#64748b]">
+                    {activeConfig?.description}
+                  </p>
                 </div>
-
-                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-white/90">
-                  {activeConfig?.badge}
-                </span>
-              </div>
-
-              <p className="mt-4 text-sm leading-7 text-white/85">
-                {activeConfig?.description}
-              </p>
-
-              <div className="mt-6 space-y-3">
-                <InfoRow
-                  icon={<CheckCircle2 className="h-4 w-4" />}
-                  text="Luxe centrale workflow voor makelaars"
-                />
-                <InfoRow
-                  icon={<Clock3 className="h-4 w-4" />}
-                  text="Snelle statusmutaties vanuit één pagina"
-                />
-                <InfoRow
-                  icon={<UploadCloud className="h-4 w-4" />}
-                  text="Foto-upload direct voorbereid in de intake"
-                />
               </div>
             </div>
           </div>
@@ -655,6 +641,30 @@ export default function WebsitePageClient({
         <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           {actionConfig.map((item) => {
             const active = item.key === activeAction;
+
+            const icon =
+              item.key === 'aanmelden' ? (
+                <PlusCircle className="h-5 w-5" />
+              ) : item.key === 'wijzigen' ? (
+                <Edit3 className="h-5 w-5" />
+              ) : item.key === 'afmelden' ? (
+                <XCircle className="h-5 w-5" />
+              ) : item.key === 'onder-bod' ? (
+                <Tag className="h-5 w-5" />
+              ) : (
+                <BadgeEuro className="h-5 w-5" />
+              );
+
+            const topBarClass =
+              item.key === 'aanmelden'
+                ? 'from-[#143567] via-[#2d6cdf] to-[#60a5fa]'
+                : item.key === 'wijzigen'
+                ? 'from-[#5634a3] via-[#7c3aed] to-[#a78bfa]'
+                : item.key === 'afmelden'
+                ? 'from-[#14532d] via-[#16a34a] to-[#4ade80]'
+                : item.key === 'onder-bod'
+                ? 'from-[#854d0e] via-[#d97706] to-[#fbbf24]'
+                : 'from-[#7a1f46] via-[#db2777] to-[#f472b6]';
 
             return (
               <button
@@ -665,57 +675,55 @@ export default function WebsitePageClient({
                   resetMessages();
                   scrollToForm();
                 }}
-                className={`group relative overflow-hidden rounded-[26px] border text-left transition-all duration-300 ${
+                className={`group relative overflow-hidden rounded-[28px] border text-left transition-all duration-300 ${
                   active
-                    ? 'border-[#153c75] bg-white shadow-[0_20px_55px_rgba(16,44,84,0.14)]'
-                    : 'border-[#e3eaf5] bg-white/90 hover:-translate-y-1 hover:border-[#d7e0ef] hover:shadow-[0_18px_45px_rgba(16,44,84,0.08)]'
+                    ? 'border-white/80 bg-white/80 shadow-[0_22px_55px_rgba(16,44,84,0.14)] ring-1 ring-white/70 backdrop-blur-xl'
+                    : 'border-white/70 bg-white/60 shadow-[0_18px_40px_rgba(16,44,84,0.08)] backdrop-blur-xl hover:-translate-y-1 hover:bg-white/75 hover:shadow-[0_22px_55px_rgba(16,44,84,0.12)]'
                 }`}
               >
-                <div
-                  className={`h-1.5 w-full ${
-                    item.key === 'aanmelden'
-                      ? 'bg-gradient-to-r from-[#143567] to-[#2d6cdf]'
-                      : item.key === 'wijzigen'
-                      ? 'bg-gradient-to-r from-[#5634a3] to-[#8b5cf6]'
-                      : item.key === 'afmelden'
-                      ? 'bg-gradient-to-r from-[#14532d] to-[#22c55e]'
-                      : item.key === 'onder-bod'
-                      ? 'bg-gradient-to-r from-[#854d0e] to-[#f59e0b]'
-                      : 'bg-gradient-to-r from-[#7a1f46] to-[#ec4899]'
-                  }`}
-                />
+                <div className={`h-1.5 w-full bg-gradient-to-r ${topBarClass}`} />
 
-                <div className="p-5">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f4f7fc] text-[#153c75]">
-                    {item.key === 'aanmelden' ? (
-                      <PlusCircle className="h-5 w-5" />
-                    ) : item.key === 'wijzigen' ? (
-                      <Edit3 className="h-5 w-5" />
-                    ) : item.key === 'afmelden' ? (
-                      <XCircle className="h-5 w-5" />
-                    ) : item.key === 'onder-bod' ? (
-                      <Tag className="h-5 w-5" />
-                    ) : (
-                      <BadgeEuro className="h-5 w-5" />
-                    )}
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.35),transparent_35%)] opacity-90" />
+
+                <div className="relative p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-2xl border shadow-sm ${
+                        active
+                          ? 'border-white/80 bg-white text-[#153c75]'
+                          : 'border-white/70 bg-white/70 text-[#153c75]'
+                      }`}
+                    >
+                      {icon}
+                    </div>
+
+                    <span
+                      className={`inline-flex rounded-full px-3 py-1 text-[11px] font-semibold ${
+                        active
+                          ? 'bg-[#153c75] text-white'
+                          : 'border border-[#dbe4f1] bg-white/80 text-[#153c75]'
+                      }`}
+                    >
+                      {active ? 'Actief' : item.badge}
+                    </span>
                   </div>
 
-                  <h3 className="text-lg font-semibold text-[#102c54]">
+                  <h3 className="mt-5 text-lg font-semibold leading-tight text-[#102c54]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-6 text-[#64748b]">
+
+                  <p className="mt-2 min-h-[96px] text-sm leading-6 text-[#64748b]">
                     {item.description}
                   </p>
 
-                  <div className="mt-4">
-                    <span
-                      className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${
-                        active
-                          ? 'bg-[#153c75] text-white'
-                          : 'bg-[#eef3fb] text-[#153c75]'
-                      }`}
-                    >
-                      {active ? 'Actief' : 'Openen'}
+                  <div className="mt-5 flex items-center justify-between">
+                    <span className="text-xs font-medium uppercase tracking-[0.16em] text-[#7a8aa3]">
+                      Workflow
+                    </span>
+
+                    <span className="inline-flex items-center gap-1 text-sm font-medium text-[#153c75]">
+                      Openen
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
                 </div>
@@ -1419,7 +1427,7 @@ function ActionButton({
   );
 }
 
-function StatPill({
+function GlassStatPill({
   icon,
   text,
 }: {
@@ -1427,7 +1435,7 @@ function StatPill({
   text: string;
 }) {
   return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/90 backdrop-blur">
+    <div className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/60 px-4 py-2 text-sm text-[#153c75] shadow-sm backdrop-blur-xl">
       {icon}
       {text}
     </div>
