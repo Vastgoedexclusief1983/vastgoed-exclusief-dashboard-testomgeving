@@ -16,6 +16,7 @@ import {
   Globe,
   Image as ImageIcon,
   FileSearch,
+  PlusCircle,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -49,6 +50,51 @@ function NavLink({ href, label, icon: Icon, active }: NavItem & { active: boolea
   );
 }
 
+function PrimaryActionLink({
+  href,
+  label,
+  active,
+}: {
+  href: string;
+  label: string;
+  active: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        'group flex items-center gap-3 rounded-2xl border px-3 py-3 text-sm font-semibold shadow-md transition-all',
+        active
+          ? 'border-white bg-white text-[#102c54]'
+          : 'border-white/20 bg-white/10 text-white hover:border-white/30 hover:bg-white/15'
+      )}
+    >
+      <div
+        className={cn(
+          'flex h-10 w-10 items-center justify-center rounded-xl transition',
+          active
+            ? 'bg-[#102c54]/10 text-[#102c54]'
+            : 'bg-white/15 text-white group-hover:bg-white/20'
+        )}
+      >
+        <PlusCircle className="h-5 w-5" />
+      </div>
+
+      <div className="flex flex-col">
+        <span>{label}</span>
+        <span
+          className={cn(
+            'text-[11px]',
+            active ? 'text-[#102c54]/70' : 'text-white/70'
+          )}
+        >
+          Start direct met invoeren
+        </span>
+      </div>
+    </Link>
+  );
+}
+
 export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname();
   const t = useTranslations('nav');
@@ -60,8 +106,9 @@ export function Sidebar({ role }: SidebarProps) {
     dashboard: isAdmin ? '/admin/dashboard' : '/dashboard',
 
     aiAsk: '/ai-vraag',
-    properties: isAdmin ? '/admin/properties' : '/properties',
-    valuation: isAdmin ? '/admin/property-valuation' : '/property-valuation',
+    properties: '/properties',
+    propertyNew: '/properties/new', // ✅ juiste route
+    valuation: '/property-valuation',
 
     aiAnalysis: '/ai-assistent',
 
@@ -75,12 +122,10 @@ export function Sidebar({ role }: SidebarProps) {
     adminAiUsage: '/admin/ai-usage',
   } as const;
 
-  // 🔥 NIEUW: OVERZICHT (Dashboard bovenaan)
   const overviewItems: NavItem[] = [
     { href: ROUTES.dashboard, label: t('dashboard'), icon: LayoutDashboard },
   ];
 
-  // ❗ Dashboard hier verwijderd
   const waardebepalingItems: NavItem[] = [
     { href: ROUTES.aiAsk, label: 'Basisprijs', icon: Bot },
     { href: ROUTES.properties, label: t('properties'), icon: Building2 },
@@ -134,7 +179,16 @@ export function Sidebar({ role }: SidebarProps) {
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
 
-        {/* 🔥 NIEUW: OVERZICHT */}
+        {/* 🔥 NIEUWE TOP BUTTON */}
+        <div className="mb-5">
+          <PrimaryActionLink
+            href={ROUTES.propertyNew}
+            label="Woning aanmelden"
+            active={isActive(ROUTES.propertyNew)}
+          />
+        </div>
+
+        {/* OVERZICHT */}
         <div className="px-2 pt-2 text-[11px] font-semibold uppercase tracking-wide text-white/60">
           Overzicht
         </div>
@@ -184,20 +238,10 @@ export function Sidebar({ role }: SidebarProps) {
           ))}
         </div>
 
-        {/* HELP / LEGAL */}
+        {/* HELP */}
         <div className="mt-6 px-2 space-y-1">
           <DashboardHelpDialog />
           <DisclaimerDialog />
-
-          <Link href="/legal/voorwaarden" className="ml-9 mt-1 block text-xs text-white/60 underline hover:text-white">
-            Algemene voorwaarden
-          </Link>
-          <Link href="/legal/privacy" className="ml-9 mt-1 block text-xs text-white/60 underline hover:text-white">
-            Privacy
-          </Link>
-          <Link href="/legal/verwerkersovereenkomst" className="ml-9 mt-1 block text-xs text-white/60 underline hover:text-white">
-            Verwerkersovereenkomst
-          </Link>
         </div>
 
         {/* ADMIN */}
