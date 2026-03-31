@@ -146,7 +146,7 @@ function UtilityCard({
           <div className="text-[11px] text-white/65">{subtitle}</div>
         </div>
       </div>
-      <div>{children}</div>
+      <div className="space-y-2">{children}</div>
     </div>
   );
 }
@@ -370,29 +370,25 @@ export function Sidebar({ role }: SidebarProps) {
             title="Belangrijk"
             subtitle="Disclaimer en voorwaarden"
           >
-            <div className="space-y-2">
-              <UtilityButtonWrap>
-                <DisclaimerDialog />
-              </UtilityButtonWrap>
+            <UtilityButtonWrap>
+              <DisclaimerDialog />
+            </UtilityButtonWrap>
 
-              <div className="space-y-2 pt-1">
-                <UtilityLegalLink
-                  href={ROUTES.legalTerms}
-                  label="Algemene voorwaarden"
-                  active={isActive(ROUTES.legalTerms)}
-                />
-                <UtilityLegalLink
-                  href={ROUTES.legalPrivacy}
-                  label="Privacyverklaring"
-                  active={isActive(ROUTES.legalPrivacy)}
-                />
-                <UtilityLegalLink
-                  href={ROUTES.legalDpa}
-                  label="Verwerkersovereenkomst"
-                  active={isActive(ROUTES.legalDpa)}
-                />
-              </div>
-            </div>
+            <UtilityLegalLink
+              href={ROUTES.legalTerms}
+              label="Algemene voorwaarden"
+              active={isActive(ROUTES.legalTerms)}
+            />
+            <UtilityLegalLink
+              href={ROUTES.legalPrivacy}
+              label="Privacyverklaring"
+              active={isActive(ROUTES.legalPrivacy)}
+            />
+            <UtilityLegalLink
+              href={ROUTES.legalDpa}
+              label="Verwerkersovereenkomst"
+              active={isActive(ROUTES.legalDpa)}
+            />
           </UtilityCard>
         </div>
 
