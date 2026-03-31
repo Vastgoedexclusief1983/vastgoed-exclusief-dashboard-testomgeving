@@ -34,18 +34,44 @@ type NavItem = {
   icon: any;
 };
 
-function NavLink({ href, label, icon: Icon, active }: NavItem & { active: boolean }) {
+function LuxuryNavLink({
+  href,
+  label,
+  icon: Icon,
+  active,
+}: NavItem & { active: boolean }) {
   return (
     <Link
       href={href}
       className={cn(
-        'flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition',
-        'hover:bg-white/10 hover:text-white',
-        active ? 'bg-white text-[#102c54]' : 'text-white/90'
+        'group flex items-center gap-3 rounded-2xl border px-3 py-3 text-sm font-semibold shadow-md transition-all',
+        active
+          ? 'border-white bg-white text-[#102c54]'
+          : 'border-white/15 bg-white/8 text-white hover:border-white/25 hover:bg-white/12'
       )}
     >
-      <Icon className={cn('h-5 w-5', active ? 'text-[#102c54]' : 'text-white/90')} />
-      <span>{label}</span>
+      <div
+        className={cn(
+          'flex h-10 w-10 items-center justify-center rounded-xl transition',
+          active
+            ? 'bg-[#102c54]/10 text-[#102c54]'
+            : 'bg-white/12 text-white group-hover:bg-white/18'
+        )}
+      >
+        <Icon className="h-5 w-5" />
+      </div>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <span className="truncate">{label}</span>
+        <span
+          className={cn(
+            'text-[11px]',
+            active ? 'text-[#102c54]/70' : 'text-white/65'
+          )}
+        >
+          Open onderdeel
+        </span>
+      </div>
     </Link>
   );
 }
@@ -80,8 +106,8 @@ function PrimaryActionLink({
         <PlusCircle className="h-5 w-5" />
       </div>
 
-      <div className="flex flex-col">
-        <span>{label}</span>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <span className="truncate">{label}</span>
         <span
           className={cn(
             'text-[11px]',
@@ -107,7 +133,7 @@ export function Sidebar({ role }: SidebarProps) {
 
     aiAsk: '/ai-vraag',
     properties: '/properties',
-    propertyNew: '/properties/new', // ✅ juiste route
+    propertyNew: '/properties/new',
     valuation: '/property-valuation',
 
     aiAnalysis: '/ai-assistent',
@@ -151,7 +177,8 @@ export function Sidebar({ role }: SidebarProps) {
     { href: ROUTES.adminAiUsage, label: 'AI-credits (maand)', icon: Gauge },
   ];
 
-  const isActive = (href: string) => pathname === href || pathname?.startsWith(href + '/');
+  const isActive = (href: string) =>
+    pathname === href || pathname?.startsWith(href + '/');
 
   return (
     <aside className="flex h-screen w-[270px] flex-col bg-[#102c54] text-white shadow-lg">
@@ -178,8 +205,7 @@ export function Sidebar({ role }: SidebarProps) {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-
-        {/* 🔥 NIEUWE TOP BUTTON */}
+        {/* Top button */}
         <div className="mb-5">
           <PrimaryActionLink
             href={ROUTES.propertyNew}
@@ -188,71 +214,95 @@ export function Sidebar({ role }: SidebarProps) {
           />
         </div>
 
-        {/* OVERZICHT */}
-        <div className="px-2 pt-2 text-[11px] font-semibold uppercase tracking-wide text-white/60">
+        {/* Overzicht */}
+        <div className="px-2 pt-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Overzicht
         </div>
-        <div className="mt-2 space-y-1">
+        <div className="mt-2 space-y-2">
           {overviewItems.map((item) => (
-            <NavLink key={item.href} {...item} active={isActive(item.href)} />
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
           ))}
         </div>
 
-        {/* WAARDEBEPALING */}
-        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/60">
+        {/* Waardebepaling */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Waardebepaling
         </div>
-        <div className="mt-2 space-y-1">
+        <div className="mt-2 space-y-2">
           {waardebepalingItems.map((item) => (
-            <NavLink key={item.href} {...item} active={isActive(item.href)} />
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
           ))}
         </div>
 
-        {/* MULTIMEDIA */}
-        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/60">
+        {/* Multimedia */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Multimedia
         </div>
-        <div className="mt-2 space-y-1">
+        <div className="mt-2 space-y-2">
           {multimediaItems.map((item) => (
-            <NavLink key={item.href} {...item} active={isActive(item.href)} />
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
           ))}
         </div>
 
-        {/* MARKTANALYSE */}
-        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/60">
+        {/* Marktanalyse */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Marktanalyse
         </div>
-        <div className="mt-2 space-y-1">
+        <div className="mt-2 space-y-2">
           {marktanalyseItems.map((item) => (
-            <NavLink key={item.href} {...item} active={isActive(item.href)} />
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
           ))}
         </div>
 
-        {/* WEBSITE */}
-        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/60">
+        {/* Website */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Website
         </div>
-        <div className="mt-2 space-y-1">
+        <div className="mt-2 space-y-2">
           {websiteItems.map((item) => (
-            <NavLink key={item.href} {...item} active={isActive(item.href)} />
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
           ))}
         </div>
 
-        {/* HELP */}
-        <div className="mt-6 px-2 space-y-1">
+        {/* Help */}
+        <div className="mt-6 space-y-2 px-2">
           <DashboardHelpDialog />
           <DisclaimerDialog />
         </div>
 
-        {/* ADMIN */}
+        {/* Admin */}
         {isAdmin && (
           <>
-            <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/60">
+            <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
               Platform beheer
             </div>
-            <div className="mt-2 space-y-1">
+            <div className="mt-2 space-y-2">
               {adminItems.map((item) => (
-                <NavLink key={item.href} {...item} active={isActive(item.href)} />
+                <LuxuryNavLink
+                  key={item.href}
+                  {...item}
+                  active={isActive(item.href)}
+                />
               ))}
             </div>
           </>
