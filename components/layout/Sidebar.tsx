@@ -138,7 +138,7 @@ function UtilityCard({
   return (
     <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-3 shadow-md backdrop-blur-sm">
       <div className="mb-3 flex items-start gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/12 text-white">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/12 text-white">
           <Icon className="h-5 w-5" />
         </div>
         <div className="min-w-0">
@@ -146,11 +146,40 @@ function UtilityCard({
           <div className="text-[11px] text-white/65">{subtitle}</div>
         </div>
       </div>
-
-      <div className="sidebar-utility-card [&>*]:w-full [&>button]:w-full [&>button]:justify-start [&>button]:rounded-xl [&>button]:border [&>button]:border-white/10 [&>button]:bg-white/[0.06] [&>button]:px-3 [&>button]:py-2.5 [&>button]:text-left [&>button]:text-sm [&>button]:font-medium [&>button]:text-white [&>button]:transition [&>button:hover]:bg-white/[0.1] [&>a]:block [&>a]:w-full [&>a]:rounded-xl [&>a]:border [&>a]:border-white/10 [&>a]:bg-white/[0.06] [&>a]:px-3 [&>a]:py-2.5 [&>a]:text-sm [&>a]:font-medium [&>a]:text-white [&>a]:transition [&>a:hover]:bg-white/[0.1]">
-        {children}
-      </div>
+      <div>{children}</div>
     </div>
+  );
+}
+
+function UtilityButtonWrap({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="sidebar-utility-button [&>*]:w-full [&>button]:flex [&>button]:w-full [&>button]:items-center [&>button]:justify-start [&>button]:rounded-xl [&>button]:border [&>button]:border-white/10 [&>button]:bg-white/[0.06] [&>button]:px-3 [&>button]:py-2.5 [&>button]:text-left [&>button]:text-sm [&>button]:font-medium [&>button]:text-white [&>button]:transition [&>button:hover]:bg-white/[0.1]">
+      {children}
+    </div>
+  );
+}
+
+function UtilityLegalLink({
+  href,
+  label,
+  active,
+}: {
+  href: string;
+  label: string;
+  active: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        'flex w-full items-center rounded-xl border px-3 py-2.5 text-sm font-medium transition',
+        active
+          ? 'border-white bg-white text-[#102c54]'
+          : 'border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.1]'
+      )}
+    >
+      <span className="truncate">{label}</span>
+    </Link>
   );
 }
 
@@ -175,6 +204,10 @@ export function Sidebar({ role }: SidebarProps) {
     presentatiePromotie: '/presentatie-promotie',
 
     website: '/website',
+
+    legalTerms: '/legal/voorwaarden',
+    legalPrivacy: '/legal/privacy',
+    legalDpa: '/legal/verwerkersovereenkomst',
 
     adminAgents: '/admin/agents',
     adminAccess: '/admin/toegang',
@@ -327,7 +360,9 @@ export function Sidebar({ role }: SidebarProps) {
             title="Dashboard hulp"
             subtitle="Uitleg en ondersteuning"
           >
-            <DashboardHelpDialog />
+            <UtilityButtonWrap>
+              <DashboardHelpDialog />
+            </UtilityButtonWrap>
           </UtilityCard>
 
           <UtilityCard
@@ -335,13 +370,28 @@ export function Sidebar({ role }: SidebarProps) {
             title="Belangrijk"
             subtitle="Disclaimer en voorwaarden"
           >
-            <DisclaimerDialog />
-            <div className="mt-2 space-y-2">
-              <Link href="/legal/voorwaarden">Algemene voorwaarden</Link>
-              <Link href="/legal/privacy">Privacy</Link>
-              <Link href="/legal/verwerkersovereenkomst">
-                Verwerkersovereenkomst
-              </Link>
+            <div className="space-y-2">
+              <UtilityButtonWrap>
+                <DisclaimerDialog />
+              </UtilityButtonWrap>
+
+              <div className="space-y-2 pt-1">
+                <UtilityLegalLink
+                  href={ROUTES.legalTerms}
+                  label="Algemene voorwaarden"
+                  active={isActive(ROUTES.legalTerms)}
+                />
+                <UtilityLegalLink
+                  href={ROUTES.legalPrivacy}
+                  label="Privacyverklaring"
+                  active={isActive(ROUTES.legalPrivacy)}
+                />
+                <UtilityLegalLink
+                  href={ROUTES.legalDpa}
+                  label="Verwerkersovereenkomst"
+                  active={isActive(ROUTES.legalDpa)}
+                />
+              </div>
             </div>
           </UtilityCard>
         </div>
