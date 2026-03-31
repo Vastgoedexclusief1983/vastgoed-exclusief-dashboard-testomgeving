@@ -17,6 +17,8 @@ import {
   Image as ImageIcon,
   FileSearch,
   PlusCircle,
+  HelpCircle,
+  ShieldAlert,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -39,7 +41,8 @@ function LuxuryNavLink({
   label,
   icon: Icon,
   active,
-}: NavItem & { active: boolean }) {
+  subtitle = 'Open onderdeel',
+}: NavItem & { active: boolean; subtitle?: string }) {
   return (
     <Link
       href={href}
@@ -47,7 +50,7 @@ function LuxuryNavLink({
         'group flex items-center gap-3 rounded-2xl border px-3 py-3 text-sm font-semibold shadow-md transition-all',
         active
           ? 'border-white bg-white text-[#102c54]'
-          : 'border-white/15 bg-white/8 text-white hover:border-white/25 hover:bg-white/12'
+          : 'border-white/15 bg-white/[0.08] text-white hover:border-white/25 hover:bg-white/[0.12]'
       )}
     >
       <div
@@ -69,7 +72,7 @@ function LuxuryNavLink({
             active ? 'text-[#102c54]/70' : 'text-white/65'
           )}
         >
-          Open onderdeel
+          {subtitle}
         </span>
       </div>
     </Link>
@@ -118,6 +121,36 @@ function PrimaryActionLink({
         </span>
       </div>
     </Link>
+  );
+}
+
+function UtilityCard({
+  icon: Icon,
+  title,
+  subtitle,
+  children,
+}: {
+  icon: any;
+  title: string;
+  subtitle: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-3 shadow-md backdrop-blur-sm">
+      <div className="mb-3 flex items-start gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/12 text-white">
+          <Icon className="h-5 w-5" />
+        </div>
+        <div className="min-w-0">
+          <div className="truncate text-sm font-semibold text-white">{title}</div>
+          <div className="text-[11px] text-white/65">{subtitle}</div>
+        </div>
+      </div>
+
+      <div className="sidebar-utility-card [&>*]:w-full [&>button]:w-full [&>button]:justify-start [&>button]:rounded-xl [&>button]:border [&>button]:border-white/10 [&>button]:bg-white/[0.06] [&>button]:px-3 [&>button]:py-2.5 [&>button]:text-left [&>button]:text-sm [&>button]:font-medium [&>button]:text-white [&>button]:transition [&>button:hover]:bg-white/[0.1] [&>a]:block [&>a]:w-full [&>a]:rounded-xl [&>a]:border [&>a]:border-white/10 [&>a]:bg-white/[0.06] [&>a]:px-3 [&>a]:py-2.5 [&>a]:text-sm [&>a]:font-medium [&>a]:text-white [&>a]:transition [&>a:hover]:bg-white/[0.1]">
+        {children}
+      </div>
+    </div>
   );
 }
 
@@ -284,10 +317,33 @@ export function Sidebar({ role }: SidebarProps) {
           ))}
         </div>
 
-        {/* Help */}
-        <div className="mt-6 space-y-2 px-2">
-          <DashboardHelpDialog />
-          <DisclaimerDialog />
+        {/* Help & Legal */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
+          Hulp & informatie
+        </div>
+        <div className="mt-2 space-y-3">
+          <UtilityCard
+            icon={HelpCircle}
+            title="Dashboard hulp"
+            subtitle="Uitleg en ondersteuning"
+          >
+            <DashboardHelpDialog />
+          </UtilityCard>
+
+          <UtilityCard
+            icon={ShieldAlert}
+            title="Belangrijk"
+            subtitle="Disclaimer en voorwaarden"
+          >
+            <DisclaimerDialog />
+            <div className="mt-2 space-y-2">
+              <Link href="/legal/voorwaarden">Algemene voorwaarden</Link>
+              <Link href="/legal/privacy">Privacy</Link>
+              <Link href="/legal/verwerkersovereenkomst">
+                Verwerkersovereenkomst
+              </Link>
+            </div>
+          </UtilityCard>
         </div>
 
         {/* Admin */}
