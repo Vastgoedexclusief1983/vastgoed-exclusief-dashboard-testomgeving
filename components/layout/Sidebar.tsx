@@ -138,7 +138,7 @@ function UtilityCard({
   return (
     <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-3 shadow-md backdrop-blur-sm">
       <div className="mb-3 flex items-start gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/12 text-white">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/12 text-white">
           <Icon className="h-5 w-5" />
         </div>
         <div className="min-w-0">
@@ -153,7 +153,7 @@ function UtilityCard({
 
 function UtilityButtonWrap({ children }: { children: React.ReactNode }) {
   return (
-    <div className="[&>*]:w-full [&>button]:w-full">
+    <div className="sidebar-utility-button [&>*]:w-full [&>button]:flex [&>button]:w-full [&>button]:items-center [&>button]:justify-start [&>button]:rounded-xl [&>button]:border [&>button]:border-white/10 [&>button]:bg-white/[0.06] [&>button]:px-3 [&>button]:py-2.5 [&>button]:text-left [&>button]:text-sm [&>button]:font-medium [&>button]:text-white [&>button]:transition [&>button:hover]:bg-white/[0.1]">
       {children}
     </div>
   );
@@ -178,7 +178,7 @@ function UtilityLegalLink({
           : 'border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.1]'
       )}
     >
-      {label}
+      <span className="truncate">{label}</span>
     </Link>
   );
 }
@@ -187,97 +187,235 @@ export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname();
   const t = useTranslations('nav');
 
-  const isAdmin = String(role).toLowerCase() === 'admin';
+  const roleNormalized = String(role ?? '').toLowerCase();
+  const isAdmin = roleNormalized === 'admin';
 
   const ROUTES = {
     dashboard: isAdmin ? '/admin/dashboard' : '/dashboard',
+
+    aiAsk: '/ai-vraag',
     properties: '/properties',
     propertyNew: '/properties/new',
     valuation: '/property-valuation',
-    aiAsk: '/ai-vraag',
+
     aiAnalysis: '/ai-assistent',
+
     aiMultimedia: '/ai-multimedia',
     presentatiePromotie: '/presentatie-promotie',
+
     website: '/website',
+
     legalTerms: '/legal/voorwaarden',
     legalPrivacy: '/legal/privacy',
     legalDpa: '/legal/verwerkersovereenkomst',
-  };
+
+    adminAgents: '/admin/agents',
+    adminAccess: '/admin/toegang',
+    adminAiUsage: '/admin/ai-usage',
+  } as const;
+
+  const overviewItems: NavItem[] = [
+    { href: ROUTES.dashboard, label: t('dashboard'), icon: LayoutDashboard },
+  ];
+
+  const waardebepalingItems: NavItem[] = [
+    { href: ROUTES.aiAsk, label: 'Basisprijs', icon: Bot },
+    { href: ROUTES.properties, label: t('properties'), icon: Building2 },
+    { href: ROUTES.valuation, label: t('valuation'), icon: Calculator },
+  ];
+
+  const multimediaItems: NavItem[] = [
+    { href: ROUTES.aiMultimedia, label: 'Woning restylen', icon: ImageIcon },
+    { href: ROUTES.presentatiePromotie, label: 'Presentatie & Promotie', icon: Megaphone },
+  ];
+
+  const marktanalyseItems: NavItem[] = [
+    { href: ROUTES.aiAnalysis, label: 'Waarde & Positionering', icon: FileSearch },
+  ];
+
+  const websiteItems: NavItem[] = [
+    { href: ROUTES.website, label: 'Website beheer', icon: Globe },
+  ];
+
+  const adminItems: NavItem[] = [
+    { href: ROUTES.adminAgents, label: 'Makelaars beheren', icon: Users },
+    { href: ROUTES.adminAccess, label: 'Toegang & Features', icon: Shield },
+    { href: ROUTES.adminAiUsage, label: 'AI-credits (maand)', icon: Gauge },
+  ];
 
   const isActive = (href: string) =>
-    pathname === href || pathname.startsWith(href + '/');
+    pathname === href || pathname?.startsWith(href + '/');
 
   return (
-    <aside className="flex h-screen w-[270px] flex-col bg-[#102c54] text-white">
-
-      {/* LOGO HEADER */}
+    <aside className="flex h-screen w-[270px] flex-col bg-[#102c54] text-white shadow-lg">
+      {/* Header */}
       <div className="border-b border-white/10 px-4 py-4">
         <div className="flex items-center gap-3">
-
-          {/* 🔥 LUXE LOGO */}
-          <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md shadow-lg">
+          <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-white">
             <Image
               src="/logo.png"
               alt="Vastgoed Exclusief"
               fill
-              className="object-contain p-1.5 drop-shadow-[0_4px_12px_rgba(255,255,255,0.25)]"
+              className="object-contain p-1"
+              priority
             />
           </div>
-
-          <div>
+          <div className="leading-tight">
             <div className="text-sm font-semibold">Vastgoed Exclusief</div>
-            <div className="text-xs text-white/70">Dashboard</div>
+            <div className="text-xs text-white/70">
+              {isAdmin ? 'Beheerportaal' : 'Dashboard'}
+            </div>
           </div>
-
         </div>
       </div>
 
-      {/* NAV */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-3">
+      {/* Nav */}
+      <nav className="flex-1 overflow-y-auto px-3 py-4">
+        {/* Top button */}
+        <div className="mb-5">
+          <PrimaryActionLink
+            href={ROUTES.propertyNew}
+            label="Woning aanmelden"
+            active={isActive(ROUTES.propertyNew)}
+          />
+        </div>
 
-        <PrimaryActionLink
-          href={ROUTES.propertyNew}
-          label="Woning aanmelden"
-          active={isActive(ROUTES.propertyNew)}
-        />
+        {/* Overzicht */}
+        <div className="px-2 pt-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
+          Overzicht
+        </div>
+        <div className="mt-2 space-y-2">
+          {overviewItems.map((item) => (
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
+          ))}
+        </div>
 
-        <LuxuryNavLink href={ROUTES.dashboard} label="Dashboard" icon={LayoutDashboard} active={isActive(ROUTES.dashboard)} />
-        <LuxuryNavLink href={ROUTES.aiAsk} label="Basisprijs" icon={Bot} active={isActive(ROUTES.aiAsk)} />
-        <LuxuryNavLink href={ROUTES.properties} label="Woningen" icon={Building2} active={isActive(ROUTES.properties)} />
-        <LuxuryNavLink href={ROUTES.valuation} label="Waardering" icon={Calculator} active={isActive(ROUTES.valuation)} />
-        <LuxuryNavLink href={ROUTES.aiMultimedia} label="Woning restylen" icon={ImageIcon} active={isActive(ROUTES.aiMultimedia)} />
-        <LuxuryNavLink href={ROUTES.presentatiePromotie} label="Presentatie & Promotie" icon={Megaphone} active={isActive(ROUTES.presentatiePromotie)} />
-        <LuxuryNavLink href={ROUTES.aiAnalysis} label="Waarde & Positionering" icon={FileSearch} active={isActive(ROUTES.aiAnalysis)} />
-        <LuxuryNavLink href={ROUTES.website} label="Website beheer" icon={Globe} active={isActive(ROUTES.website)} />
+        {/* Waardebepaling */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
+          Waardebepaling
+        </div>
+        <div className="mt-2 space-y-2">
+          {waardebepalingItems.map((item) => (
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
+          ))}
+        </div>
 
-        {/* HELP */}
-        <UtilityCard icon={HelpCircle} title="Dashboard hulp" subtitle="Uitleg en ondersteuning">
-          <UtilityButtonWrap>
-            <DashboardHelpDialog />
-          </UtilityButtonWrap>
-        </UtilityCard>
+        {/* Multimedia */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
+          Multimedia
+        </div>
+        <div className="mt-2 space-y-2">
+          {multimediaItems.map((item) => (
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
+          ))}
+        </div>
 
-        {/* DISCLAIMER + LEGAL */}
-        <UtilityCard icon={ShieldAlert} title="Belangrijk" subtitle="Disclaimer en voorwaarden">
+        {/* Marktanalyse */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
+          Marktanalyse
+        </div>
+        <div className="mt-2 space-y-2">
+          {marktanalyseItems.map((item) => (
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
+          ))}
+        </div>
 
-          <UtilityButtonWrap>
-            <DisclaimerDialog />
-          </UtilityButtonWrap>
+        {/* Website */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
+          Website
+        </div>
+        <div className="mt-2 space-y-2">
+          {websiteItems.map((item) => (
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
+          ))}
+        </div>
 
-          <UtilityLegalLink href={ROUTES.legalTerms} label="Algemene voorwaarden" active={isActive(ROUTES.legalTerms)} />
-          <UtilityLegalLink href={ROUTES.legalPrivacy} label="Privacyverklaring" active={isActive(ROUTES.legalPrivacy)} />
-          <UtilityLegalLink href={ROUTES.legalDpa} label="Verwerkersovereenkomst" active={isActive(ROUTES.legalDpa)} />
+        {/* Help & Legal */}
+        <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
+          Hulp & informatie
+        </div>
+        <div className="mt-2 space-y-3">
+          <UtilityCard
+            icon={HelpCircle}
+            title="Dashboard hulp"
+            subtitle="Uitleg en ondersteuning"
+          >
+            <UtilityButtonWrap>
+              <DashboardHelpDialog />
+            </UtilityButtonWrap>
+          </UtilityCard>
 
-        </UtilityCard>
+          <UtilityCard
+            icon={ShieldAlert}
+            title="Belangrijk"
+            subtitle="Disclaimer en voorwaarden"
+          >
+            <UtilityButtonWrap>
+              <DisclaimerDialog />
+            </UtilityButtonWrap>
 
+            <UtilityLegalLink
+              href={ROUTES.legalTerms}
+              label="Algemene voorwaarden"
+              active={isActive(ROUTES.legalTerms)}
+            />
+            <UtilityLegalLink
+              href={ROUTES.legalPrivacy}
+              label="Privacyverklaring"
+              active={isActive(ROUTES.legalPrivacy)}
+            />
+            <UtilityLegalLink
+              href={ROUTES.legalDpa}
+              label="Verwerkersovereenkomst"
+              active={isActive(ROUTES.legalDpa)}
+            />
+          </UtilityCard>
+        </div>
+
+        {/* Admin */}
+        {isAdmin && (
+          <>
+            <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
+              Platform beheer
+            </div>
+            <div className="mt-2 space-y-2">
+              {adminItems.map((item) => (
+                <LuxuryNavLink
+                  key={item.href}
+                  {...item}
+                  active={isActive(item.href)}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </nav>
 
-      {/* FOOTER */}
+      {/* Footer */}
       <div className="border-t border-white/10 px-4 py-4 text-xs text-white/60">
         Vastgoed Exclusief
         <div className="text-white/40">Version 1.0.0</div>
       </div>
-
     </aside>
   );
 }
