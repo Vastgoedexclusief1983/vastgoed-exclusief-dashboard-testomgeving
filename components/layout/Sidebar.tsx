@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import {
@@ -21,6 +20,7 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import type { ReactNode } from 'react';
 
 import type { UserRole } from '@/types/auth';
 import DisclaimerDialog from '@/components/DisclaimerDialog';
@@ -133,7 +133,7 @@ function UtilityCard({
   icon: any;
   title: string;
   subtitle: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-3 shadow-md backdrop-blur-sm">
@@ -151,7 +151,7 @@ function UtilityCard({
   );
 }
 
-function UtilityButtonWrap({ children }: { children: React.ReactNode }) {
+function UtilityButtonWrap({ children }: { children: ReactNode }) {
   return (
     <div className="sidebar-utility-button [&>*]:w-full [&>button]:flex [&>button]:w-full [&>button]:items-center [&>button]:justify-start [&>button]:rounded-xl [&>button]:border [&>button]:border-white/10 [&>button]:bg-white/[0.06] [&>button]:px-3 [&>button]:py-2.5 [&>button]:text-left [&>button]:text-sm [&>button]:font-medium [&>button]:text-white [&>button]:transition [&>button:hover]:bg-white/[0.1]">
       {children}
@@ -219,12 +219,24 @@ export function Sidebar({ role }: SidebarProps) {
   ];
 
   const multimediaItems: NavItem[] = [
-    { href: ROUTES.aiMultimedia, label: 'Woning restylen', icon: ImageIcon },
-    { href: ROUTES.presentatiePromotie, label: 'Presentatie & Promotie', icon: Megaphone },
+    {
+      href: ROUTES.aiMultimedia,
+      label: 'Woning restylen',
+      icon: ImageIcon,
+    },
+    {
+      href: ROUTES.presentatiePromotie,
+      label: 'Presentatie & Promotie',
+      icon: Megaphone,
+    },
   ];
 
   const marktanalyseItems: NavItem[] = [
-    { href: ROUTES.aiAnalysis, label: 'Waarde & Positionering', icon: FileSearch },
+    {
+      href: ROUTES.aiAnalysis,
+      label: 'Waarde & Positionering',
+      icon: FileSearch,
+    },
   ];
 
   const websiteItems: NavItem[] = [
@@ -242,25 +254,24 @@ export function Sidebar({ role }: SidebarProps) {
 
   return (
     <aside className="flex h-screen w-[270px] flex-col bg-[#102c54] text-white shadow-lg">
-      
-      {/* 🔥 LOGO HEADER (FIXED) */}
+      {/* Header */}
       <div className="border-b border-white/10 px-4 py-4">
-        <Link href={ROUTES.dashboard}>
-          <div className="relative h-10 w-[180px]">
-            <Image
-              src="/logo.png?v=5"
-              alt="Vastgoed Exclusief"
-              fill
-              className="object-contain object-left"
-              priority
-            />
-          </div>
+        <Link
+          href={ROUTES.dashboard}
+          className="block"
+          aria-label="Ga naar dashboard"
+        >
+          <img
+            src="/logo.png?v=8"
+            alt="Vastgoed Exclusief"
+            className="block h-auto w-[175px] max-w-full object-contain"
+            draggable={false}
+          />
         </Link>
       </div>
 
-      {/* NAV */}
+      {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-
         <div className="mb-5">
           <PrimaryActionLink
             href={ROUTES.propertyNew}
@@ -272,72 +283,106 @@ export function Sidebar({ role }: SidebarProps) {
         <div className="px-2 pt-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Overzicht
         </div>
-
         <div className="mt-2 space-y-2">
           {overviewItems.map((item) => (
-            <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
           ))}
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Waardebepaling
         </div>
-
         <div className="mt-2 space-y-2">
           {waardebepalingItems.map((item) => (
-            <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
           ))}
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Multimedia
         </div>
-
         <div className="mt-2 space-y-2">
           {multimediaItems.map((item) => (
-            <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
           ))}
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Marktanalyse
         </div>
-
         <div className="mt-2 space-y-2">
           {marktanalyseItems.map((item) => (
-            <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
           ))}
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Website
         </div>
-
         <div className="mt-2 space-y-2">
           {websiteItems.map((item) => (
-            <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
+            <LuxuryNavLink
+              key={item.href}
+              {...item}
+              active={isActive(item.href)}
+            />
           ))}
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Hulp & informatie
         </div>
-
         <div className="mt-2 space-y-3">
-          <UtilityCard icon={HelpCircle} title="Dashboard hulp" subtitle="Uitleg en ondersteuning">
+          <UtilityCard
+            icon={HelpCircle}
+            title="Dashboard hulp"
+            subtitle="Uitleg en ondersteuning"
+          >
             <UtilityButtonWrap>
               <DashboardHelpDialog />
             </UtilityButtonWrap>
           </UtilityCard>
 
-          <UtilityCard icon={ShieldAlert} title="Belangrijk" subtitle="Disclaimer en voorwaarden">
+          <UtilityCard
+            icon={ShieldAlert}
+            title="Belangrijk"
+            subtitle="Disclaimer en voorwaarden"
+          >
             <UtilityButtonWrap>
               <DisclaimerDialog />
             </UtilityButtonWrap>
 
-            <UtilityLegalLink href={ROUTES.legalTerms} label="Algemene voorwaarden" active={isActive(ROUTES.legalTerms)} />
-            <UtilityLegalLink href={ROUTES.legalPrivacy} label="Privacyverklaring" active={isActive(ROUTES.legalPrivacy)} />
-            <UtilityLegalLink href={ROUTES.legalDpa} label="Verwerkersovereenkomst" active={isActive(ROUTES.legalDpa)} />
+            <UtilityLegalLink
+              href={ROUTES.legalTerms}
+              label="Algemene voorwaarden"
+              active={isActive(ROUTES.legalTerms)}
+            />
+            <UtilityLegalLink
+              href={ROUTES.legalPrivacy}
+              label="Privacyverklaring"
+              active={isActive(ROUTES.legalPrivacy)}
+            />
+            <UtilityLegalLink
+              href={ROUTES.legalDpa}
+              label="Verwerkersovereenkomst"
+              active={isActive(ROUTES.legalDpa)}
+            />
           </UtilityCard>
         </div>
 
@@ -346,17 +391,20 @@ export function Sidebar({ role }: SidebarProps) {
             <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
               Platform beheer
             </div>
-
             <div className="mt-2 space-y-2">
               {adminItems.map((item) => (
-                <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
+                <LuxuryNavLink
+                  key={item.href}
+                  {...item}
+                  active={isActive(item.href)}
+                />
               ))}
             </div>
           </>
         )}
       </nav>
 
-      {/* FOOTER */}
+      {/* Footer */}
       <div className="border-t border-white/10 px-4 py-4 text-xs text-white/60">
         Vastgoed Exclusief
         <div className="text-white/40">Version 1.0.0</div>
