@@ -248,15 +248,14 @@ export function Sidebar({ role }: SidebarProps) {
 
   return (
     <aside className="flex h-screen w-[270px] flex-col bg-[#102c54] text-white shadow-lg">
-      {/* Header */}
       <div className="border-b border-white/10 px-4 py-4">
         <div className="flex items-center gap-3">
           <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-md">
             <Image
-              src="/logo.png"
+              src="/logo.png?v=2"
               alt="Vastgoed Exclusief"
               fill
-              className="object-contain p-1.5"
+              className="object-contain p-1"
               priority
             />
           </div>
@@ -270,9 +269,7 @@ export function Sidebar({ role }: SidebarProps) {
         </div>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        {/* Top button */}
         <div className="mb-5">
           <PrimaryActionLink
             href={ROUTES.propertyNew}
@@ -281,7 +278,6 @@ export function Sidebar({ role }: SidebarProps) {
           />
         </div>
 
-        {/* Overzicht */}
         <div className="px-2 pt-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Overzicht
         </div>
@@ -295,7 +291,6 @@ export function Sidebar({ role }: SidebarProps) {
           ))}
         </div>
 
-        {/* Waardebepaling */}
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Waardebepaling
         </div>
@@ -309,7 +304,6 @@ export function Sidebar({ role }: SidebarProps) {
           ))}
         </div>
 
-        {/* Multimedia */}
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Multimedia
         </div>
@@ -323,7 +317,6 @@ export function Sidebar({ role }: SidebarProps) {
           ))}
         </div>
 
-        {/* Marktanalyse */}
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Marktanalyse
         </div>
@@ -337,7 +330,6 @@ export function Sidebar({ role }: SidebarProps) {
           ))}
         </div>
 
-        {/* Website */}
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Website
         </div>
@@ -351,7 +343,6 @@ export function Sidebar({ role }: SidebarProps) {
           ))}
         </div>
 
-        {/* Help & Legal */}
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Hulp & informatie
         </div>
@@ -393,7 +384,6 @@ export function Sidebar({ role }: SidebarProps) {
           </UtilityCard>
         </div>
 
-        {/* Admin */}
         {isAdmin && (
           <>
             <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
@@ -412,7 +402,6 @@ export function Sidebar({ role }: SidebarProps) {
         )}
       </nav>
 
-      {/* Footer */}
       <div className="border-t border-white/10 px-4 py-4 text-xs text-white/60">
         Vastgoed Exclusief
         <div className="text-white/40">Version 1.0.0</div>
