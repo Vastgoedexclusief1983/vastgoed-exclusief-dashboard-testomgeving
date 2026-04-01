@@ -264,7 +264,7 @@ export function Sidebar({ role }: SidebarProps) {
           <img
             src="/logo.png?v=8"
             alt="Vastgoed Exclusief"
-            className="block h-auto w-[175px] max-w-full object-contain"
+            className="block h-auto w-[233px] max-w-full object-contain"
             draggable={false}
           />
         </Link>
