@@ -251,17 +251,18 @@ export function Sidebar({ role }: SidebarProps) {
       {/* Header */}
       <div className="border-b border-white/10 px-4 py-4">
         <div className="flex items-center gap-3">
-          <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-white">
+          <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-md">
             <Image
               src="/logo.png"
               alt="Vastgoed Exclusief"
               fill
-              className="object-contain p-1"
+              className="object-contain p-1.5"
               priority
             />
           </div>
-          <div className="leading-tight">
-            <div className="text-sm font-semibold">Vastgoed Exclusief</div>
+
+          <div className="min-w-0 leading-tight">
+            <div className="truncate text-sm font-semibold">Vastgoed Exclusief</div>
             <div className="text-xs text-white/70">
               {isAdmin ? 'Beheerportaal' : 'Dashboard'}
             </div>
