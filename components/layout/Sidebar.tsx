@@ -248,27 +248,28 @@ export function Sidebar({ role }: SidebarProps) {
 
   return (
     <aside className="flex h-screen w-[270px] flex-col bg-[#102c54] text-white shadow-lg">
+      {/* Header */}
       <div className="border-b border-white/10 px-4 py-4">
-        <div className="flex items-center gap-3">
-          <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-md">
+        <Link
+          href={ROUTES.dashboard}
+          className="block transition-opacity hover:opacity-100 opacity-95"
+        >
+          <div className="relative h-12 w-[190px]">
             <Image
-              src="/logo.png?v=2"
+              src="/logo.png?v=3"
               alt="Vastgoed Exclusief"
               fill
-              className="object-contain p-1"
+              className="object-contain object-left"
               priority
             />
           </div>
-
-          <div className="min-w-0 leading-tight">
-            <div className="truncate text-sm font-semibold">Vastgoed Exclusief</div>
-            <div className="text-xs text-white/70">
-              {isAdmin ? 'Beheerportaal' : 'Dashboard'}
-            </div>
+          <div className="mt-1 pl-[2px] text-xs text-white/70">
+            {isAdmin ? 'Beheerportaal' : 'Dashboard'}
           </div>
-        </div>
+        </Link>
       </div>
 
+      {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
         <div className="mb-5">
           <PrimaryActionLink
@@ -402,6 +403,7 @@ export function Sidebar({ role }: SidebarProps) {
         )}
       </nav>
 
+      {/* Footer */}
       <div className="border-t border-white/10 px-4 py-4 text-xs text-white/60">
         Vastgoed Exclusief
         <div className="text-white/40">Version 1.0.0</div>
