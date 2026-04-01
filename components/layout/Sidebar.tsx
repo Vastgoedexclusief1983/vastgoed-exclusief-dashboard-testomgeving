@@ -192,23 +192,17 @@ export function Sidebar({ role }: SidebarProps) {
 
   const ROUTES = {
     dashboard: isAdmin ? '/admin/dashboard' : '/dashboard',
-
     aiAsk: '/ai-vraag',
     properties: '/properties',
     propertyNew: '/properties/new',
     valuation: '/property-valuation',
-
     aiAnalysis: '/ai-assistent',
-
     aiMultimedia: '/ai-multimedia',
     presentatiePromotie: '/presentatie-promotie',
-
     website: '/website',
-
     legalTerms: '/legal/voorwaarden',
     legalPrivacy: '/legal/privacy',
     legalDpa: '/legal/verwerkersovereenkomst',
-
     adminAgents: '/admin/agents',
     adminAccess: '/admin/toegang',
     adminAiUsage: '/admin/ai-usage',
@@ -248,29 +242,25 @@ export function Sidebar({ role }: SidebarProps) {
 
   return (
     <aside className="flex h-screen w-[270px] flex-col bg-[#102c54] text-white shadow-lg">
-      {/* Header */}
+      
+      {/* 🔥 LOGO HEADER (FIXED) */}
       <div className="border-b border-white/10 px-4 py-4">
-        <Link
-          href={ROUTES.dashboard}
-          className="block transition-opacity hover:opacity-100 opacity-95"
-        >
-          <div className="relative h-12 w-[190px]">
+        <Link href={ROUTES.dashboard}>
+          <div className="relative h-10 w-[180px]">
             <Image
-              src="/logo.png?v=3"
+              src="/logo.png?v=5"
               alt="Vastgoed Exclusief"
               fill
               className="object-contain object-left"
               priority
             />
           </div>
-          <div className="mt-1 pl-[2px] text-xs text-white/70">
-            {isAdmin ? 'Beheerportaal' : 'Dashboard'}
-          </div>
         </Link>
       </div>
 
-      {/* Nav */}
+      {/* NAV */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
+
         <div className="mb-5">
           <PrimaryActionLink
             href={ROUTES.propertyNew}
@@ -282,106 +272,72 @@ export function Sidebar({ role }: SidebarProps) {
         <div className="px-2 pt-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Overzicht
         </div>
+
         <div className="mt-2 space-y-2">
           {overviewItems.map((item) => (
-            <LuxuryNavLink
-              key={item.href}
-              {...item}
-              active={isActive(item.href)}
-            />
+            <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
           ))}
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Waardebepaling
         </div>
+
         <div className="mt-2 space-y-2">
           {waardebepalingItems.map((item) => (
-            <LuxuryNavLink
-              key={item.href}
-              {...item}
-              active={isActive(item.href)}
-            />
+            <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
           ))}
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Multimedia
         </div>
+
         <div className="mt-2 space-y-2">
           {multimediaItems.map((item) => (
-            <LuxuryNavLink
-              key={item.href}
-              {...item}
-              active={isActive(item.href)}
-            />
+            <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
           ))}
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Marktanalyse
         </div>
+
         <div className="mt-2 space-y-2">
           {marktanalyseItems.map((item) => (
-            <LuxuryNavLink
-              key={item.href}
-              {...item}
-              active={isActive(item.href)}
-            />
+            <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
           ))}
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Website
         </div>
+
         <div className="mt-2 space-y-2">
           {websiteItems.map((item) => (
-            <LuxuryNavLink
-              key={item.href}
-              {...item}
-              active={isActive(item.href)}
-            />
+            <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
           ))}
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Hulp & informatie
         </div>
+
         <div className="mt-2 space-y-3">
-          <UtilityCard
-            icon={HelpCircle}
-            title="Dashboard hulp"
-            subtitle="Uitleg en ondersteuning"
-          >
+          <UtilityCard icon={HelpCircle} title="Dashboard hulp" subtitle="Uitleg en ondersteuning">
             <UtilityButtonWrap>
               <DashboardHelpDialog />
             </UtilityButtonWrap>
           </UtilityCard>
 
-          <UtilityCard
-            icon={ShieldAlert}
-            title="Belangrijk"
-            subtitle="Disclaimer en voorwaarden"
-          >
+          <UtilityCard icon={ShieldAlert} title="Belangrijk" subtitle="Disclaimer en voorwaarden">
             <UtilityButtonWrap>
               <DisclaimerDialog />
             </UtilityButtonWrap>
 
-            <UtilityLegalLink
-              href={ROUTES.legalTerms}
-              label="Algemene voorwaarden"
-              active={isActive(ROUTES.legalTerms)}
-            />
-            <UtilityLegalLink
-              href={ROUTES.legalPrivacy}
-              label="Privacyverklaring"
-              active={isActive(ROUTES.legalPrivacy)}
-            />
-            <UtilityLegalLink
-              href={ROUTES.legalDpa}
-              label="Verwerkersovereenkomst"
-              active={isActive(ROUTES.legalDpa)}
-            />
+            <UtilityLegalLink href={ROUTES.legalTerms} label="Algemene voorwaarden" active={isActive(ROUTES.legalTerms)} />
+            <UtilityLegalLink href={ROUTES.legalPrivacy} label="Privacyverklaring" active={isActive(ROUTES.legalPrivacy)} />
+            <UtilityLegalLink href={ROUTES.legalDpa} label="Verwerkersovereenkomst" active={isActive(ROUTES.legalDpa)} />
           </UtilityCard>
         </div>
 
@@ -390,20 +346,17 @@ export function Sidebar({ role }: SidebarProps) {
             <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
               Platform beheer
             </div>
+
             <div className="mt-2 space-y-2">
               {adminItems.map((item) => (
-                <LuxuryNavLink
-                  key={item.href}
-                  {...item}
-                  active={isActive(item.href)}
-                />
+                <LuxuryNavLink key={item.href} {...item} active={isActive(item.href)} />
               ))}
             </div>
           </>
         )}
       </nav>
 
-      {/* Footer */}
+      {/* FOOTER */}
       <div className="border-t border-white/10 px-4 py-4 text-xs text-white/60">
         Vastgoed Exclusief
         <div className="text-white/40">Version 1.0.0</div>
