@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 type Bandbreedte = {
@@ -44,6 +44,37 @@ type ApiResponse = {
 
 type QuickActionType = 'basisprijs' | 'bandbreedte' | 'm2' | 'strategie' | 'check';
 
+type PropertyTypeValue =
+  | 'appartement'
+  | 'tussenwoning'
+  | 'hoekwoning'
+  | '2-onder-1-kap'
+  | 'vrijstaand'
+  | 'villa'
+  | 'recreatie'
+  | '';
+
+type FinishLevelValue = 'opknapper' | 'gemiddeld' | 'hoog' | 'top' | '';
+
+type ExistingProperty = {
+  id: string;
+  propertyCode?: string;
+  title: string;
+  address: string;
+  city: string;
+  neighborhood: string;
+  propertyType: PropertyTypeValue;
+  woonoppervlakteM2: number | null;
+  perceelM2: number | null;
+  bouwjaar: number | null;
+  energielabel: string;
+  finishLevel: FinishLevelValue;
+  askingPrice: number | null;
+  basePrice: number | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+};
+
 function euro(n: number) {
   return `€${n.toLocaleString('nl-NL')}`;
 }
@@ -55,6 +86,67 @@ function pct(a: number, b: number) {
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
+}
+
+function safeNumber(value: unknown): number | null {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string') {
+    const normalized = value.replace(/\./g, '').replace(',', '.').trim();
+    if (!normalized) return null;
+    const parsed = Number(normalized);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
+function toTrimmedString(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function firstNonEmptyString(...values: unknown[]) {
+  for (const value of values) {
+    const v = toTrimmedString(value);
+    if (v) return v;
+  }
+  return '';
+}
+
+function normalizePropertyType(value: unknown): PropertyTypeValue {
+  const raw = toTrimmedString(value).toLowerCase();
+
+  if (!raw) return '';
+
+  if (raw.includes('appartement') || raw === 'apartment' || raw === 'condo') {
+    return 'appartement';
+  }
+
+  if (raw.includes('tussen')) return 'tussenwoning';
+  if (raw.includes('hoek')) return 'hoekwoning';
+  if (
+    raw.includes('2-onder-1-kap') ||
+    raw.includes('twee-onder-een-kap') ||
+    raw.includes('semi-detached')
+  ) {
+    return '2-onder-1-kap';
+  }
+
+  if (raw.includes('villa')) return 'villa';
+  if (raw.includes('recreatie') || raw.includes('recreation')) return 'recreatie';
+  if (raw.includes('vrijstaand') || raw === 'house' || raw === 'detached') return 'vrijstaand';
+
+  return '';
+}
+
+function normalizeFinishLevel(value: unknown): FinishLevelValue {
+  const raw = toTrimmedString(value).toLowerCase();
+
+  if (!raw) return '';
+  if (raw.includes('opknap')) return 'opknapper';
+  if (raw.includes('gemidd')) return 'gemiddeld';
+  if (raw.includes('hoog')) return 'hoog';
+  if (raw.includes('top')) return 'top';
+
+  return '';
 }
 
 function getFinishLabel(value: string) {
@@ -93,37 +185,337 @@ function getPropertyTypeLabel(value: string) {
   }
 }
 
+function normalizeExistingProperty(raw: any): ExistingProperty | null {
+  if (!raw || typeof raw !== 'object') return null;
+
+  const basicInfo = raw.basicInfo ?? {};
+  const dimensions = raw.dimensions ?? {};
+  const valuation = raw.valuation ?? {};
+  const location = basicInfo.location ?? {};
+  const addressObj = basicInfo.address ?? {};
+
+  const id =
+    toTrimmedString(raw._id) ||
+    toTrimmedString(raw.id) ||
+    toTrimmedString(raw.propertyId) ||
+    toTrimmedString(raw.propertyCode);
+
+  if (!id) return null;
+
+  const address =
+    firstNonEmptyString(
+      basicInfo.addressLine,
+      basicInfo.streetAndNumber,
+      basicInfo.fullAddress,
+      basicInfo.address,
+      addressObj.full,
+      [addressObj.street, addressObj.houseNumber].filter(Boolean).join(' ').trim(),
+      raw.address
+    ) || '';
+
+  const city =
+    firstNonEmptyString(location.city, basicInfo.city, raw.city, location.town, location.place) || '';
+
+  const neighborhood =
+    firstNonEmptyString(location.neighborhood, basicInfo.neighborhood, raw.neighborhood, location.district) || '';
+
+  const propertyType = normalizePropertyType(
+    basicInfo.propertyType ?? raw.propertyType ?? basicInfo.type ?? raw.type
+  );
+
+  const woonoppervlakteM2 =
+    safeNumber(
+      dimensions.livingArea ??
+        dimensions.livingAreaM2 ??
+        dimensions.woonoppervlakte ??
+        raw.woonoppervlakteM2 ??
+        raw.livingArea
+    ) ?? null;
+
+  const perceelM2 =
+    safeNumber(
+      dimensions.plotArea ??
+        dimensions.lotArea ??
+        dimensions.perceeloppervlakte ??
+        raw.perceelM2 ??
+        raw.plotArea
+    ) ?? null;
+
+  const bouwjaar =
+    safeNumber(
+      basicInfo.yearBuilt ??
+        basicInfo.buildYear ??
+        raw.bouwjaar ??
+        raw.yearBuilt
+    ) ?? null;
+
+  const energielabel = firstNonEmptyString(
+    basicInfo.energyLabel,
+    basicInfo.energielabel,
+    raw.energielabel,
+    raw.energyLabel
+  );
+
+  const finishLevel = normalizeFinishLevel(
+    basicInfo.finishLevel ??
+      raw.finishLevel ??
+      basicInfo.afwerkingsniveau ??
+      raw.afwerkingsniveau ??
+      valuation.finishLevel
+  );
+
+  const askingPrice =
+    safeNumber(
+      valuation.askingPrice ??
+        valuation.basePrice ??
+        basicInfo.basePrice ??
+        raw.price ??
+        raw.askingPrice
+    ) ?? null;
+
+  const basePrice =
+    safeNumber(
+      valuation.basePrice ??
+        raw.basePrice ??
+        valuation.indicativeBasePrice
+    ) ?? null;
+
+  const title =
+    firstNonEmptyString(
+      raw.title,
+      basicInfo.title,
+      address,
+      raw.propertyCode
+    ) || 'Woning';
+
+  return {
+    id,
+    propertyCode: toTrimmedString(raw.propertyCode),
+    title,
+    address,
+    city,
+    neighborhood,
+    propertyType,
+    woonoppervlakteM2,
+    perceelM2,
+    bouwjaar,
+    energielabel,
+    finishLevel,
+    askingPrice,
+    basePrice,
+    createdAt: raw.createdAt ?? null,
+    updatedAt: raw.updatedAt ?? null,
+  };
+}
+
+function compareAreaScore(target: number | null, candidate: number | null) {
+  if (!target || !candidate) return 0.5;
+  const diffRatio = Math.abs(candidate - target) / Math.max(target, 1);
+  return clamp(1 - diffRatio, 0, 1);
+}
+
+function compareYearScore(target: number | null, candidate: number | null) {
+  if (!target || !candidate) return 0.5;
+  const diff = Math.abs(candidate - target);
+  return clamp(1 - diff / 40, 0, 1);
+}
+
+function compareExactTextScore(target: string, candidate: string) {
+  if (!target || !candidate) return 0.5;
+  return target.trim().toLowerCase() === candidate.trim().toLowerCase() ? 1 : 0;
+}
+
+function compareContainsTextScore(target: string, candidate: string) {
+  if (!target || !candidate) return 0.5;
+
+  const a = target.trim().toLowerCase();
+  const b = candidate.trim().toLowerCase();
+
+  if (a === b) return 1;
+  if (a.includes(b) || b.includes(a)) return 0.8;
+  return 0;
+}
+
+function computeComparisonScore(
+  input: {
+    city: string;
+    neighborhood: string;
+    propertyType: PropertyTypeValue;
+    woonoppervlakteM2: number | null;
+    perceelM2: number | null;
+    bouwjaar: number | null;
+    finishLevel: FinishLevelValue;
+  },
+  property: ExistingProperty
+) {
+  const cityScore = compareExactTextScore(input.city, property.city);
+  const neighborhoodScore = compareContainsTextScore(input.neighborhood, property.neighborhood);
+  const typeScore =
+    input.propertyType && property.propertyType
+      ? input.propertyType === property.propertyType
+        ? 1
+        : 0
+      : 0.5;
+  const woonScore = compareAreaScore(input.woonoppervlakteM2, property.woonoppervlakteM2);
+  const perceelScore = compareAreaScore(input.perceelM2, property.perceelM2);
+  const bouwjaarScore = compareYearScore(input.bouwjaar, property.bouwjaar);
+  const finishScore =
+    input.finishLevel && property.finishLevel
+      ? input.finishLevel === property.finishLevel
+        ? 1
+        : 0.2
+      : 0.5;
+
+  const weighted =
+    cityScore * 0.3 +
+    neighborhoodScore * 0.1 +
+    typeScore * 0.2 +
+    woonScore * 0.2 +
+    perceelScore * 0.08 +
+    bouwjaarScore * 0.06 +
+    finishScore * 0.06;
+
+  return Math.round(weighted * 100);
+}
+
+function scoreBadgeClass(score: number) {
+  if (score >= 85) return 'bg-emerald-100 text-emerald-700';
+  if (score >= 70) return 'bg-blue-100 text-blue-700';
+  if (score >= 55) return 'bg-amber-100 text-amber-700';
+  return 'bg-slate-100 text-slate-600';
+}
+
 export default function AiVraagPage() {
   const [question, setQuestion] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
-  const [propertyType, setPropertyType] = useState<
-    'appartement' | 'tussenwoning' | 'hoekwoning' | '2-onder-1-kap' | 'vrijstaand' | 'villa' | 'recreatie' | ''
-  >('');
+  const [propertyType, setPropertyType] = useState<PropertyTypeValue>('');
   const [woonoppervlakteM2, setWoonoppervlakteM2] = useState<string>('');
   const [perceelM2, setPerceelM2] = useState<string>('');
   const [bouwjaar, setBouwjaar] = useState<string>('');
   const [energielabel, setEnergielabel] = useState<string>('');
-  const [finishLevel, setFinishLevel] = useState<'opknapper' | 'gemiddeld' | 'hoog' | 'top' | ''>('');
+  const [finishLevel, setFinishLevel] = useState<FinishLevelValue>('');
 
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ApiResponse | null>(null);
 
+  const [existingProperties, setExistingProperties] = useState<ExistingProperty[]>([]);
+  const [isLoadingExisting, setIsLoadingExisting] = useState(false);
+  const [selectedPropertyId, setSelectedPropertyId] = useState('');
+  const [comparePropertyIds, setComparePropertyIds] = useState<string[]>([]);
+
+  const selectedProperty = useMemo(
+    () => existingProperties.find((item) => item.id === selectedPropertyId) ?? null,
+    [existingProperties, selectedPropertyId]
+  );
+
+  const compareProperties = useMemo(
+    () =>
+      comparePropertyIds
+        .map((id) => existingProperties.find((item) => item.id === id))
+        .filter(Boolean) as ExistingProperty[],
+    [comparePropertyIds, existingProperties]
+  );
+
   const remaining = data?.usage?.remaining ?? null;
   const limit = data?.usage?.limit ?? null;
   const used = data?.usage?.count ?? null;
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadExistingProperties() {
+      setIsLoadingExisting(true);
+
+      try {
+        const res = await fetch('/api/properties/mine?limit=100', {
+          method: 'GET',
+          cache: 'no-store',
+        });
+
+        if (!res.ok) {
+          return;
+        }
+
+        const json = await res.json();
+        const list = Array.isArray(json)
+          ? json
+          : Array.isArray(json?.items)
+          ? json.items
+          : Array.isArray(json?.properties)
+          ? json.properties
+          : [];
+
+        const normalized = list
+          .map(normalizeExistingProperty)
+          .filter(Boolean) as ExistingProperty[];
+
+        if (!cancelled) {
+          setExistingProperties(normalized);
+        }
+      } catch {
+        // stil terugvallen zodat de pagina nooit stukloopt
+      } finally {
+        if (!cancelled) {
+          setIsLoadingExisting(false);
+        }
+      }
+    }
+
+    loadExistingProperties();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const inputWoon = useMemo(() => safeNumber(woonoppervlakteM2), [woonoppervlakteM2]);
+  const inputPerceel = useMemo(() => safeNumber(perceelM2), [perceelM2]);
+  const inputBouwjaar = useMemo(() => safeNumber(bouwjaar), [bouwjaar]);
+
+  const qualityItems = useMemo(
+    () => [
+      { label: 'Plaats', done: Boolean(city.trim()), weight: 18 },
+      { label: 'Woningtype', done: Boolean(propertyType), weight: 18 },
+      { label: 'Woonoppervlakte', done: Boolean(woonoppervlakteM2.trim()), weight: 22 },
+      { label: 'Perceel', done: Boolean(perceelM2.trim()), weight: 10 },
+      { label: 'Bouwjaar', done: Boolean(bouwjaar.trim()), weight: 8 },
+      { label: 'Energielabel', done: Boolean(energielabel.trim()), weight: 6 },
+      { label: 'Afwerkingsniveau', done: Boolean(finishLevel), weight: 10 },
+      { label: 'Adres / buurt', done: Boolean(address.trim() || neighborhood.trim()), weight: 8 },
+    ],
+    [address, bouwjaar, city, energielabel, finishLevel, neighborhood, perceelM2, propertyType, woonoppervlakteM2]
+  );
+
+  const qualityScore = useMemo(() => {
+    const total = qualityItems.reduce((sum, item) => sum + item.weight, 0);
+    const done = qualityItems.reduce((sum, item) => sum + (item.done ? item.weight : 0), 0);
+    return Math.round((done / total) * 100);
+  }, [qualityItems]);
+
+  const qualityMessage = useMemo(() => {
+    if (qualityScore >= 85) {
+      return 'Sterke invoer. De indicatie kan beter aansluiten op vergelijkbare woningen en prijs per m².';
+    }
+    if (qualityScore >= 65) {
+      return 'Goede basis. Met extra gegevens zoals perceel, bouwjaar en afwerking wordt de indicatie scherper.';
+    }
+    return 'De invoer is nog beperkt. Vul minimaal plaats, woningtype en woonoppervlakte in voor een bruikbare indicatie.';
+  }, [qualityScore]);
 
   const accuracyHint = useMemo(() => {
     const missing: string[] = [];
     if (!city.trim()) missing.push('plaats');
     if (!woonoppervlakteM2.trim()) missing.push('woonoppervlakte');
     if (!propertyType) missing.push('woningtype');
-    return missing;
-  }, [city, woonoppervlakteM2, propertyType]);
+    if (!finishLevel) missing.push('afwerkingsniveau');
+    if (!perceelM2.trim()) missing.push('perceel');
+    return missing.slice(0, 4);
+  }, [city, woonoppervlakteM2, propertyType, finishLevel, perceelM2]);
 
   const hasEnoughInputForIndicatie = useMemo(() => {
-    return city.trim() && woonoppervlakteM2.trim() && propertyType;
+    return Boolean(city.trim() && woonoppervlakteM2.trim() && propertyType);
   }, [city, woonoppervlakteM2, propertyType]);
 
   const estimatedMiddenPrijs = useMemo(() => {
@@ -139,44 +531,128 @@ export default function AiVraagPage() {
     return null;
   }, [data]);
 
+  const suggestedComparables = useMemo(() => {
+    const input = {
+      city: city.trim(),
+      neighborhood: neighborhood.trim(),
+      propertyType,
+      woonoppervlakteM2: inputWoon,
+      perceelM2: inputPerceel,
+      bouwjaar: inputBouwjaar,
+      finishLevel,
+    };
+
+    return existingProperties
+      .filter((item) => item.id !== selectedPropertyId)
+      .map((item) => ({
+        property: item,
+        score: computeComparisonScore(input, item),
+      }))
+      .filter((item) => item.score >= 40)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 6);
+  }, [
+    city,
+    neighborhood,
+    propertyType,
+    inputWoon,
+    inputPerceel,
+    inputBouwjaar,
+    finishLevel,
+    existingProperties,
+    selectedPropertyId,
+  ]);
+
+  function applyPropertyToForm(property: ExistingProperty) {
+    setSelectedPropertyId(property.id);
+    setAddress(property.address || '');
+    setCity(property.city || '');
+    setNeighborhood(property.neighborhood || '');
+    setPropertyType(property.propertyType || '');
+    setWoonoppervlakteM2(property.woonoppervlakteM2 != null ? String(property.woonoppervlakteM2) : '');
+    setPerceelM2(property.perceelM2 != null ? String(property.perceelM2) : '');
+    setBouwjaar(property.bouwjaar != null ? String(property.bouwjaar) : '');
+    setEnergielabel(property.energielabel || '');
+    setFinishLevel(property.finishLevel || '');
+
+    const label = property.propertyType
+      ? getPropertyTypeLabel(property.propertyType).toLowerCase()
+      : 'woning';
+
+    const locationBase =
+      property.address || property.city
+        ? `${property.address ? property.address : ''}${
+            property.city ? `${property.address ? ', ' : ''}${property.city}` : ''
+          }${property.neighborhood ? ` (${property.neighborhood})` : ''}`.trim()
+        : 'deze woning';
+
+    const woonopp = property.woonoppervlakteM2 ? `${property.woonoppervlakteM2} m²` : 'onbekende woonoppervlakte';
+
+    setQuestion(
+      `Wat is een realistische indicatieve basisprijs voor ${locationBase}, uitgaande van een ${label} met ${woonopp} in het exclusieve segment? Gebruik waar mogelijk vergelijking met bestaande woningen van deze makelaar, geef een richtprijs, bandbreedte, prijs per m² en korte motivatie.`
+    );
+
+    toast.success('Woninggegevens uit bestaande invoer geladen.');
+  }
+
   function applyQuickPrompt(type: QuickActionType) {
     const locationBase =
       address || city || neighborhood
-        ? `${address ? address : ''}${city ? `${address ? ', ' : ''}${city}` : ''}${neighborhood ? ` (${neighborhood})` : ''}`.trim()
+        ? `${address ? address : ''}${city ? `${address ? ', ' : ''}${city}` : ''}${
+            neighborhood ? ` (${neighborhood})` : ''
+          }`.trim()
         : 'deze woning';
 
     const typeLabel = propertyType ? getPropertyTypeLabel(propertyType).toLowerCase() : 'woning';
     const woonopp = woonoppervlakteM2 ? `${woonoppervlakteM2} m²` : 'onbekende woonoppervlakte';
+    const compareLine = compareProperties.length
+      ? ` Gebruik ook vergelijking met ${compareProperties.length} geselecteerde referentiewoning${compareProperties.length > 1 ? 'en' : ''} van deze makelaar.`
+      : selectedProperty
+      ? ' Gebruik waar mogelijk ook de overige woningen van deze makelaar als referentie.'
+      : '';
 
     if (type === 'basisprijs') {
       setQuestion(
-        `Wat is een realistische indicatieve basisprijs voor een ${typeLabel} met ${woonopp} in het segment vanaf €1.000.000 op ${locationBase}? Geef een onderbouwde richtprijs, bandbreedte en korte motivatie.`
+        `Wat is een realistische indicatieve basisprijs voor een ${typeLabel} met ${woonopp} in het segment vanaf €1.000.000 op ${locationBase}? Geef een onderbouwde richtprijs, bandbreedte, prijs per m² en korte motivatie.${compareLine}`
       );
     }
 
     if (type === 'bandbreedte') {
       setQuestion(
-        `Wat is een realistische vraagprijsbandbreedte voor ${locationBase} in het hogere segment, uitgaande van een ${typeLabel} met ${woonopp}, en waarom?`
+        `Wat is een realistische vraagprijsbandbreedte voor ${locationBase} in het hogere segment, uitgaande van een ${typeLabel} met ${woonopp}, en waarom? Benoem laag, midden en hoog scenario.${compareLine}`
       );
     }
 
     if (type === 'strategie') {
       setQuestion(
-        `Welke prijsstrategie en positionering adviseer je voor ${locationBase} in het exclusieve segment? Geef advies over marktpositie, presentatie en kans op verkoop.`
+        `Welke prijsstrategie en positionering adviseer je voor ${locationBase} in het exclusieve segment? Geef advies over marktpositie, presentatie, vraagprijs versus verwachte verkoopuitkomst en kans op verkoop.${compareLine}`
       );
     }
 
     if (type === 'm2') {
       setQuestion(
-        `Wat is een realistische indicatieve prijs per m² voor ${locationBase} in het hogere segment en welke factoren hebben de meeste invloed op deze inschatting?`
+        `Wat is een realistische indicatieve prijs per m² voor ${locationBase} in het hogere segment en welke factoren hebben de meeste invloed op deze inschatting?${compareLine}`
       );
     }
 
     if (type === 'check') {
       setQuestion(
-        `Welke aanvullende woninggegevens zijn nodig om voor ${locationBase} een nauwkeurigere indicatieve basisprijs op te stellen? Geef een korte checklist.`
+        `Welke aanvullende woninggegevens zijn nodig om voor ${locationBase} een nauwkeurigere indicatieve basisprijs op te stellen? Geef een korte checklist, inclusief welke referentiewoningen nog het meest bruikbaar zouden zijn.${compareLine}`
       );
     }
+  }
+
+  function toggleCompareProperty(id: string) {
+    setComparePropertyIds((current) => {
+      if (current.includes(id)) {
+        return current.filter((item) => item !== id);
+      }
+      if (current.length >= 5) {
+        toast.error('Je kunt maximaal 5 referentiewoningen selecteren.');
+        return current;
+      }
+      return [...current, id];
+    });
   }
 
   async function onSubmit() {
@@ -191,11 +667,52 @@ export default function AiVraagPage() {
       city: city.trim() || undefined,
       neighborhood: neighborhood.trim() || undefined,
       propertyType: propertyType || undefined,
-      woonoppervlakteM2: woonoppervlakteM2.trim() ? Number(woonoppervlakteM2) : undefined,
-      perceelM2: perceelM2.trim() ? Number(perceelM2) : undefined,
-      bouwjaar: bouwjaar.trim() ? Number(bouwjaar) : undefined,
+      woonoppervlakteM2: inputWoon ?? undefined,
+      perceelM2: inputPerceel ?? undefined,
+      bouwjaar: inputBouwjaar ?? undefined,
       energielabel: energielabel.trim() || undefined,
       finishLevel: finishLevel || undefined,
+
+      selectedPropertyId: selectedProperty?.id || undefined,
+      selectedPropertySnapshot: selectedProperty
+        ? {
+            id: selectedProperty.id,
+            propertyCode: selectedProperty.propertyCode,
+            title: selectedProperty.title,
+            address: selectedProperty.address,
+            city: selectedProperty.city,
+            neighborhood: selectedProperty.neighborhood,
+            propertyType: selectedProperty.propertyType,
+            woonoppervlakteM2: selectedProperty.woonoppervlakteM2,
+            perceelM2: selectedProperty.perceelM2,
+            bouwjaar: selectedProperty.bouwjaar,
+            energielabel: selectedProperty.energielabel,
+            finishLevel: selectedProperty.finishLevel,
+            askingPrice: selectedProperty.askingPrice,
+            basePrice: selectedProperty.basePrice,
+          }
+        : undefined,
+      comparePropertyIds: compareProperties.map((item) => item.id),
+      comparePropertySnapshots:
+        compareProperties.length > 0
+          ? compareProperties.map((item) => ({
+              id: item.id,
+              propertyCode: item.propertyCode,
+              title: item.title,
+              address: item.address,
+              city: item.city,
+              neighborhood: item.neighborhood,
+              propertyType: item.propertyType,
+              woonoppervlakteM2: item.woonoppervlakteM2,
+              perceelM2: item.perceelM2,
+              bouwjaar: item.bouwjaar,
+              energielabel: item.energielabel,
+              finishLevel: item.finishLevel,
+              askingPrice: item.askingPrice,
+              basePrice: item.basePrice,
+            }))
+          : undefined,
+      qualityScore,
     };
 
     if (body.woonoppervlakteM2 !== undefined && !Number.isFinite(body.woonoppervlakteM2)) {
@@ -269,13 +786,14 @@ export default function AiVraagPage() {
               <p className="mt-4 max-w-3xl text-sm leading-7 text-white/85 md:text-base">
                 Bepaal een indicatieve richtprijs voor woningen in het hogere segment. Deze module is
                 bedoeld als premium startpunt voor de waardebepaling en geeft een AI-ondersteunde
-                inschatting op basis van ingevoerde woningkenmerken, locatie en marktcontext.
+                inschatting op basis van ingevoerde woningkenmerken, locatie, marktcontext én waar
+                mogelijk vergelijking met eerder ingevoerde woningen.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <StatusPill label="Richtprijs miljoenenwoning" />
                 <StatusPill label="Bandbreedte & prijs per m²" />
-                <StatusPill label="Indicatief resultaat" />
+                <StatusPill label="Vergelijking met eigen woningen" />
               </div>
             </div>
 
@@ -289,7 +807,7 @@ export default function AiVraagPage() {
 
               <div className="mt-5 grid gap-3">
                 <FeatureRow text="Geschikt voor exclusieve woningen vanaf circa €1.000.000" />
-                <FeatureRow text="Geeft richting voor bandbreedte, positionering en prijs per m²" />
+                <FeatureRow text="Gebruikt input, segmentcontext en vergelijkingen als referentie" />
                 <FeatureRow text="Kan later worden gebruikt binnen dashboard en waardering" />
               </div>
             </div>
@@ -338,11 +856,62 @@ export default function AiVraagPage() {
               <div className="text-xs font-medium uppercase tracking-wide text-slate-400">
                 Resultaat
               </div>
-              <div className="mt-1 text-sm font-semibold text-slate-900">
-                Altijd indicatief
-              </div>
+              <div className="mt-1 text-sm font-semibold text-slate-900">Altijd indicatief</div>
             </div>
           </div>
+
+          {existingProperties.length > 0 && (
+            <div className="mt-5 rounded-[24px] border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                <div className="w-full">
+                  <label className="mb-2 block text-sm font-semibold text-slate-900">
+                    Start vanuit bestaande woning van deze makelaar
+                  </label>
+                  <select
+                    value={selectedPropertyId}
+                    onChange={(e) => {
+                      const id = e.target.value;
+                      setSelectedPropertyId(id);
+                      const property = existingProperties.find((item) => item.id === id);
+                      if (property) {
+                        applyPropertyToForm(property);
+                      }
+                    }}
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#20497b] focus:ring-4 focus:ring-[#20497b]/10"
+                  >
+                    <option value="">Kies een bestaande woning…</option>
+                    {existingProperties.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.propertyCode ? `${item.propertyCode} • ` : ''}
+                        {item.address || item.title}
+                        {item.city ? ` • ${item.city}` : ''}
+                        {item.woonoppervlakteM2 ? ` • ${item.woonoppervlakteM2} m²` : ''}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="text-xs text-slate-500 lg:min-w-[220px] lg:text-right">
+                  {isLoadingExisting
+                    ? 'Bestaande woningen laden…'
+                    : `${existingProperties.length} bestaande woning${existingProperties.length > 1 ? 'en' : ''} beschikbaar`}
+                </div>
+              </div>
+
+              <div className="mt-3 text-sm text-slate-500">
+                Kies een bestaande woning om de invoer direct te vullen. Daarna kun je aanvullende
+                referentiewoningen selecteren voor vergelijking.
+              </div>
+            </div>
+          )}
+
+          {existingProperties.length === 0 && !isLoadingExisting && (
+            <div className="mt-5 rounded-[24px] border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
+              Nog geen bestaande woningen ingeladen op deze pagina. De basisprijs-module blijft wel
+              gewoon werken. Zodra een endpoint voor de eigen woningen beschikbaar is, kan deze sectie
+              automatisch gevuld worden.
+            </div>
+          )}
 
           <div className="mt-5 flex flex-wrap gap-2">
             <QuickActionButton onClick={() => applyQuickPrompt('basisprijs')} label="Basisprijs bepalen" />
@@ -352,15 +921,83 @@ export default function AiVraagPage() {
             <QuickActionButton onClick={() => applyQuickPrompt('check')} label="Checklist ontbrekende info" />
           </div>
 
+          {suggestedComparables.length > 0 && (
+            <div className="mt-6">
+              <div className="mb-3 flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-900">Voorgestelde referentiewoningen</h3>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Gebaseerd op plaats, woningtype, oppervlak, perceel, bouwjaar en afwerking.
+                  </p>
+                </div>
+                <div className="text-xs text-slate-500">
+                  Geselecteerd: {comparePropertyIds.length}/5
+                </div>
+              </div>
+
+              <div className="grid gap-3">
+                {suggestedComparables.map(({ property, score }) => {
+                  const selected = comparePropertyIds.includes(property.id);
+
+                  return (
+                    <button
+                      key={property.id}
+                      type="button"
+                      onClick={() => toggleCompareProperty(property.id)}
+                      className={`rounded-[22px] border p-4 text-left transition ${
+                        selected
+                          ? 'border-[#20497b] bg-[#f4f8fc] shadow-sm'
+                          : 'border-slate-200 bg-white hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                        <div>
+                          <div className="text-sm font-semibold text-slate-900">
+                            {property.address || property.title}
+                          </div>
+                          <div className="mt-1 text-xs text-slate-500">
+                            {[property.city, property.neighborhood].filter(Boolean).join(' • ') || 'Locatie niet compleet'}
+                          </div>
+
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <Chip label={getPropertyTypeLabel(property.propertyType)} />
+                            {property.woonoppervlakteM2 != null && (
+                              <Chip label={`${property.woonoppervlakteM2} m²`} />
+                            )}
+                            {property.perceelM2 != null && (
+                              <Chip label={`${property.perceelM2} m² perceel`} />
+                            )}
+                            {property.askingPrice != null && <Chip label={euro(property.askingPrice)} />}
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col items-start gap-2 md:items-end">
+                          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${scoreBadgeClass(score)}`}>
+                            Match {score}%
+                          </span>
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                              selected ? 'bg-[#102c54] text-white' : 'bg-slate-100 text-slate-600'
+                            }`}
+                          >
+                            {selected ? 'Geselecteerd' : 'Selecteer'}
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           <div className="mt-6">
-            <label className="mb-2 block text-sm font-semibold text-slate-900">
-              Analyse-opdracht
-            </label>
+            <label className="mb-2 block text-sm font-semibold text-slate-900">Analyse-opdracht</label>
             <textarea
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
-              className="min-h-[180px] w-full rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-900 outline-none transition focus:border-[#20497b] focus:bg-white focus:ring-4 focus:ring-[#20497b]/10"
-              placeholder="Bijv. Wat is een realistische indicatieve basisprijs voor een villa van 300 m² woonoppervlakte in Bloemendaal, inclusief bandbreedte, prijs per m² en een korte motivatie?"
+              className="min-h-[190px] w-full rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-900 outline-none transition focus:border-[#20497b] focus:bg-white focus:ring-4 focus:ring-[#20497b]/10"
+              placeholder="Bijv. Wat is een realistische indicatieve basisprijs voor een villa van 300 m² woonoppervlakte in Bloemendaal, inclusief bandbreedte, prijs per m², vergelijking met bestaande woningen en een korte motivatie?"
             />
             {accuracyHint.length > 0 && (
               <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800">
@@ -381,9 +1018,9 @@ export default function AiVraagPage() {
               description="Gericht op exclusieve woningen"
             />
             <MiniInfoCard
-              title="Uitkomst"
-              value="Indicatief"
-              description="Geen officiële taxatie of bindend advies"
+              title="Vergelijking"
+              value={comparePropertyIds.length ? `${comparePropertyIds.length} refs` : 'Optioneel'}
+              description="Gebruik bestaande woningen als extra referentie"
             />
           </div>
 
@@ -391,7 +1028,8 @@ export default function AiVraagPage() {
             <div>
               <div className="text-sm font-semibold text-slate-900">Klaar om de basisprijs te berekenen?</div>
               <div className="mt-1 text-sm text-slate-500">
-                Vul bij voorkeur plaats, woningtype en woonoppervlakte in voor een bruikbare eerste indicatie.
+                Vul bij voorkeur plaats, woningtype en woonoppervlakte in. Met referentiewoningen van
+                de makelaar wordt de context sterker.
               </div>
             </div>
 
@@ -444,7 +1082,7 @@ export default function AiVraagPage() {
             <Field label="Woningtype">
               <select
                 value={propertyType}
-                onChange={(e) => setPropertyType(e.target.value as any)}
+                onChange={(e) => setPropertyType(e.target.value as PropertyTypeValue)}
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#20497b] focus:bg-white focus:ring-4 focus:ring-[#20497b]/10"
               >
                 <option value="">Kies…</option>
@@ -501,7 +1139,7 @@ export default function AiVraagPage() {
               <Field label="Afwerkingsniveau">
                 <select
                   value={finishLevel}
-                  onChange={(e) => setFinishLevel(e.target.value as any)}
+                  onChange={(e) => setFinishLevel(e.target.value as FinishLevelValue)}
                   className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#20497b] focus:bg-white focus:ring-4 focus:ring-[#20497b]/10"
                 >
                   <option value="">Kies…</option>
@@ -515,20 +1153,100 @@ export default function AiVraagPage() {
           </div>
 
           <div className="mt-6 rounded-[24px] border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4">
-            <div className="text-sm font-semibold text-slate-900">Kwaliteit van de invoer</div>
-            <div className="mt-2 text-sm text-slate-500">
-              {hasEnoughInputForIndicatie
-                ? 'De ingevoerde basisgegevens zijn voldoende voor een eerste indicatieve richtprijs.'
-                : 'Vul minimaal plaats, woningtype en woonoppervlakte in voor een bruikbare indicatie.'}
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-sm font-semibold text-slate-900">Kwaliteit van de invoer</div>
+              <div className="rounded-full bg-[#102c54] px-3 py-1 text-xs font-semibold text-white">
+                {qualityScore}% compleet
+              </div>
             </div>
 
+            <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-slate-200">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[#102c54] via-[#20497b] to-[#3c6aa3]"
+                style={{ width: `${qualityScore}%` }}
+              />
+            </div>
+
+            <div className="mt-3 text-sm text-slate-500">{qualityMessage}</div>
+
             <div className="mt-4 grid gap-3">
-              <QualityRow label="Plaats" done={Boolean(city.trim())} />
-              <QualityRow label="Woningtype" done={Boolean(propertyType)} />
-              <QualityRow label="Woonoppervlakte" done={Boolean(woonoppervlakteM2.trim())} />
-              <QualityRow label="Afwerkingsniveau" done={Boolean(finishLevel)} />
+              {qualityItems.map((item) => (
+                <QualityRow key={item.label} label={item.label} done={item.done} />
+              ))}
             </div>
           </div>
+
+          {selectedProperty && (
+            <div className="mt-6 rounded-[24px] border border-[#20497b]/20 bg-[#f4f8fc] p-4">
+              <div className="text-sm font-semibold text-slate-900">Geselecteerde basiswoning</div>
+              <div className="mt-2 text-sm text-slate-700">
+                {selectedProperty.address || selectedProperty.title}
+                {selectedProperty.city ? ` • ${selectedProperty.city}` : ''}
+              </div>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Chip label={getPropertyTypeLabel(selectedProperty.propertyType)} />
+                {selectedProperty.woonoppervlakteM2 != null && (
+                  <Chip label={`${selectedProperty.woonoppervlakteM2} m²`} />
+                )}
+                {selectedProperty.perceelM2 != null && (
+                  <Chip label={`${selectedProperty.perceelM2} m² perceel`} />
+                )}
+                {selectedProperty.askingPrice != null && (
+                  <Chip label={`Vraagprijs ${euro(selectedProperty.askingPrice)}`} />
+                )}
+              </div>
+            </div>
+          )}
+
+          {compareProperties.length > 0 && (
+            <div className="mt-6 rounded-[24px] border border-slate-200 bg-white p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-sm font-semibold text-slate-900">Geselecteerde referenties</div>
+                <button
+                  type="button"
+                  onClick={() => setComparePropertyIds([])}
+                  className="text-xs font-medium text-slate-500 transition hover:text-slate-700"
+                >
+                  Wis selectie
+                </button>
+              </div>
+
+              <div className="mt-3 space-y-3">
+                {compareProperties.map((property) => (
+                  <div
+                    key={property.id}
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"
+                  >
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <div className="text-sm font-semibold text-slate-900">
+                          {property.address || property.title}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-500">
+                          {[property.city, property.neighborhood].filter(Boolean).join(' • ') || 'Locatie niet compleet'}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {property.woonoppervlakteM2 != null && (
+                          <Chip label={`${property.woonoppervlakteM2} m²`} />
+                        )}
+                        {property.askingPrice != null && <Chip label={euro(property.askingPrice)} />}
+                        <button
+                          type="button"
+                          onClick={() => toggleCompareProperty(property.id)}
+                          className="rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-300"
+                        >
+                          Verwijderen
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -555,7 +1273,9 @@ export default function AiVraagPage() {
             <div className="mx-auto max-w-2xl">
               <div className="text-lg font-semibold text-slate-900">Nog geen indicatieve basisprijs opgehaald</div>
               <p className="mt-3 text-sm leading-6 text-slate-500">
-                Vul de woninggegevens in en klik op <span className="font-medium text-slate-700">Bereken indicatieve basisprijs</span> om een eerste prijsrichting te genereren.
+                Vul de woninggegevens in en klik op{' '}
+                <span className="font-medium text-slate-700">Bereken indicatieve basisprijs</span> om
+                een eerste prijsrichting te genereren.
               </p>
             </div>
           </div>
@@ -593,23 +1313,14 @@ export default function AiVraagPage() {
 
                 <div className="mt-4 text-sm leading-6 text-white/80">
                   Deze indicatieve richtprijs is een AI-ondersteunde eerste inschatting op basis van
-                  ingevoerde kenmerken, marktbasis en context. Gebruik dit resultaat uitsluitend als
-                  richtinggevend startpunt.
+                  ingevoerde kenmerken, marktbasis, context en waar mogelijk vergelijking met
+                  geselecteerde referenties.
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  <ResultStat
-                    label="Woningtype"
-                    value={getPropertyTypeLabel(propertyType)}
-                  />
-                  <ResultStat
-                    label="Afwerking"
-                    value={getFinishLabel(finishLevel)}
-                  />
-                  <ResultStat
-                    label="Plaats"
-                    value={city.trim() || 'Niet opgegeven'}
-                  />
+                  <ResultStat label="Woningtype" value={getPropertyTypeLabel(propertyType)} />
+                  <ResultStat label="Afwerking" value={getFinishLabel(finishLevel)} />
+                  <ResultStat label="Plaats" value={city.trim() || 'Niet opgegeven'} />
                 </div>
               </div>
 
@@ -666,6 +1377,31 @@ export default function AiVraagPage() {
                 />
               </div>
             ) : null}
+
+            {compareProperties.length > 0 && (
+              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+                <div className="text-sm font-semibold text-slate-900">Meegegeven referentiewoningen</div>
+                <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                  {compareProperties.map((property) => (
+                    <div key={property.id} className="rounded-2xl border border-slate-200 bg-white p-4">
+                      <div className="text-sm font-semibold text-slate-900">
+                        {property.address || property.title}
+                      </div>
+                      <div className="mt-1 text-xs text-slate-500">
+                        {[property.city, property.neighborhood].filter(Boolean).join(' • ') || 'Locatie niet compleet'}
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <Chip label={getPropertyTypeLabel(property.propertyType)} />
+                        {property.woonoppervlakteM2 != null && (
+                          <Chip label={`${property.woonoppervlakteM2} m²`} />
+                        )}
+                        {property.askingPrice != null && <Chip label={euro(property.askingPrice)} />}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {data.result?.bandbreedte ? (
               <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
@@ -794,9 +1530,7 @@ function QualityRow({ label, done }: { label: string; done: boolean }) {
       <span className="text-sm text-slate-700">{label}</span>
       <span
         className={`rounded-full px-3 py-1 text-xs font-semibold ${
-          done
-            ? 'bg-emerald-100 text-emerald-700'
-            : 'bg-slate-100 text-slate-500'
+          done ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'
         }`}
       >
         {done ? 'Ingevuld' : 'Ontbreekt'}
@@ -865,5 +1599,13 @@ function ListCard({
         <div className="mt-3 text-sm text-slate-500">{emptyLabel}</div>
       )}
     </div>
+  );
+}
+
+function Chip({ label }: { label: string }) {
+  return (
+    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+      {label}
+    </span>
   );
 }
