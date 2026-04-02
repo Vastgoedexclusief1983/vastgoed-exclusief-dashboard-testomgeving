@@ -758,49 +758,51 @@ export default function AiVraagPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-6">
-      <section className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-[#0b1830] shadow-[0_30px_90px_rgba(15,39,71,0.18)]">
+      <section className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_30px_90px_rgba(15,39,71,0.12)]">
         <div className="absolute inset-0">
           <Image
-            src="/01-Duinvilla-Bosch-en-Duin-IMG_6625-2-2048x1366.jpg"
+            src="/01-Duinvilla-Bosch-en-Duin-IMG_6625-scaled.jpg"
             alt="Luxe villa achtergrond"
             fill
             priority
-            className="object-cover"
+            className="object-cover object-center"
           />
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#08162d]/92 via-[#102c54]/82 to-[#17365f]/68" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_24%)]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#08162d]/52 via-[#102c54]/22 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_20%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_24%)]" />
 
         <div className="relative px-6 py-7 md:px-8 md:py-8">
           <div className="grid gap-6 lg:grid-cols-[1.5fr_0.9fr] lg:items-end">
             <div>
-              <div className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium tracking-wide text-white/90 backdrop-blur-xl">
+              <div className="inline-flex rounded-full border border-white/30 bg-white/16 px-4 py-2 text-xs font-medium tracking-wide text-white backdrop-blur-md">
                 Indicatieve prijsanalyse voor exclusief vastgoed
               </div>
 
-              <h1 className="mt-5 text-3xl font-semibold tracking-tight text-white md:text-5xl">
-                Basisprijs bepalen
-              </h1>
+              <div className="mt-5 inline-block max-w-3xl rounded-[24px] bg-[#08162d]/34 p-5 backdrop-blur-[3px] md:p-6">
+                <h1 className="text-3xl font-semibold tracking-tight text-white md:text-5xl">
+                  Basisprijs bepalen
+                </h1>
 
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-white/85 md:text-base">
-                Bepaal een indicatieve richtprijs voor woningen in het hogere segment. Deze module is
-                bedoeld als premium startpunt voor de waardebepaling en geeft een AI-ondersteunde
-                inschatting op basis van ingevoerde woningkenmerken, locatie, marktcontext én waar
-                mogelijk vergelijking met eerder ingevoerde woningen.
-              </p>
+                <p className="mt-4 max-w-3xl text-sm leading-7 text-white/95 md:text-base">
+                  Bepaal een indicatieve richtprijs voor woningen in het hogere segment. Deze module is
+                  bedoeld als premium startpunt voor de waardebepaling en geeft een AI-ondersteunde
+                  inschatting op basis van ingevoerde woningkenmerken, locatie, marktcontext én waar
+                  mogelijk vergelijking met eerder ingevoerde woningen.
+                </p>
 
-              <div className="mt-6 flex flex-wrap gap-3">
-                <StatusPill label="Richtprijs miljoenenwoning" />
-                <StatusPill label="Bandbreedte & prijs per m²" />
-                <StatusPill label="Vergelijking met eigen woningen" />
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <StatusPill label="Richtprijs miljoenenwoning" />
+                  <StatusPill label="Bandbreedte & prijs per m²" />
+                  <StatusPill label="Vergelijking met eigen woningen" />
+                </div>
               </div>
             </div>
 
-            <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
-              <div className="text-sm font-medium text-white/80">Positionering van deze module</div>
+            <div className="rounded-[24px] border border-white/25 bg-[#102c54]/66 p-5 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.12)]">
+              <div className="text-sm font-medium text-white/85">Positionering van deze module</div>
               <div className="mt-3 text-2xl font-semibold text-white">Basisprijs / richtprijs</div>
-              <p className="mt-3 text-sm leading-6 text-white/80">
+              <p className="mt-3 text-sm leading-6 text-white/90">
                 Gebruik deze pagina als eerste stap binnen de waardebepaling. Het resultaat is
                 nadrukkelijk indicatief en geen officieel taxatierapport.
               </p>
@@ -1035,7 +1037,7 @@ export default function AiVraagPage() {
 
             <button
               onClick={onSubmit}
-              disabled={isLoading}
+              disabled={isLoading || !hasEnoughInputForIndicatie}
               className="inline-flex min-w-[220px] items-center justify-center rounded-2xl bg-[#102c54] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#102c54]/20 transition hover:bg-[#0d2545] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoading ? 'Basisprijs wordt berekend…' : 'Bereken indicatieve basisprijs'}
@@ -1474,7 +1476,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function StatusPill({ label }: { label: string }) {
   return (
-    <div className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-white/90 backdrop-blur-xl">
+    <div className="rounded-full border border-white/30 bg-white/16 px-4 py-2 text-xs font-medium text-white backdrop-blur-md">
       {label}
     </div>
   );
@@ -1482,7 +1484,7 @@ function StatusPill({ label }: { label: string }) {
 
 function FeatureRow({ text }: { text: string }) {
   return (
-    <div className="rounded-2xl border border-white/12 bg-white/10 px-4 py-3 text-sm text-white/90 backdrop-blur-xl">
+    <div className="rounded-2xl border border-white/20 bg-white/14 px-4 py-3 text-sm text-white/95 backdrop-blur-md">
       {text}
     </div>
   );
