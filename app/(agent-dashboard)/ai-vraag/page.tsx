@@ -769,34 +769,22 @@ export default function AiVraagPage() {
           />
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#08162d]/52 via-[#102c54]/22 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_20%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_24%)]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#08162d]/60 via-[#102c54]/28 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_20%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.06),transparent_24%)]" />
 
-        <div className="relative px-6 py-7 md:px-8 md:py-8">
+        <div className="relative px-6 py-8 md:px-8 md:py-10">
           <div className="grid gap-6 lg:grid-cols-[1.5fr_0.9fr] lg:items-end">
-            <div>
-              <div className="inline-flex rounded-full border border-white/30 bg-white/16 px-4 py-2 text-xs font-medium tracking-wide text-white backdrop-blur-md">
-                Indicatieve prijsanalyse voor exclusief vastgoed
-              </div>
+            <div className="max-w-3xl">
+              <h1 className="text-3xl font-semibold tracking-tight text-white drop-shadow-[0_8px_22px_rgba(0,0,0,0.35)] md:text-5xl">
+                Basisprijs bepalen
+              </h1>
 
-              <div className="mt-5 inline-block max-w-3xl rounded-[24px] bg-[#08162d]/34 p-5 backdrop-blur-[3px] md:p-6">
-                <h1 className="text-3xl font-semibold tracking-tight text-white md:text-5xl">
-                  Basisprijs bepalen
-                </h1>
-
-                <p className="mt-4 max-w-3xl text-sm leading-7 text-white/95 md:text-base">
-                  Bepaal een indicatieve richtprijs voor woningen in het hogere segment. Deze module is
-                  bedoeld als premium startpunt voor de waardebepaling en geeft een AI-ondersteunde
-                  inschatting op basis van ingevoerde woningkenmerken, locatie, marktcontext én waar
-                  mogelijk vergelijking met eerder ingevoerde woningen.
-                </p>
-
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <StatusPill label="Richtprijs miljoenenwoning" />
-                  <StatusPill label="Bandbreedte & prijs per m²" />
-                  <StatusPill label="Vergelijking met eigen woningen" />
-                </div>
-              </div>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-white/95 drop-shadow-[0_4px_14px_rgba(0,0,0,0.28)] md:text-base">
+                Bepaal een indicatieve richtprijs voor woningen in het hogere segment. Deze module is
+                bedoeld als premium startpunt voor de waardebepaling en geeft een AI-ondersteunde
+                inschatting op basis van ingevoerde woningkenmerken, locatie, marktcontext én waar
+                mogelijk vergelijking met eerder ingevoerde woningen.
+              </p>
             </div>
 
             <div className="rounded-[24px] border border-white/25 bg-[#102c54]/66 p-5 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.12)]">
@@ -1471,14 +1459,6 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       </span>
       {children}
     </label>
-  );
-}
-
-function StatusPill({ label }: { label: string }) {
-  return (
-    <div className="rounded-full border border-white/30 bg-white/16 px-4 py-2 text-xs font-medium text-white backdrop-blur-md">
-      {label}
-    </div>
   );
 }
 
