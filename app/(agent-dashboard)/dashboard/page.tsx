@@ -1,15 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { StatsCard } from '@/components/ui/stats-card';
 import { requireAuth } from '@/lib/auth/session';
 import dbConnect from '@/lib/db/mongodb';
 import Property from '@/lib/db/models/Property';
 import {
   Building2,
   Home,
-  TrendingUp,
   Clock,
   Plus,
-  Eye,
   Calendar,
   ShieldCheck,
 } from 'lucide-react';
@@ -116,8 +113,8 @@ export default async function AgentDashboardPage() {
   };
 
   return (
-    <div className="space-y-8">
-      <section className="relative overflow-hidden rounded-[30px] border border-white/20 shadow-[0_25px_80px_rgba(16,44,84,0.18)]">
+    <div className="space-y-8 pb-6">
+      <section className="relative overflow-hidden rounded-[34px] border border-white/15 shadow-[0_25px_80px_rgba(16,44,84,0.22)]">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -125,10 +122,10 @@ export default async function AgentDashboardPage() {
               "url('/High-end-real-estate-avondfotografie-IMG_6632-1280x720.jpg')",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#071a33]/78 via-[#0d2a52]/48 to-[#102c54]/22" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#071a33]/50 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#071a33]/72 via-[#0d2a52]/40 to-[#102c54]/16" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071a33]/55 via-transparent to-transparent" />
 
-        <div className="relative flex min-h-[360px] flex-col justify-between px-8 py-8 lg:min-h-[420px] lg:px-10 lg:py-10">
+        <div className="relative flex min-h-[400px] flex-col justify-between px-8 py-8 lg:min-h-[470px] lg:px-10 lg:py-10">
           <div className="flex items-start justify-between gap-4">
             <div className="max-w-3xl">
               <div className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm">
@@ -153,7 +150,7 @@ export default async function AgentDashboardPage() {
           </div>
 
           <div className="mt-10 grid gap-4 md:grid-cols-3 xl:max-w-4xl">
-            <div className="rounded-[22px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md">
+            <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.12)]">
               <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/70">
                 Totaal woningen
               </div>
@@ -165,7 +162,7 @@ export default async function AgentDashboardPage() {
               </div>
             </div>
 
-            <div className="rounded-[22px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md">
+            <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.12)]">
               <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/70">
                 Portefeuille waarde
               </div>
@@ -177,7 +174,7 @@ export default async function AgentDashboardPage() {
               </div>
             </div>
 
-            <div className="rounded-[22px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md">
+            <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.12)]">
               <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/70">
                 Recente toevoegingen
               </div>
@@ -192,224 +189,173 @@ export default async function AgentDashboardPage() {
         </div>
       </section>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-[26px] border border-[#d8e2ef] bg-white/95 shadow-[0_18px_50px_rgba(16,44,84,0.08)] backdrop-blur-sm">
-          <StatsCard
-            title={t('totalProperties')}
-            value={stats.totalProperties}
-            icon={Building2}
-            iconColor="blue"
-            trend={
-              <Link href="/properties">
-                <p className="flex cursor-pointer items-center gap-1 text-xs text-blue-600 hover:underline">
-                  <Eye className="h-3 w-3" />
-                  {t('viewAllProperties')}
-                </p>
-              </Link>
-            }
-          />
-        </div>
-
-        <div className="rounded-[26px] border border-[#d8e2ef] bg-white/95 shadow-[0_18px_50px_rgba(16,44,84,0.08)] backdrop-blur-sm">
-          <StatsCard
-            title={t('portfolioValue')}
-            value={formatPrice(stats.totalValue)}
-            description={t('totalListingValue')}
-            icon={TrendingUp}
-            iconColor="green"
-          />
-        </div>
-
-        <div className="rounded-[26px] border border-[#d8e2ef] bg-white/95 shadow-[0_18px_50px_rgba(16,44,84,0.08)] backdrop-blur-sm">
-          <StatsCard
-            title={t('recentAdditions')}
-            value={stats.recentProperties}
-            description={t('inLast30Days')}
-            icon={Clock}
-            iconColor="purple"
-          />
-        </div>
-
-        <div className="rounded-[26px] border border-[#d8e2ef] bg-white/95 shadow-[0_18px_50px_rgba(16,44,84,0.08)] backdrop-blur-sm">
-          <StatsCard
-            title={t('avgPropertyValue')}
-            value={
-              stats.totalProperties > 0
-                ? formatPrice(stats.totalValue / stats.totalProperties)
-                : '€0'
-            }
-            description={t('averageListingPrice')}
-            icon={Home}
-            iconColor="orange"
-          />
-        </div>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="overflow-hidden rounded-[28px] border border-[#dde6f1] bg-white/95 shadow-[0_20px_60px_rgba(16,44,84,0.08)]">
-          <CardHeader className="border-b border-[#edf2f7] bg-[linear-gradient(180deg,#fbfdff_0%,#f6f9fc_100%)]">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-xl font-semibold text-[#102c54]">
-                  {t('propertyTypes')}
-                </CardTitle>
-                <p className="mt-1 text-sm text-[#64748b]">
-                  {t('portfolioBreakdown')}
-                </p>
+      <div className="-mt-14 relative z-10 px-1 md:-mt-20">
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Card className="overflow-hidden rounded-[30px] border border-white/10 bg-[#0d213d]/72 shadow-[0_24px_70px_rgba(16,44,84,0.28)] backdrop-blur-2xl">
+            <CardHeader className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-xl font-semibold text-white">
+                    {t('propertyTypes')}
+                  </CardTitle>
+                  <p className="mt-1 text-sm text-white/65">
+                    {t('portfolioBreakdown')}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-3 text-white shadow-sm backdrop-blur">
+                  <Building2 className="h-5 w-5" />
+                </div>
               </div>
-              <div className="rounded-2xl bg-[#eef4ff] p-2.5 text-[#102c54]">
-                <Building2 className="h-5 w-5" />
-              </div>
-            </div>
-          </CardHeader>
+            </CardHeader>
 
-          <CardContent className="pt-6">
-            {stats.propertyTypes.length > 0 ? (
-              <div className="space-y-4">
-                {stats.propertyTypes.map((type, index) => {
-                  const typeLabel =
-                    getPropertyTypeLabel(type.type) || type.type;
+            <CardContent className="pt-6">
+              {stats.propertyTypes.length > 0 ? (
+                <div className="space-y-4">
+                  {stats.propertyTypes.map((type, index) => {
+                    const typeLabel =
+                      getPropertyTypeLabel(type.type) || type.type;
 
-                  return (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between rounded-2xl border border-[#edf2f7] bg-[#f8fbff] p-4 transition-colors hover:bg-[#f2f7fd]"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="rounded-2xl bg-white p-3 shadow-sm ring-1 ring-[#e6edf7]">
-                          <Home className="h-5 w-5 text-[#102c54]" />
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between rounded-[24px] border border-white/10 bg-white/8 p-4 shadow-[0_8px_24px_rgba(0,0,0,0.14)] backdrop-blur-md transition hover:bg-white/12"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="rounded-2xl border border-white/15 bg-white/10 p-3 shadow-sm">
+                            <Home className="h-5 w-5 text-white" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-white">
+                              {typeLabel}
+                            </p>
+                            <p className="text-xs text-white/60">
+                              {Math.round(
+                                (type.count / stats.totalProperties) * 100
+                              )}
+                              % {t('ofPortfolio')}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-semibold text-[#102c54]">
-                            {typeLabel}
-                          </p>
-                          <p className="text-xs text-[#64748b]">
-                            {Math.round(
-                              (type.count / stats.totalProperties) * 100
-                            )}
-                            % {t('ofPortfolio')}
-                          </p>
-                        </div>
+                        <span className="text-2xl font-semibold text-white">
+                          {type.count}
+                        </span>
                       </div>
-                      <span className="text-2xl font-semibold text-[#102c54]">
-                        {type.count}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="py-10 text-center text-[#64748b]">
-                <Building2 className="mx-auto mb-3 h-12 w-12 text-[#c5d0df]" />
-                <p className="text-sm">{t('noPropertiesYet')}</p>
-                <Link href="/properties/new">
-                  <Button className="mt-4 rounded-full bg-[#102c54] hover:bg-[#0c2343]">
-                    <Plus className="mr-2 h-4 w-4" />
-                    {t('addFirstProperty')}
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card className="overflow-hidden rounded-[28px] border border-[#dde6f1] bg-white/95 shadow-[0_20px_60px_rgba(16,44,84,0.08)]">
-          <CardHeader className="border-b border-[#edf2f7] bg-[linear-gradient(180deg,#fbfdff_0%,#f6f9fc_100%)]">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-xl font-semibold text-[#102c54]">
-                  {t('recentProperties')}
-                </CardTitle>
-                <p className="mt-1 text-sm text-[#64748b]">
-                  {t('latestListings')}
-                </p>
-              </div>
-              <div className="rounded-2xl bg-[#eef4ff] p-2.5 text-[#102c54]">
-                <Clock className="h-5 w-5" />
-              </div>
-            </div>
-          </CardHeader>
-
-          <CardContent className="pt-6">
-            {stats.recentPropertiesList.length > 0 ? (
-              <div className="space-y-3">
-                {stats.recentPropertiesList.map((property) => (
-                  <Link key={property._id} href={`/properties/${property._id}`}>
-                    <div className="flex cursor-pointer items-center justify-between rounded-2xl border border-[#edf2f7] bg-[#f8fbff] p-4 transition-colors hover:bg-[#f2f7fd]">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-[#102c54]">
-                          {property.address}
-                        </p>
-                        <div className="mt-1 flex items-center gap-2">
-                          <span className="rounded-full bg-white px-2.5 py-1 text-xs text-[#5b6b82] ring-1 ring-[#e5ecf5]">
-                            {getPropertyTypeLabel(property.propertyType) ||
-                              property.propertyType}
-                          </span>
-                          <span className="text-xs text-[#64748b]">
-                            {property.city}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="ml-4 text-right">
-                        <p className="text-sm font-semibold text-[#102c54]">
-                          {formatPrice(property.price)}
-                        </p>
-                        <p className="mt-1 flex items-center justify-end gap-1 text-xs text-[#64748b]">
-                          <Calendar className="h-3 w-3" />
-                          {formatDate(property.createdAt)}
-                        </p>
-                      </div>
-                    </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="py-10 text-center text-white/65">
+                  <Building2 className="mx-auto mb-3 h-12 w-12 text-white/25" />
+                  <p className="text-sm">{t('noPropertiesYet')}</p>
+                  <Link href="/properties/new">
+                    <Button className="mt-4 rounded-full border border-white/15 bg-white/10 text-white hover:bg-white/20">
+                      <Plus className="mr-2 h-4 w-4" />
+                      {t('addFirstProperty')}
+                    </Button>
                   </Link>
-                ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
-                <Link href="/properties">
-                  <Button
-                    variant="outline"
-                    className="mt-3 w-full rounded-full border-[#d7e3f3] text-[#102c54] hover:bg-[#f7faff]"
-                  >
-                    {t('viewAllProperties')}
-                  </Button>
-                </Link>
+          <Card className="overflow-hidden rounded-[30px] border border-white/10 bg-[#0d213d]/72 shadow-[0_24px_70px_rgba(16,44,84,0.28)] backdrop-blur-2xl">
+            <CardHeader className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-xl font-semibold text-white">
+                    {t('recentProperties')}
+                  </CardTitle>
+                  <p className="mt-1 text-sm text-white/65">
+                    {t('latestListings')}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-3 text-white shadow-sm backdrop-blur">
+                  <Clock className="h-5 w-5" />
+                </div>
               </div>
-            ) : (
-              <div className="py-10 text-center text-[#64748b]">
-                <Clock className="mx-auto mb-3 h-12 w-12 text-[#c5d0df]" />
-                <p className="text-sm">{t('noRecentProperties')}</p>
+            </CardHeader>
+
+            <CardContent className="pt-6">
+              {stats.recentPropertiesList.length > 0 ? (
+                <div className="space-y-3">
+                  {stats.recentPropertiesList.map((property) => (
+                    <Link key={property._id} href={`/properties/${property._id}`}>
+                      <div className="flex cursor-pointer items-center justify-between rounded-[24px] border border-white/10 bg-white/8 p-4 shadow-[0_8px_24px_rgba(0,0,0,0.14)] backdrop-blur-md transition hover:bg-white/12">
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-white">
+                            {property.address}
+                          </p>
+                          <div className="mt-1 flex items-center gap-2">
+                            <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-xs text-white/75">
+                              {getPropertyTypeLabel(property.propertyType) ||
+                                property.propertyType}
+                            </span>
+                            <span className="text-xs text-white/55">
+                              {property.city}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="ml-4 text-right">
+                          <p className="text-sm font-semibold text-white">
+                            {formatPrice(property.price)}
+                          </p>
+                          <p className="mt-1 flex items-center justify-end gap-1 text-xs text-white/55">
+                            <Calendar className="h-3 w-3" />
+                            {formatDate(property.createdAt)}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+
+                  <Link href="/properties">
+                    <Button
+                      variant="outline"
+                      className="mt-3 w-full rounded-full border-white/15 bg-white/8 text-white hover:bg-white/14"
+                    >
+                      Bekijk alle woningen
+                    </Button>
+                  </Link>
+                </div>
+              ) : (
+                <div className="py-10 text-center text-white/65">
+                  <Clock className="mx-auto mb-3 h-12 w-12 text-white/25" />
+                  <p className="text-sm">{t('noRecentProperties')}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {showLegalAcceptance && (
+          <Card className="mt-6 overflow-hidden rounded-[30px] border border-white/10 bg-[#0d213d]/72 shadow-[0_24px_70px_rgba(16,44,84,0.28)] backdrop-blur-2xl">
+            <CardHeader className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
+              <div className="flex items-start gap-3">
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-3 text-white shadow-sm">
+                  <ShieldCheck className="h-5 w-5" />
+                </div>
+
+                <div>
+                  <CardTitle className="text-xl font-semibold text-white">
+                    Juridische documenten bevestigen
+                  </CardTitle>
+                  <p className="mt-1 text-sm text-white/65">
+                    Geef hieronder eenmalig akkoord op de toepasselijke
+                    voorwaarden, privacyverklaring, verwerkersovereenkomst en
+                    disclaimer. Daarna verdwijnt dit blok automatisch uit je
+                    dashboard.
+                  </p>
+                </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardHeader>
+
+            <CardContent className="pt-6">
+              <LegalAcceptancePanel />
+            </CardContent>
+          </Card>
+        )}
       </div>
-
-      {showLegalAcceptance && (
-        <Card className="overflow-hidden rounded-[28px] border border-[#102c54]/10 bg-white/95 shadow-[0_20px_60px_rgba(16,44,84,0.08)]">
-          <CardHeader className="border-b bg-[linear-gradient(180deg,rgba(16,44,84,0.04)_0%,rgba(16,44,84,0.02)_100%)]">
-            <div className="flex items-start gap-3">
-              <div className="rounded-2xl bg-[#102c54]/10 p-3 text-[#102c54]">
-                <ShieldCheck className="h-5 w-5" />
-              </div>
-
-              <div>
-                <CardTitle className="text-xl font-semibold text-[#102c54]">
-                  Juridische documenten bevestigen
-                </CardTitle>
-                <p className="mt-1 text-sm text-[#5b6b82]">
-                  Geef hieronder eenmalig akkoord op de toepasselijke
-                  voorwaarden, privacyverklaring, verwerkersovereenkomst en
-                  disclaimer. Daarna verdwijnt dit blok automatisch uit je
-                  dashboard.
-                </p>
-              </div>
-            </div>
-          </CardHeader>
-
-          <CardContent className="pt-6">
-            <LegalAcceptancePanel />
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
