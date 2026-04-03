@@ -7,11 +7,9 @@ import {
   ArrowRight,
   BadgeEuro,
   BedDouble,
-  Building2,
   CalendarDays,
   Check,
   CheckCircle2,
-  CircleDollarSign,
   Clock3,
   Edit3,
   Eye,
@@ -68,6 +66,7 @@ export type MutatieForm = {
   city: string;
   currentPrice: string;
   newPrice: string;
+  soldPrice: string;
   statusDate: string;
   notes: string;
 };
@@ -116,6 +115,7 @@ const initialMutatie: MutatieForm = {
   city: '',
   currentPrice: '',
   newPrice: '',
+  soldPrice: '',
   statusDate: '',
   notes: '',
 };
@@ -145,10 +145,10 @@ const actionConfig: {
   },
   {
     key: 'afmelden',
-    title: 'Woning afmelden',
-    subtitle: 'Object afmelden als verkocht',
+    title: 'Woning verkocht',
+    subtitle: 'Object als verkocht doorgeven',
     description:
-      'Meld een woning netjes af zodra deze verkocht is of niet langer actief mag blijven staan.',
+      'Geef netjes door zodra een woning verkocht is, inclusief de prijs waarvoor deze is verkocht.',
     badge: 'Verkocht',
   },
   {
@@ -212,7 +212,7 @@ function getVisualStateAfterAction(
     case 'afmelden':
       return {
         visualStatus: 'verkocht',
-        lastActionLabel: 'Afgemeld als verkocht',
+        lastActionLabel: 'Verkocht doorgegeven',
       };
     case 'prijswijziging':
       return {
@@ -377,6 +377,11 @@ export default function WebsitePageClient({
       return false;
     }
 
+    if (activeAction === 'afmelden' && !mutatieForm.soldPrice) {
+      setErrorMessage('Vul de prijs in waarvoor de woning is verkocht.');
+      return false;
+    }
+
     return true;
   }
 
@@ -427,6 +432,7 @@ export default function WebsitePageClient({
                 phone: mutatieForm.phone,
                 currentPrice: mutatieForm.currentPrice,
                 newPrice: mutatieForm.newPrice,
+                soldPrice: mutatieForm.soldPrice,
                 statusDate: mutatieForm.statusDate,
                 notes: mutatieForm.notes,
                 propertyId: chosenProperty?.id || null,
@@ -457,7 +463,7 @@ export default function WebsitePageClient({
           : activeAction === 'wijzigen'
           ? 'wijziging'
           : activeAction === 'afmelden'
-          ? 'afmelding'
+          ? 'woning verkocht melding'
           : activeAction === 'onder-bod'
           ? 'onder bod melding'
           : 'prijswijziging';
@@ -485,6 +491,7 @@ export default function WebsitePageClient({
       } else {
         setMutatieForm((prev) => ({
           ...prev,
+          soldPrice: '',
           notes: '',
           statusDate: '',
         }));
@@ -515,12 +522,13 @@ export default function WebsitePageClient({
       city: property.city,
       currentPrice: property.price,
       newPrice: action === 'prijswijziging' ? property.price : '',
+      soldPrice: '',
       statusDate: '',
       notes:
         action === 'wijzigen'
           ? `Wijziging voor woning: ${property.address}, ${property.city}`
           : action === 'afmelden'
-          ? `Afmelden als verkocht voor woning: ${property.address}, ${property.city}`
+          ? `Woning verkocht voor object: ${property.address}, ${property.city}`
           : action === 'onder-bod'
           ? `Onder bod melding voor woning: ${property.address}, ${property.city}`
           : action === 'prijswijziging'
@@ -530,21 +538,6 @@ export default function WebsitePageClient({
 
     scrollToForm();
   }
-
-  const quickLinks = [
-    {
-      title: 'Bestaande pagina woning aanmelden',
-      href: '/dashboard/woning-aanmelden',
-    },
-    {
-      title: 'Bestaande pagina woning wijzigen',
-      href: '/dashboard/woning-wijziging',
-    },
-    {
-      title: 'Bestaande pagina woning afmelden',
-      href: '/dashboard/woning-afmelden',
-    },
-  ];
 
   const filterOptions: { key: FilterKey; label: string }[] = [
     { key: 'alle', label: 'Alle' },
@@ -987,7 +980,7 @@ export default function WebsitePageClient({
           )}
         </section>
 
-        <section className="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <section className="mt-8">
           <div
             id="beheer-form"
             className="rounded-[30px] border border-[#e5ecf6] bg-white p-5 shadow-[0_25px_70px_rgba(16,44,84,0.08)] md:p-8"
@@ -1230,8 +1223,23 @@ export default function WebsitePageClient({
                       </>
                     )}
 
-                    {(activeAction === 'afmelden' ||
-                      activeAction === 'onder-bod') && (
+                    {activeAction === 'afmelden' && (
+                      <>
+                        <LuxuryInput
+                          label="Prijs waarvoor verkocht *"
+                          value={mutatieForm.soldPrice}
+                          onChange={(v) => updateMutatie('soldPrice', v)}
+                        />
+                        <LuxuryInput
+                          label="Datum verkocht"
+                          type="date"
+                          value={mutatieForm.statusDate}
+                          onChange={(v) => updateMutatie('statusDate', v)}
+                        />
+                      </>
+                    )}
+
+                    {activeAction === 'onder-bod' && (
                       <LuxuryInput
                         label="Datum statuswijziging"
                         type="date"
@@ -1246,7 +1254,7 @@ export default function WebsitePageClient({
                       activeAction === 'wijzigen'
                         ? 'Omschrijf de gewenste wijziging'
                         : activeAction === 'afmelden'
-                        ? 'Toelichting afmelding'
+                        ? 'Toelichting verkocht'
                         : activeAction === 'onder-bod'
                         ? 'Toelichting onder bod'
                         : 'Toelichting prijswijziging'
@@ -1275,84 +1283,6 @@ export default function WebsitePageClient({
                 </button>
               </div>
             </form>
-          </div>
-
-          <div className="space-y-6">
-            <div className="rounded-[30px] border border-[#e5ecf6] bg-white p-6 shadow-[0_25px_70px_rgba(16,44,84,0.07)]">
-              <h3 className="text-xl font-semibold text-[#102c54]">
-                Snelle acties
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-[#64748b]">
-                Directe snelkoppelingen naar bestaande onderdelen van het dashboard.
-              </p>
-
-              <div className="mt-5 space-y-3">
-                {quickLinks.map((link) => (
-                  <button
-                    key={link.href}
-                    type="button"
-                    onClick={() => router.push(link.href)}
-                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8eef7] bg-[#fbfcfe] px-4 py-3 text-left transition hover:border-[#d6e1f1] hover:bg-white"
-                  >
-                    <span className="text-sm font-medium text-[#102c54]">
-                      {link.title}
-                    </span>
-                    <ArrowRight className="h-4 w-4 text-[#153c75]" />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-[30px] border border-[#e5ecf6] bg-white p-6 shadow-[0_25px_70px_rgba(16,44,84,0.07)]">
-              <h3 className="text-xl font-semibold text-[#102c54]">
-                Waarom deze pagina luxe werkt
-              </h3>
-
-              <div className="mt-5 space-y-4">
-                <FeatureBlock
-                  icon={<Building2 className="h-5 w-5" />}
-                  title="Eén premium beheerscherm"
-                  text="Makelaars hoeven niet meer te zoeken tussen losse workflows en krijgen direct overzicht."
-                />
-                <FeatureBlock
-                  icon={<CircleDollarSign className="h-5 w-5" />}
-                  title="Sterke prijs- en statuscontrole"
-                  text="Prijswijziging, onder bod en verkocht kunnen logisch vanuit één centrale plek worden doorgegeven."
-                />
-                <FeatureBlock
-                  icon={<UploadCloud className="h-5 w-5" />}
-                  title="Voorbereid op intake met foto’s"
-                  text="De woningaanmelding bevat al foto-upload voor maximaal 10 bestanden."
-                />
-              </div>
-            </div>
-
-            <div className="rounded-[30px] border border-[#e5ecf6] bg-gradient-to-br from-[#102c54] to-[#1c4c8f] p-6 text-white shadow-[0_25px_70px_rgba(16,44,84,0.16)]">
-              <h3 className="text-xl font-semibold">
-                Klaar voor de volgende stap
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-white/85">
-                Hierna koppel je deze pagina aan echte API-routes zodat:
-              </p>
-
-              <div className="mt-4 space-y-3 text-sm text-white/90">
-                <InfoRow
-                  icon={<Mail className="h-4 w-4" />}
-                  text="aanvragen naar info@vastgoedexclusief.nl kunnen worden gestuurd"
-                  dark
-                />
-                <InfoRow
-                  icon={<FileImage className="h-4 w-4" />}
-                  text="de 10 foto’s echt meegestuurd kunnen worden"
-                  dark
-                />
-                <InfoRow
-                  icon={<CheckCircle2 className="h-4 w-4" />}
-                  text="woningkaarten live uit de database opgehaald worden"
-                  dark
-                />
-              </div>
-            </div>
           </div>
         </section>
       </div>
@@ -1438,51 +1368,6 @@ function GlassStatPill({
     <div className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/60 px-4 py-2 text-sm text-[#153c75] shadow-sm backdrop-blur-xl">
       {icon}
       {text}
-    </div>
-  );
-}
-
-function InfoRow({
-  icon,
-  text,
-  dark = false,
-}: {
-  icon: ReactNode;
-  text: string;
-  dark?: boolean;
-}) {
-  return (
-    <div
-      className={`flex items-center gap-3 rounded-2xl px-3 py-2 ${
-        dark ? 'bg-white/10 text-white/90' : 'bg-[#f7faff] text-[#4f627d]'
-      }`}
-    >
-      <div className={dark ? 'text-white' : 'text-[#153c75]'}>{icon}</div>
-      <span className="text-sm">{text}</span>
-    </div>
-  );
-}
-
-function FeatureBlock({
-  icon,
-  title,
-  text,
-}: {
-  icon: ReactNode;
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-[#eef3f8] bg-[#fbfdff] p-4">
-      <div className="flex items-start gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#eef4ff] text-[#153c75]">
-          {icon}
-        </div>
-        <div>
-          <h4 className="text-sm font-semibold text-[#102c54]">{title}</h4>
-          <p className="mt-1 text-sm leading-6 text-[#64748b]">{text}</p>
-        </div>
-      </div>
     </div>
   );
 }
