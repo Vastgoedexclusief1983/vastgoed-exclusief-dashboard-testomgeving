@@ -14,7 +14,6 @@ import {
   Instagram,
   Newspaper,
   Send,
-  ShieldCheck,
   Sparkles,
   TrendingUp,
 } from 'lucide-react';
@@ -57,8 +56,7 @@ const SERVICES: PromotionService[] = [
     description:
       'Volledige high-end presentatie voor exclusieve woningen met fotografie, video, dronebeelden, socials en homepage-uitlichting.',
     icon: Camera,
-    accentClass:
-      'from-[#0f172a] via-[#102c54] to-[#2563eb] border-white/10',
+    accentClass: 'from-[#0f172a] via-[#102c54] to-[#2563eb] border-white/10',
     badgeClass: 'border border-white/15 bg-white/10 text-white',
     bullets: [
       'High-end fotografie incl. bewerking',
@@ -83,8 +81,7 @@ const SERVICES: PromotionService[] = [
     description:
       'Maximale zichtbaarheid op de homepagebanner inclusief logo, directe doorklik en extra social media exposure.',
     icon: TrendingUp,
-    accentClass:
-      'from-[#1e3a8a] via-[#2563eb] to-[#06b6d4] border-cyan-300/20',
+    accentClass: 'from-[#1e3a8a] via-[#2563eb] to-[#06b6d4] border-cyan-300/20',
     badgeClass: 'border border-white/15 bg-white/10 text-white',
     bullets: [
       'Maximale zichtbaarheid bij kopers in het hogere segment',
@@ -104,8 +101,7 @@ const SERVICES: PromotionService[] = [
     description:
       'Een krachtige extra plaatsing op de homepage voor meer attentiewaarde en snellere zichtbaarheid binnen het exclusieve segment.',
     icon: Crown,
-    accentClass:
-      'from-[#581c87] via-[#7c3aed] to-[#ec4899] border-fuchsia-300/20',
+    accentClass: 'from-[#581c87] via-[#7c3aed] to-[#ec4899] border-fuchsia-300/20',
     badgeClass: 'border border-white/15 bg-white/10 text-white',
     bullets: [
       'Maximale zichtbaarheid bij kopers in het hogere segment',
@@ -123,8 +119,7 @@ const SERVICES: PromotionService[] = [
     description:
       'Gerichte Instagram campagne via Vastgoed Exclusief met advertentiebudget, doelgroep targeting en extra zichtbaarheid buiten het platform.',
     icon: Instagram,
-    accentClass:
-      'from-fuchsia-700 via-pink-600 to-orange-500 border-pink-300/20',
+    accentClass: 'from-fuchsia-700 via-pink-600 to-orange-500 border-pink-300/20',
     badgeClass: 'border border-white/15 bg-white/10 text-white',
     bullets: [
       'Betaalde campagne via Instagram @vastgoedexclusief.nl',
@@ -144,8 +139,7 @@ const SERVICES: PromotionService[] = [
     description:
       'Exclusieve vermelding in het online magazine van Vastgoed Exclusief voor extra zichtbaarheid binnen het hogere segment.',
     icon: Newspaper,
-    accentClass:
-      'from-[#052e16] via-[#166534] to-[#0ea5e9] border-emerald-300/20',
+    accentClass: 'from-[#052e16] via-[#166534] to-[#0ea5e9] border-emerald-300/20',
     badgeClass: 'border border-white/15 bg-white/10 text-white',
     bullets: [
       'Maximale zichtbaarheid bij kopers in het hogere segment',
@@ -314,22 +308,20 @@ export default function PresentatiePromotiePage() {
             priority
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#06101d]/96 via-[#07111f]/78 to-[#07111f]/38" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
 
           <div className="relative z-10 grid min-h-[520px] gap-8 px-7 py-7 lg:grid-cols-[1.1fr_340px] lg:px-10 lg:py-10">
             <div className="flex flex-col justify-center">
               <div>
-                <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white/95 backdrop-blur">
+                <div className="inline-flex items-center rounded-full border border-white/25 bg-black/15 px-4 py-2 text-sm font-medium text-white backdrop-blur">
                   <Sparkles className="mr-2 h-4 w-4 text-[#f3df9b]" />
                   Multimedia • Presentatie & Promotie
                 </div>
 
-                <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-tight text-white md:text-6xl">
+                <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-tight text-white drop-shadow-[0_8px_22px_rgba(0,0,0,0.28)] md:text-6xl">
                   Promotie & zichtbaarheid
                 </h1>
 
-                <p className="mt-5 max-w-2xl text-base leading-8 text-white/85 md:text-lg">
+                <p className="mt-5 max-w-2xl text-base leading-8 text-white/92 drop-shadow-[0_4px_14px_rgba(0,0,0,0.22)] md:text-lg">
                   Kies een pakket en verzend direct een zakelijke aanvraag.
                   Professionele fotografie, social campagnes en premium
                   zichtbaarheid voor exclusieve woningen.
@@ -337,61 +329,60 @@ export default function PresentatiePromotiePage() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 lg:justify-end">
-              <div className="overflow-hidden rounded-[28px] border border-white/12 bg-black/20 backdrop-blur-md">
-                <div className="relative h-[185px]">
+            <div className="grid auto-rows-fr gap-4 lg:justify-end">
+              <div className="overflow-hidden rounded-[28px] border border-white/12 bg-black/10 backdrop-blur-sm">
+                <div className="relative h-[180px]">
                   <Image
                     src="/High-end-real-estate-avondfotografie-IMG_0214-1280x720.jpg"
                     alt="Avondfotografie luxe woning"
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+                    <div className="inline-flex rounded-full border border-white/20 bg-black/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
                       Avondfotografie
                     </div>
-                    <div className="mt-3 text-xl font-semibold text-white">
+                    <div className="mt-3 text-xl font-semibold text-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.35)]">
                       High-end uitstraling
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-[28px] border border-white/12 bg-black/20 backdrop-blur-md">
-                <div className="relative h-[185px]">
+              <div className="overflow-hidden rounded-[28px] border border-white/12 bg-black/10 backdrop-blur-sm">
+                <div className="relative h-[180px]">
                   <Image
                     src="/High-end-real-estate-avondfotografie-IMG_5863-1280x720.jpg"
                     alt="Luxe interieur fotografie"
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+                    <div className="inline-flex rounded-full border border-white/20 bg-black/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
                       Interieur
                     </div>
-                    <div className="mt-3 text-xl font-semibold text-white">
+                    <div className="mt-3 text-xl font-semibold text-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.35)]">
                       Beleving & detail
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-[28px] border border-white/12 bg-black/20 backdrop-blur-md">
-                <div className="relative h-[220px]">
+              <div className="overflow-hidden rounded-[28px] border border-white/12 bg-black/10 backdrop-blur-sm">
+                <div className="relative h-[180px]">
                   <Image
                     src="/High-end-real-estate-avondfotografie-IMG_5652-1280x720.jpg"
                     alt="Instagram bereik luxe presentatie"
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-                    <div className="inline-flex rounded-full border border-white/15 bg-black/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+                    <div className="inline-flex rounded-full border border-white/20 bg-black/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
                       Instagram bereik
                     </div>
-                    <div className="mt-3 text-2xl font-semibold">18K+</div>
+                    <div className="mt-3 text-2xl font-semibold drop-shadow-[0_4px_14px_rgba(0,0,0,0.35)]">
+                      18K+
+                    </div>
                   </div>
                 </div>
               </div>
@@ -411,7 +402,7 @@ export default function PresentatiePromotiePage() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="space-y-4">
           {SERVICES.map((service) => {
             const Icon = service.icon;
             const active = selectedServiceKey === service.key;
@@ -422,83 +413,88 @@ export default function PresentatiePromotiePage() {
                 type="button"
                 onClick={() => applyService(service)}
                 className={[
-                  'group rounded-[26px] border p-5 text-left transition-all duration-200',
-                  'shadow-[0_10px_28px_rgba(16,44,84,0.07)]',
+                  'group w-full rounded-[28px] border p-6 text-left transition-all duration-200',
                   active
                     ? `bg-gradient-to-br ${service.accentClass} text-white shadow-[0_22px_60px_rgba(16,44,84,0.18)]`
-                    : 'border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_16px_36px_rgba(16,44,84,0.12)]',
+                    : 'border-slate-200 bg-white shadow-[0_10px_28px_rgba(16,44,84,0.07)] hover:border-slate-300 hover:shadow-[0_16px_36px_rgba(16,44,84,0.12)]',
                 ].join(' ')}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div
-                    className={[
-                      'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold',
-                      active
-                        ? service.badgeClass
-                        : 'border border-slate-200 bg-slate-50 text-slate-600',
-                    ].join(' ')}
-                  >
-                    {service.priceLabel}
-                  </div>
-
-                  <div
-                    className={[
-                      'flex h-11 w-11 items-center justify-center rounded-2xl',
-                      active
-                        ? 'bg-white/12 text-white'
-                        : 'bg-[#102c54]/5 text-[#102c54]',
-                    ].join(' ')}
-                  >
-                    <Icon className="h-5 w-5" />
-                  </div>
-                </div>
-
-                <h3
-                  className={[
-                    'mt-5 text-[1.85rem] font-semibold leading-tight',
-                    active ? 'text-white' : 'text-[#102c54]',
-                  ].join(' ')}
-                >
-                  {service.title}
-                </h3>
-
-                <p
-                  className={[
-                    'mt-3 text-sm leading-6',
-                    active ? 'text-white/88' : 'text-slate-600',
-                  ].join(' ')}
-                >
-                  {service.description}
-                </p>
-
-                <ul className="mt-4 space-y-2.5">
-                  {service.bullets.map((bullet) => (
-                    <li
-                      key={bullet}
+                <div className="grid gap-6 lg:grid-cols-[320px_1fr_auto] lg:items-start">
+                  <div>
+                    <div
                       className={[
-                        'flex items-start gap-2.5 text-sm leading-6',
-                        active ? 'text-white/92' : 'text-slate-700',
+                        'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold',
+                        active
+                          ? service.badgeClass
+                          : 'border border-slate-200 bg-slate-50 text-slate-600',
                       ].join(' ')}
                     >
-                      <BadgeCheck
-                        className={[
-                          'mt-1 h-4 w-4 shrink-0',
-                          active ? 'text-[#fff1b8]' : 'text-[#102c54]',
-                        ].join(' ')}
-                      />
-                      <span>{bullet}</span>
-                    </li>
-                  ))}
-                </ul>
+                      {service.priceLabel}
+                    </div>
 
-                <div
-                  className={[
-                    'mt-5 inline-flex items-center text-sm font-semibold',
-                    active ? 'text-white' : 'text-[#102c54]',
-                  ].join(' ')}
-                >
-                  Kies dit pakket
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <h3
+                      className={[
+                        'mt-5 text-[2rem] font-semibold leading-tight',
+                        active ? 'text-white' : 'text-[#102c54]',
+                      ].join(' ')}
+                    >
+                      {service.title}
+                    </h3>
+
+                    <p
+                      className={[
+                        'mt-3 text-sm leading-7',
+                        active ? 'text-white/88' : 'text-slate-600',
+                      ].join(' ')}
+                    >
+                      {service.description}
+                    </p>
+                  </div>
+
+                  <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-2">
+                    {service.bullets.map((bullet) => (
+                      <div
+                        key={bullet}
+                        className={[
+                          'flex items-start gap-2.5 rounded-2xl border px-4 py-3 text-sm leading-6',
+                          active
+                            ? 'border-white/10 bg-white/8 text-white/92'
+                            : 'border-slate-200 bg-slate-50 text-slate-700',
+                        ].join(' ')}
+                      >
+                        <BadgeCheck
+                          className={[
+                            'mt-1 h-4 w-4 shrink-0',
+                            active ? 'text-[#fff1b8]' : 'text-[#102c54]',
+                          ].join(' ')}
+                        />
+                        <span>{bullet}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col items-start gap-4 lg:items-end">
+                    <div
+                      className={[
+                        'flex h-12 w-12 items-center justify-center rounded-2xl',
+                        active
+                          ? 'bg-white/12 text-white'
+                          : 'bg-[#102c54]/5 text-[#102c54]',
+                      ].join(' ')}
+                    >
+                      <Icon className="h-5 w-5" />
+                    </div>
+
+                    <div
+                      className={[
+                        'inline-flex items-center text-sm font-semibold',
+                        active ? 'text-white' : 'text-[#102c54]',
+                      ].join(' ')}
+                    >
+                      Kies dit pakket
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
                 </div>
               </button>
             );
