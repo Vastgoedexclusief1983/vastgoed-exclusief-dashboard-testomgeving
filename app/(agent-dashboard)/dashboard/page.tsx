@@ -190,24 +190,24 @@ export default async function AgentDashboardPage() {
 
       <div className="-mt-14 relative z-10 px-1 md:-mt-20">
         <div className="grid gap-6 lg:grid-cols-2">
-          <Card className="overflow-hidden rounded-[30px] border border-white/10 bg-[#0d213d]/72 shadow-[0_24px_70px_rgba(16,44,84,0.28)] backdrop-blur-2xl">
-            <CardHeader className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
+          <Card className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-[0_24px_70px_rgba(16,44,84,0.12)]">
+            <CardHeader className="border-b border-slate-200 bg-white">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-xl font-semibold text-white">
+                  <CardTitle className="text-xl font-semibold text-[#102c54]">
                     {t('propertyTypes')}
                   </CardTitle>
-                  <p className="mt-1 text-sm text-white/65">
+                  <p className="mt-1 text-sm text-slate-500">
                     {t('portfolioBreakdown')}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-white/15 bg-white/10 p-3 text-white shadow-sm backdrop-blur">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-[#102c54] shadow-sm">
                   <Building2 className="h-5 w-5" />
                 </div>
               </div>
             </CardHeader>
 
-            <CardContent className="pt-6">
+            <CardContent className="bg-white pt-6">
               {stats.propertyTypes.length > 0 ? (
                 <div className="space-y-4">
                   {stats.propertyTypes.map((type, index) => {
@@ -217,17 +217,17 @@ export default async function AgentDashboardPage() {
                     return (
                       <div
                         key={index}
-                        className="flex items-center justify-between rounded-[24px] border border-white/10 bg-white/8 p-4 shadow-[0_8px_24px_rgba(0,0,0,0.14)] backdrop-blur-md transition hover:bg-white/12"
+                        className="flex items-center justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-4 shadow-[0_8px_24px_rgba(16,44,84,0.05)] transition hover:bg-slate-100"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="rounded-2xl border border-white/15 bg-white/10 p-3 shadow-sm">
-                            <Home className="h-5 w-5 text-white" />
+                          <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+                            <Home className="h-5 w-5 text-[#102c54]" />
                           </div>
                           <div>
-                            <p className="font-semibold text-white">
+                            <p className="font-semibold text-[#102c54]">
                               {typeLabel}
                             </p>
-                            <p className="text-xs text-white/60">
+                            <p className="text-xs text-slate-500">
                               {Math.round(
                                 (type.count / stats.totalProperties) * 100
                               )}
@@ -235,7 +235,7 @@ export default async function AgentDashboardPage() {
                             </p>
                           </div>
                         </div>
-                        <span className="text-2xl font-semibold text-white">
+                        <span className="text-2xl font-semibold text-[#102c54]">
                           {type.count}
                         </span>
                       </div>
@@ -243,11 +243,11 @@ export default async function AgentDashboardPage() {
                   })}
                 </div>
               ) : (
-                <div className="py-10 text-center text-white/65">
-                  <Building2 className="mx-auto mb-3 h-12 w-12 text-white/25" />
+                <div className="py-10 text-center text-slate-500">
+                  <Building2 className="mx-auto mb-3 h-12 w-12 text-slate-300" />
                   <p className="text-sm">{t('noPropertiesYet')}</p>
                   <Link href="/properties/new">
-                    <Button className="mt-4 rounded-full border border-white/15 bg-white/10 text-white hover:bg-white/20">
+                    <Button className="mt-4 rounded-full bg-[#102c54] text-white hover:bg-[#0c2342]">
                       <Plus className="mr-2 h-4 w-4" />
                       {t('addFirstProperty')}
                     </Button>
@@ -257,49 +257,49 @@ export default async function AgentDashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="overflow-hidden rounded-[30px] border border-white/10 bg-[#0d213d]/72 shadow-[0_24px_70px_rgba(16,44,84,0.28)] backdrop-blur-2xl">
-            <CardHeader className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
+          <Card className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-[0_24px_70px_rgba(16,44,84,0.12)]">
+            <CardHeader className="border-b border-slate-200 bg-white">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-xl font-semibold text-white">
+                  <CardTitle className="text-xl font-semibold text-[#102c54]">
                     {t('recentProperties')}
                   </CardTitle>
-                  <p className="mt-1 text-sm text-white/65">
+                  <p className="mt-1 text-sm text-slate-500">
                     {t('latestListings')}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-white/15 bg-white/10 p-3 text-white shadow-sm backdrop-blur">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-[#102c54] shadow-sm">
                   <Clock className="h-5 w-5" />
                 </div>
               </div>
             </CardHeader>
 
-            <CardContent className="pt-6">
+            <CardContent className="bg-white pt-6">
               {stats.recentPropertiesList.length > 0 ? (
                 <div className="space-y-3">
                   {stats.recentPropertiesList.map((property) => (
                     <Link key={property._id} href={`/properties/${property._id}`}>
-                      <div className="flex cursor-pointer items-center justify-between rounded-[24px] border border-white/10 bg-white/8 p-4 shadow-[0_8px_24px_rgba(0,0,0,0.14)] backdrop-blur-md transition hover:bg-white/12">
+                      <div className="flex cursor-pointer items-center justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-4 shadow-[0_8px_24px_rgba(16,44,84,0.05)] transition hover:bg-slate-100">
                         <div className="flex-1">
-                          <p className="text-sm font-semibold text-white">
+                          <p className="text-sm font-semibold text-[#102c54]">
                             {property.address}
                           </p>
                           <div className="mt-1 flex items-center gap-2">
-                            <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-xs text-white/75">
+                            <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-600">
                               {getPropertyTypeLabel(property.propertyType) ||
                                 property.propertyType}
                             </span>
-                            <span className="text-xs text-white/55">
+                            <span className="text-xs text-slate-500">
                               {property.city}
                             </span>
                           </div>
                         </div>
 
                         <div className="ml-4 text-right">
-                          <p className="text-sm font-semibold text-white">
+                          <p className="text-sm font-semibold text-[#102c54]">
                             {formatPrice(property.price)}
                           </p>
-                          <p className="mt-1 flex items-center justify-end gap-1 text-xs text-white/55">
+                          <p className="mt-1 flex items-center justify-end gap-1 text-xs text-slate-500">
                             <Calendar className="h-3 w-3" />
                             {formatDate(property.createdAt)}
                           </p>
@@ -311,15 +311,15 @@ export default async function AgentDashboardPage() {
                   <Link href="/properties">
                     <Button
                       variant="outline"
-                      className="mt-3 w-full rounded-full border-white/15 bg-white/8 text-white hover:bg-white/14"
+                      className="mt-3 w-full rounded-full border-slate-300 bg-white text-[#102c54] hover:bg-slate-50"
                     >
                       Bekijk alle woningen
                     </Button>
                   </Link>
                 </div>
               ) : (
-                <div className="py-10 text-center text-white/65">
-                  <Clock className="mx-auto mb-3 h-12 w-12 text-white/25" />
+                <div className="py-10 text-center text-slate-500">
+                  <Clock className="mx-auto mb-3 h-12 w-12 text-slate-300" />
                   <p className="text-sm">{t('noRecentProperties')}</p>
                 </div>
               )}
@@ -328,18 +328,18 @@ export default async function AgentDashboardPage() {
         </div>
 
         {showLegalAcceptance && (
-          <Card className="mt-6 overflow-hidden rounded-[30px] border border-white/10 bg-[#0d213d]/72 shadow-[0_24px_70px_rgba(16,44,84,0.28)] backdrop-blur-2xl">
-            <CardHeader className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
+          <Card className="mt-6 overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-[0_24px_70px_rgba(16,44,84,0.12)]">
+            <CardHeader className="border-b border-slate-200 bg-white">
               <div className="flex items-start gap-3">
-                <div className="rounded-2xl border border-white/15 bg-white/10 p-3 text-white shadow-sm">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-[#102c54] shadow-sm">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
 
                 <div>
-                  <CardTitle className="text-xl font-semibold text-white">
+                  <CardTitle className="text-xl font-semibold text-[#102c54]">
                     Juridische documenten bevestigen
                   </CardTitle>
-                  <p className="mt-1 text-sm text-white/65">
+                  <p className="mt-1 text-sm text-slate-500">
                     Geef hieronder eenmalig akkoord op de toepasselijke
                     voorwaarden, privacyverklaring, verwerkersovereenkomst en
                     disclaimer. Daarna verdwijnt dit blok automatisch uit je
@@ -349,7 +349,7 @@ export default async function AgentDashboardPage() {
               </div>
             </CardHeader>
 
-            <CardContent className="pt-6">
+            <CardContent className="bg-white pt-6">
               <LegalAcceptancePanel />
             </CardContent>
           </Card>
