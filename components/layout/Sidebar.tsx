@@ -209,7 +209,7 @@ export function Sidebar({ role }: SidebarProps) {
   } as const;
 
   const overviewItems: NavItem[] = [
-    { href: ROUTES.dashboard, label: t('dashboard'), icon: LayoutDashboard },
+    { href: ROUTES.dashboard, label: 'Overzicht', icon: LayoutDashboard },
   ];
 
   const waardebepalingItems: NavItem[] = [
@@ -254,7 +254,6 @@ export function Sidebar({ role }: SidebarProps) {
 
   return (
     <aside className="flex h-screen w-[270px] flex-col bg-[#102c54] text-white shadow-lg">
-      {/* Header */}
       <div className="border-b border-white/10 px-4 py-4">
         <Link
           href={ROUTES.dashboard}
@@ -270,16 +269,7 @@ export function Sidebar({ role }: SidebarProps) {
         </Link>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <div className="mb-5">
-          <PrimaryActionLink
-            href={ROUTES.propertyNew}
-            label="Woning aanmelden"
-            active={isActive(ROUTES.propertyNew)}
-          />
-        </div>
-
         <div className="px-2 pt-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
           Overzicht
         </div>
@@ -291,6 +281,14 @@ export function Sidebar({ role }: SidebarProps) {
               active={isActive(item.href)}
             />
           ))}
+        </div>
+
+        <div className="mt-5">
+          <PrimaryActionLink
+            href={ROUTES.propertyNew}
+            label="Woning aanmelden"
+            active={isActive(ROUTES.propertyNew)}
+          />
         </div>
 
         <div className="mt-6 px-2 text-[11px] font-semibold uppercase tracking-wide text-white/55">
@@ -404,7 +402,6 @@ export function Sidebar({ role }: SidebarProps) {
         )}
       </nav>
 
-      {/* Footer */}
       <div className="border-t border-white/10 px-4 py-4 text-xs text-white/60">
         Vastgoed Exclusief
         <div className="text-white/40">Version 1.0.0</div>
