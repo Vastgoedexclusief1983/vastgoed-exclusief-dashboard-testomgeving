@@ -122,27 +122,26 @@ export default async function AgentDashboardPage() {
               "url('/High-end-real-estate-avondfotografie-IMG_6632-1280x720.jpg')",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#071a33]/72 via-[#0d2a52]/40 to-[#102c54]/16" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#071a33]/55 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-black/10" />
 
         <div className="relative flex min-h-[400px] flex-col justify-between px-8 py-8 lg:min-h-[470px] lg:px-10 lg:py-10">
           <div className="flex items-start justify-between gap-4">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm">
+              <div className="inline-flex items-center rounded-full border border-white/30 bg-white/14 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.10)]">
                 Vastgoed Exclusief Dashboard
               </div>
 
-              <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white md:text-5xl xl:text-6xl">
+              <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white drop-shadow-[0_3px_18px_rgba(0,0,0,0.28)] md:text-5xl xl:text-6xl">
                 {t('title')}
               </h1>
 
-              <p className="mt-4 max-w-2xl text-base leading-8 text-white/85 md:text-lg">
+              <p className="mt-4 max-w-2xl text-base leading-8 text-white/95 drop-shadow-[0_2px_14px_rgba(0,0,0,0.22)] md:text-lg">
                 {t('subtitle')}
               </p>
             </div>
 
             <Link href="/properties/new">
-              <Button className="gap-2 rounded-full border border-white/20 bg-white/12 px-6 text-white shadow-lg backdrop-blur-md hover:bg-white/20">
+              <Button className="gap-2 rounded-full border border-white/30 bg-white/14 px-6 text-white shadow-lg backdrop-blur-md hover:bg-white/22">
                 <Plus className="h-4 w-4" />
                 {t('addProperty')}
               </Button>
@@ -150,38 +149,38 @@ export default async function AgentDashboardPage() {
           </div>
 
           <div className="mt-10 grid gap-4 md:grid-cols-3 xl:max-w-4xl">
-            <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.12)]">
-              <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/70">
+            <div className="rounded-[24px] border border-white/20 bg-white/12 p-5 text-white backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.12)]">
+              <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/75">
                 Totaal woningen
               </div>
               <div className="mt-3 text-3xl font-semibold">
                 {stats.totalProperties}
               </div>
-              <div className="mt-2 text-sm text-white/75">
+              <div className="mt-2 text-sm text-white/82">
                 Actieve portefeuille in overzicht
               </div>
             </div>
 
-            <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.12)]">
-              <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/70">
+            <div className="rounded-[24px] border border-white/20 bg-white/12 p-5 text-white backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.12)]">
+              <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/75">
                 Portefeuille waarde
               </div>
               <div className="mt-3 text-3xl font-semibold">
                 {formatPrice(stats.totalValue)}
               </div>
-              <div className="mt-2 text-sm text-white/75">
+              <div className="mt-2 text-sm text-white/82">
                 Totale aanbodwaarde van uw woningen
               </div>
             </div>
 
-            <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.12)]">
-              <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/70">
+            <div className="rounded-[24px] border border-white/20 bg-white/12 p-5 text-white backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.12)]">
+              <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/75">
                 Recente toevoegingen
               </div>
               <div className="mt-3 text-3xl font-semibold">
                 {stats.recentProperties}
               </div>
-              <div className="mt-2 text-sm text-white/75">
+              <div className="mt-2 text-sm text-white/82">
                 Nieuwe woningen in de laatste 30 dagen
               </div>
             </div>
