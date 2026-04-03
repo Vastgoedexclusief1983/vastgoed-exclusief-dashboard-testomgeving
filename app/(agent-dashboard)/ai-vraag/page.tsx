@@ -769,9 +769,6 @@ export default function AiVraagPage() {
           />
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#08162d]/60 via-[#102c54]/28 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_20%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.06),transparent_24%)]" />
-
         <div className="relative px-6 py-8 md:px-8 md:py-10">
           <div className="grid gap-6 lg:grid-cols-[1.5fr_0.9fr] lg:items-end">
             <div className="max-w-3xl">
