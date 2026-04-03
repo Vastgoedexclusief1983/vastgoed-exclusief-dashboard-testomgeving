@@ -116,79 +116,150 @@ export default async function AgentDashboardPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-          <p className="mt-1 text-gray-500">{t('subtitle')}</p>
-        </div>
+    <div className="space-y-8">
+      <section className="relative overflow-hidden rounded-[30px] border border-white/20 shadow-[0_25px_80px_rgba(16,44,84,0.18)]">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('/High-end-real-estate-avondfotografie-IMG_6632-1280x720.jpg')",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#071a33]/78 via-[#0d2a52]/48 to-[#102c54]/22" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071a33]/50 via-transparent to-transparent" />
 
-        <Link href="/properties/new">
-          <Button className="gap-2 bg-brand-700 hover:bg-brand-800">
-            <Plus className="h-4 w-4" />
-            {t('addProperty')}
-          </Button>
-        </Link>
-      </div>
+        <div className="relative flex min-h-[360px] flex-col justify-between px-8 py-8 lg:min-h-[420px] lg:px-10 lg:py-10">
+          <div className="flex items-start justify-between gap-4">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm">
+                Vastgoed Exclusief Dashboard
+              </div>
+
+              <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white md:text-5xl xl:text-6xl">
+                {t('title')}
+              </h1>
+
+              <p className="mt-4 max-w-2xl text-base leading-8 text-white/85 md:text-lg">
+                {t('subtitle')}
+              </p>
+            </div>
+
+            <Link href="/properties/new">
+              <Button className="gap-2 rounded-full border border-white/20 bg-white/12 px-6 text-white shadow-lg backdrop-blur-md hover:bg-white/20">
+                <Plus className="h-4 w-4" />
+                {t('addProperty')}
+              </Button>
+            </Link>
+          </div>
+
+          <div className="mt-10 grid gap-4 md:grid-cols-3 xl:max-w-4xl">
+            <div className="rounded-[22px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md">
+              <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/70">
+                Totaal woningen
+              </div>
+              <div className="mt-3 text-3xl font-semibold">
+                {stats.totalProperties}
+              </div>
+              <div className="mt-2 text-sm text-white/75">
+                Actieve portefeuille in overzicht
+              </div>
+            </div>
+
+            <div className="rounded-[22px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md">
+              <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/70">
+                Portefeuille waarde
+              </div>
+              <div className="mt-3 text-3xl font-semibold">
+                {formatPrice(stats.totalValue)}
+              </div>
+              <div className="mt-2 text-sm text-white/75">
+                Totale aanbodwaarde van uw woningen
+              </div>
+            </div>
+
+            <div className="rounded-[22px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md">
+              <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/70">
+                Recente toevoegingen
+              </div>
+              <div className="mt-3 text-3xl font-semibold">
+                {stats.recentProperties}
+              </div>
+              <div className="mt-2 text-sm text-white/75">
+                Nieuwe woningen in de laatste 30 dagen
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatsCard
-          title={t('totalProperties')}
-          value={stats.totalProperties}
-          icon={Building2}
-          iconColor="blue"
-          trend={
-            <Link href="/properties">
-              <p className="flex cursor-pointer items-center gap-1 text-xs text-blue-600 hover:underline">
-                <Eye className="h-3 w-3" />
-                {t('viewAllProperties')}
-              </p>
-            </Link>
-          }
-        />
+        <div className="rounded-[26px] border border-[#d8e2ef] bg-white/95 shadow-[0_18px_50px_rgba(16,44,84,0.08)] backdrop-blur-sm">
+          <StatsCard
+            title={t('totalProperties')}
+            value={stats.totalProperties}
+            icon={Building2}
+            iconColor="blue"
+            trend={
+              <Link href="/properties">
+                <p className="flex cursor-pointer items-center gap-1 text-xs text-blue-600 hover:underline">
+                  <Eye className="h-3 w-3" />
+                  {t('viewAllProperties')}
+                </p>
+              </Link>
+            }
+          />
+        </div>
 
-        <StatsCard
-          title={t('portfolioValue')}
-          value={formatPrice(stats.totalValue)}
-          description={t('totalListingValue')}
-          icon={TrendingUp}
-          iconColor="green"
-        />
+        <div className="rounded-[26px] border border-[#d8e2ef] bg-white/95 shadow-[0_18px_50px_rgba(16,44,84,0.08)] backdrop-blur-sm">
+          <StatsCard
+            title={t('portfolioValue')}
+            value={formatPrice(stats.totalValue)}
+            description={t('totalListingValue')}
+            icon={TrendingUp}
+            iconColor="green"
+          />
+        </div>
 
-        <StatsCard
-          title={t('recentAdditions')}
-          value={stats.recentProperties}
-          description={t('inLast30Days')}
-          icon={Clock}
-          iconColor="purple"
-        />
+        <div className="rounded-[26px] border border-[#d8e2ef] bg-white/95 shadow-[0_18px_50px_rgba(16,44,84,0.08)] backdrop-blur-sm">
+          <StatsCard
+            title={t('recentAdditions')}
+            value={stats.recentProperties}
+            description={t('inLast30Days')}
+            icon={Clock}
+            iconColor="purple"
+          />
+        </div>
 
-        <StatsCard
-          title={t('avgPropertyValue')}
-          value={
-            stats.totalProperties > 0
-              ? formatPrice(stats.totalValue / stats.totalProperties)
-              : '€0'
-          }
-          description={t('averageListingPrice')}
-          icon={Home}
-          iconColor="orange"
-        />
+        <div className="rounded-[26px] border border-[#d8e2ef] bg-white/95 shadow-[0_18px_50px_rgba(16,44,84,0.08)] backdrop-blur-sm">
+          <StatsCard
+            title={t('avgPropertyValue')}
+            value={
+              stats.totalProperties > 0
+                ? formatPrice(stats.totalValue / stats.totalProperties)
+                : '€0'
+            }
+            description={t('averageListingPrice')}
+            icon={Home}
+            iconColor="orange"
+          />
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="shadow-sm">
-          <CardHeader className="border-b bg-gray-50/50">
+        <Card className="overflow-hidden rounded-[28px] border border-[#dde6f1] bg-white/95 shadow-[0_20px_60px_rgba(16,44,84,0.08)]">
+          <CardHeader className="border-b border-[#edf2f7] bg-[linear-gradient(180deg,#fbfdff_0%,#f6f9fc_100%)]">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg font-semibold text-gray-900">
+                <CardTitle className="text-xl font-semibold text-[#102c54]">
                   {t('propertyTypes')}
                 </CardTitle>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-[#64748b]">
                   {t('portfolioBreakdown')}
                 </p>
               </div>
-              <Building2 className="h-5 w-5 text-gray-400" />
+              <div className="rounded-2xl bg-[#eef4ff] p-2.5 text-[#102c54]">
+                <Building2 className="h-5 w-5" />
+              </div>
             </div>
           </CardHeader>
 
@@ -202,17 +273,17 @@ export default async function AgentDashboardPage() {
                   return (
                     <div
                       key={index}
-                      className="flex items-center justify-between rounded-lg bg-gray-50 p-3 transition-colors hover:bg-gray-100"
+                      className="flex items-center justify-between rounded-2xl border border-[#edf2f7] bg-[#f8fbff] p-4 transition-colors hover:bg-[#f2f7fd]"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="rounded-lg bg-white p-2 shadow-sm">
-                          <Home className="h-5 w-5 text-brand-700" />
+                        <div className="rounded-2xl bg-white p-3 shadow-sm ring-1 ring-[#e6edf7]">
+                          <Home className="h-5 w-5 text-[#102c54]" />
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-semibold text-[#102c54]">
                             {typeLabel}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-[#64748b]">
                             {Math.round(
                               (type.count / stats.totalProperties) * 100
                             )}
@@ -220,7 +291,7 @@ export default async function AgentDashboardPage() {
                           </p>
                         </div>
                       </div>
-                      <span className="text-lg font-semibold text-gray-900">
+                      <span className="text-2xl font-semibold text-[#102c54]">
                         {type.count}
                       </span>
                     </div>
@@ -228,11 +299,11 @@ export default async function AgentDashboardPage() {
                 })}
               </div>
             ) : (
-              <div className="py-8 text-center text-gray-500">
-                <Building2 className="mx-auto mb-2 h-12 w-12 text-gray-300" />
+              <div className="py-10 text-center text-[#64748b]">
+                <Building2 className="mx-auto mb-3 h-12 w-12 text-[#c5d0df]" />
                 <p className="text-sm">{t('noPropertiesYet')}</p>
                 <Link href="/properties/new">
-                  <Button className="mt-4 bg-brand-700 hover:bg-brand-800">
+                  <Button className="mt-4 rounded-full bg-[#102c54] hover:bg-[#0c2343]">
                     <Plus className="mr-2 h-4 w-4" />
                     {t('addFirstProperty')}
                   </Button>
@@ -242,18 +313,20 @@ export default async function AgentDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm">
-          <CardHeader className="border-b bg-gray-50/50">
+        <Card className="overflow-hidden rounded-[28px] border border-[#dde6f1] bg-white/95 shadow-[0_20px_60px_rgba(16,44,84,0.08)]">
+          <CardHeader className="border-b border-[#edf2f7] bg-[linear-gradient(180deg,#fbfdff_0%,#f6f9fc_100%)]">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg font-semibold text-gray-900">
+                <CardTitle className="text-xl font-semibold text-[#102c54]">
                   {t('recentProperties')}
                 </CardTitle>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-[#64748b]">
                   {t('latestListings')}
                 </p>
               </div>
-              <Clock className="h-5 w-5 text-gray-400" />
+              <div className="rounded-2xl bg-[#eef4ff] p-2.5 text-[#102c54]">
+                <Clock className="h-5 w-5" />
+              </div>
             </div>
           </CardHeader>
 
@@ -262,27 +335,27 @@ export default async function AgentDashboardPage() {
               <div className="space-y-3">
                 {stats.recentPropertiesList.map((property) => (
                   <Link key={property._id} href={`/properties/${property._id}`}>
-                    <div className="flex cursor-pointer items-center justify-between rounded-lg bg-gray-50 p-3 transition-colors hover:bg-gray-100">
+                    <div className="flex cursor-pointer items-center justify-between rounded-2xl border border-[#edf2f7] bg-[#f8fbff] p-4 transition-colors hover:bg-[#f2f7fd]">
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-semibold text-[#102c54]">
                           {property.address}
                         </p>
                         <div className="mt-1 flex items-center gap-2">
-                          <span className="rounded bg-white px-2 py-0.5 text-xs text-gray-600">
+                          <span className="rounded-full bg-white px-2.5 py-1 text-xs text-[#5b6b82] ring-1 ring-[#e5ecf5]">
                             {getPropertyTypeLabel(property.propertyType) ||
                               property.propertyType}
                           </span>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-[#64748b]">
                             {property.city}
                           </span>
                         </div>
                       </div>
 
                       <div className="ml-4 text-right">
-                        <p className="text-sm font-semibold text-gray-900">
+                        <p className="text-sm font-semibold text-[#102c54]">
                           {formatPrice(property.price)}
                         </p>
-                        <p className="mt-1 flex items-center justify-end gap-1 text-xs text-gray-500">
+                        <p className="mt-1 flex items-center justify-end gap-1 text-xs text-[#64748b]">
                           <Calendar className="h-3 w-3" />
                           {formatDate(property.createdAt)}
                         </p>
@@ -292,14 +365,17 @@ export default async function AgentDashboardPage() {
                 ))}
 
                 <Link href="/properties">
-                  <Button variant="outline" className="mt-2 w-full">
+                  <Button
+                    variant="outline"
+                    className="mt-3 w-full rounded-full border-[#d7e3f3] text-[#102c54] hover:bg-[#f7faff]"
+                  >
                     {t('viewAllProperties')}
                   </Button>
                 </Link>
               </div>
             ) : (
-              <div className="py-8 text-center text-gray-500">
-                <Clock className="mx-auto mb-2 h-12 w-12 text-gray-300" />
+              <div className="py-10 text-center text-[#64748b]">
+                <Clock className="mx-auto mb-3 h-12 w-12 text-[#c5d0df]" />
                 <p className="text-sm">{t('noRecentProperties')}</p>
               </div>
             )}
@@ -308,18 +384,18 @@ export default async function AgentDashboardPage() {
       </div>
 
       {showLegalAcceptance && (
-        <Card className="border-[#102c54]/10 shadow-sm">
-          <CardHeader className="border-b bg-[#102c54]/[0.03]">
+        <Card className="overflow-hidden rounded-[28px] border border-[#102c54]/10 bg-white/95 shadow-[0_20px_60px_rgba(16,44,84,0.08)]">
+          <CardHeader className="border-b bg-[linear-gradient(180deg,rgba(16,44,84,0.04)_0%,rgba(16,44,84,0.02)_100%)]">
             <div className="flex items-start gap-3">
               <div className="rounded-2xl bg-[#102c54]/10 p-3 text-[#102c54]">
                 <ShieldCheck className="h-5 w-5" />
               </div>
 
               <div>
-                <CardTitle className="text-xl font-semibold text-gray-900">
+                <CardTitle className="text-xl font-semibold text-[#102c54]">
                   Juridische documenten bevestigen
                 </CardTitle>
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-[#5b6b82]">
                   Geef hieronder eenmalig akkoord op de toepasselijke
                   voorwaarden, privacyverklaring, verwerkersovereenkomst en
                   disclaimer. Daarna verdwijnt dit blok automatisch uit je
