@@ -1,6 +1,5 @@
 'use client';
 
-import { getLocationTypeLabel } from '@/lib/utils/locationTypeLabels';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,7 +15,10 @@ import {
   LOCATION_TYPES,
   PropertyDetails,
 } from '@/types/property-valuation';
-import { getPropertyTypeLabel } from '@/lib/utils/propertyTypeLabels';
+import {
+  getPropertyTypeLabel,
+  getLocationTypeLabel,
+} from '@/lib/utils/propertyTypeLabels';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -298,7 +300,7 @@ export function BasicDetailsForm() {
               <SelectContent>
                 {LOCATION_TYPES.map((type) => (
                   <SelectItem key={type} value={type}>
-                    {type}
+                    {getLocationTypeLabel(type)}
                   </SelectItem>
                 ))}
               </SelectContent>
