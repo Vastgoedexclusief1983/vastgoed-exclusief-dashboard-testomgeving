@@ -479,7 +479,7 @@ export default function AiCreditsInfo({
                         </label>
                         <select
                           id="selectedPlan"
-                          value={selectedPlan}
+                          value={selectedPlan ?? 'professional'}
                           onChange={(e) => {
                             setSelectedPlan(e.target.value as PlanKey);
                             resetFormFeedback();
