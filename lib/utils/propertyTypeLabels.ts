@@ -1,4 +1,5 @@
 // lib/utils/propertyTypeLabels.ts
+
 export const PROPERTY_TYPE_LABELS = {
   House: 'Woonhuis',
   Villa: 'Villa',
@@ -12,8 +13,8 @@ export const PROPERTY_TYPE_LABELS = {
   Farmhouse: 'Woonboerderij',
   MonumentalBuilding: 'Monumentaal pand',
 
-  // oude waarden voor bestaande records / backward compatibility
-  Condo: 'Condominium',
+  // legacy / oude waarden
+  Condo: 'Appartement',
   Townhouse: 'Stadsvilla',
   Land: 'Bouwgrond',
   Commercial: 'Commercieel vastgoed',
@@ -22,20 +23,51 @@ export const PROPERTY_TYPE_LABELS = {
 export type PropertyTypeKey = keyof typeof PROPERTY_TYPE_LABELS;
 
 /**
- * Veilig label ophalen voor een woningtype dat uit DB/API kan komen als:
- * string | null | undefined (en soms met andere casing/varianten).
+ * Normalisatie mapping (voor API / lowercase / varianten)
+ */
+const NORMALIZATION_MAP: Record<string, PropertyTypeKey> = {
+  // lowercase api / frontend varianten
+  house: 'House',
+  villa: 'Villa',
+  countryhouse: 'CountryHouse',
+  mansion: 'Mansion',
+  semidetached: 'SemiDetached',
+  terracedhouse: 'TerracedHouse',
+  apartment: 'Apartment',
+  penthouse: 'Penthouse',
+  holidayhome: 'HolidayHome',
+  farmhouse: 'Farmhouse',
+  monumentalbuilding: 'MonumentalBuilding',
+
+  // varianten / synoniemen
+  flat: 'Apartment',
+  condo: 'Condo',
+  townhouse: 'Townhouse',
+  land: 'Land',
+  commercial: 'Commercial',
+};
+
+/**
+ * Veilig label ophalen voor elk type input
  */
 export function getPropertyTypeLabel(input?: string | null): string {
   if (!input) return '';
 
-  // Normaliseer veelvoorkomende varianten (optioneel uitbreiden)
-  const normalized = input.trim();
+  const trimmed = input.trim();
 
-  // Exacte match (House/Apartment/...)
-  if (normalized in PROPERTY_TYPE_LABELS) {
-    return PROPERTY_TYPE_LABELS[normalized as PropertyTypeKey];
+  // 1. Directe match (beste case)
+  if (trimmed in PROPERTY_TYPE_LABELS) {
+    return PROPERTY_TYPE_LABELS[trimmed as PropertyTypeKey];
   }
 
-  // Fallback: toon originele waarde
-  return normalized;
+  // 2. Lowercase normalisatie
+  const lower = trimmed.toLowerCase();
+
+  if (lower in NORMALIZATION_MAP) {
+    const normalizedKey = NORMALIZATION_MAP[lower];
+    return PROPERTY_TYPE_LABELS[normalizedKey];
+  }
+
+  // 3. Fallback (toon netjes met hoofdletter)
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
 }
