@@ -14,7 +14,7 @@ export default function DisclaimerDialog() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="ml-9 mt-1 block text-xs text-white/60 underline hover:text-white"
+          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
         >
           Disclaimer
         </button>
@@ -27,29 +27,27 @@ export default function DisclaimerDialog() {
 
         <p className="text-sm leading-relaxed text-muted-foreground">
           Het via dit dashboard gegenereerde woningrapport, de weergegeven
-          waardes en alle bijbehorende inzichten zijn uitsluitend indicatief
-          van aard en bedoeld als ondersteunend hulpmiddel voor de
-          professionele gebruiker (makelaar).
+          waardes en alle bijbehorende inzichten zijn uitsluitend indicatief van
+          aard en bedoeld als ondersteunend hulpmiddel voor de professionele
+          gebruiker (makelaar).
           <br />
           <br />
-          De uitkomsten zijn gebaseerd op door de makelaar ingevoerde
-          gegevens, beschikbare marktinformatie en geautomatiseerde
-          analyses. Vastgoed Exclusief geeft geen garanties ten aanzien van
-          de juistheid, volledigheid of actualiteit van deze informatie.
+          De uitkomsten zijn gebaseerd op door de makelaar ingevoerde gegevens,
+          gekozen kenmerken en een geautomatiseerde waarderingsmethodiek.
+          Vastgoed Exclusief geeft geen garanties ten aanzien van juistheid,
+          volledigheid, actualiteit of geschiktheid voor een specifiek doel.
           <br />
           <br />
-          Het woningrapport vormt nadrukkelijk geen taxatie en kan niet
-          worden aangemerkt als een taxatierapport in de zin van de
-          NRVT-richtlijnen of andere geldende taxatiestandaarden.
+          Het woningrapport vormt geen officiële taxatie, bindend waardeoordeel,
+          financieel advies of juridisch advies. Voor een formele waardebepaling
+          of taxatie dient altijd een erkend taxateur of andere bevoegde
+          specialist te worden ingeschakeld.
           <br />
           <br />
-          De makelaar blijft te allen tijde volledig zelf verantwoordelijk
-          voor het gebruik, de interpretatie en de toepassing van de
-          resultaten richting opdrachtgevers en derden. Aan de uitkomsten
-          kunnen geen rechten worden ontleend. Vastgoed Exclusief aanvaardt
-          geen enkele aansprakelijkheid voor directe of indirecte schade
-          voortvloeiend uit het gebruik van dit dashboard of de
-          gegenereerde rapportages.
+          Door gebruik te maken van deze functionaliteit erkent de gebruiker dat
+          Vastgoed Exclusief niet aansprakelijk is voor directe of indirecte
+          schade, beslissingen of gevolgen die voortvloeien uit het gebruik van
+          de gegenereerde informatie of rapportages.
         </p>
       </DialogContent>
     </Dialog>
