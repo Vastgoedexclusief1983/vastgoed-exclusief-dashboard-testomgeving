@@ -126,7 +126,7 @@ export default function AiCreditsInfo({
     resetFormFeedback();
 
     try {
-      const response = await fetch('/api/ai-credits-request', {
+      const response = await fetch('/api/ai/credits-request', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
