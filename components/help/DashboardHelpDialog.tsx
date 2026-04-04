@@ -80,16 +80,17 @@ export function DashboardHelpDialog({ className, label = 'Handleiding' }: Props)
       <DialogTrigger asChild>
         <button
           type="button"
-          className={['ml-9 mt-1 block text-xs text-white/60 underline hover:text-white', className ?? ''].join(' ')}
+          className={[
+            'w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white',
+            className ?? '',
+          ].join(' ')}
         >
           {label}
         </button>
       </DialogTrigger>
 
-      {/* Flex layout: header + scroll content + (compact) footer. Geen overlap. */}
       <DialogContent className="max-w-3xl p-0">
         <div className="flex max-h-[80vh] flex-col">
-          {/* Header */}
           <div className="border-b border-slate-200 bg-white px-6 py-4">
             <DialogHeader className="space-y-1">
               <DialogTitle className="flex items-center gap-2 text-base">
@@ -102,9 +103,7 @@ export function DashboardHelpDialog({ className, label = 'Handleiding' }: Props)
             </DialogHeader>
           </div>
 
-          {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-6 py-5">
-            {/* Intro */}
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
               <div className="flex items-start gap-3">
                 <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white">
@@ -268,7 +267,6 @@ export function DashboardHelpDialog({ className, label = 'Handleiding' }: Props)
             <div className="h-2" />
           </div>
 
-          {/* Compact footer: NIET sticky, dus geen overlap */}
           <div className="border-t border-slate-200 bg-white px-6 py-4">
             <div className="flex items-center justify-end">
               <DialogClose asChild>
