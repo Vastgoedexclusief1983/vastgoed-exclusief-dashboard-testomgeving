@@ -7,54 +7,62 @@ import Property from '@/lib/db/models/Property';
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) {
+
+    if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     await dbConnect();
 
     const searchParams = request.nextUrl.searchParams;
-    const query = searchParams.get('q') || '';
-    const limit = parseInt(searchParams.get('limit') || '100');
+    const query = (searchParams.get('q') || '').trim();
+    const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10), 100);
 
-    // Base condition: not deleted
-    const notDeletedCondition = { $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }, { isDeleted: null }] };
+    const user = session.user as { id: string; role?: string };
+    const userId = String(user.id);
+    const userRole = String(user.role || '').toLowerCase();
+    const isAdmin = userRole === 'admin';
 
-    // For agents, filter to only their properties
-    const user = session.user as { id: string; role: string };
+    const notDeletedCondition = {
+      $or: [
+        { isDeleted: false },
+        { isDeleted: { $exists: false } },
+        { isDeleted: null },
+      ],
+    };
 
-    // Build base query
-    let baseQuery: Record<string, unknown> = notDeletedCondition;
-    if (user.role === 'agent') {
-      baseQuery = {
-        $and: [notDeletedCondition, { agentId: user.id }]
-      };
-    }
+    const searchCondition = query
+      ? {
+          $or: [
+            { propertyCode: { $regex: query, $options: 'i' } },
+            { 'basicInfo.address': { $regex: query, $options: 'i' } },
+            { 'basicInfo.city': { $regex: query, $options: 'i' } },
+            { 'basicInfo.province': { $regex: query, $options: 'i' } },
+            { 'basicInfo.postalCode': { $regex: query, $options: 'i' } },
+          ],
+        }
+      : null;
 
-    const searchQuery = query
+    const mongoQuery = isAdmin
       ? {
           $and: [
             notDeletedCondition,
-            ...(user.role === 'agent' ? [{ agentId: user.id }] : []),
-            {
-              $or: [
-                { propertyCode: { $regex: query, $options: 'i' } },
-                { 'basicInfo.address': { $regex: query, $options: 'i' } },
-                { 'basicInfo.city': { $regex: query, $options: 'i' } },
-                { 'basicInfo.province': { $regex: query, $options: 'i' } },
-                { 'basicInfo.postalCode': { $regex: query, $options: 'i' } },
-              ],
-            }
-          ]
+            ...(searchCondition ? [searchCondition] : []),
+          ],
         }
-      : baseQuery;
+      : {
+          $and: [
+            notDeletedCondition,
+            { agentId: userId },
+            ...(searchCondition ? [searchCondition] : []),
+          ],
+        };
 
-    const properties = await Property.find(searchQuery)
+    const properties = await Property.find(mongoQuery)
       .limit(limit)
       .sort({ createdAt: -1 })
       .lean();
 
-    // Transform the data to flatten the structure for the frontend
     const transformedProperties = properties.map((property: any) => {
       const city = property.basicInfo?.city || 'Unknown';
       const postalCode = property.basicInfo?.postalCode || '';
@@ -64,16 +72,17 @@ export async function GET(request: NextRequest) {
         propertyCode: property.propertyCode || null,
         title: `${property.basicInfo?.propertyType || 'Property'} in ${city}`,
         address: property.basicInfo?.address || '',
-        city: city,
+        city,
         province: property.basicInfo?.province || '',
-        postalCode: postalCode,
+        postalCode,
         price: property.basicInfo?.basePrice || 0,
         propertyType: property.basicInfo?.propertyType || 'House',
         bedrooms: property.dimensions?.bedrooms || 0,
         bathrooms: property.dimensions?.bathrooms || 0,
         size: property.dimensions?.livingArea || 0,
         plotSize: property.dimensions?.lotSize || 0,
-        yearBuilt: property.basicInfo?.constructionYear || new Date().getFullYear(),
+        yearBuilt:
+          property.basicInfo?.constructionYear || new Date().getFullYear(),
         energyLabel: property.basicInfo?.energyLabel || 'Unknown',
         location: property.basicInfo?.location || '',
       };
