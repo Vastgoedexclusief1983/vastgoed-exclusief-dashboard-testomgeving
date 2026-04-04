@@ -1,3 +1,4 @@
+import AgentWorkflowCard from '@/components/dashboard/AgentWorkflowCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { requireAuth } from '@/lib/auth/session';
 import dbConnect from '@/lib/db/mongodb';
