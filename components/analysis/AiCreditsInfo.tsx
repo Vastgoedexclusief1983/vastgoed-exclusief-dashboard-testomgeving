@@ -17,6 +17,10 @@ type Props = {
   limit: number;
   label?: string;
   iconOnly?: boolean;
+  defaultCompanyName?: string;
+  defaultContactName?: string;
+  defaultEmail?: string;
+  defaultPhone?: string;
 };
 
 type PlanKey = 'professional' | 'premium' | 'custom';
@@ -72,6 +76,10 @@ export default function AiCreditsInfo({
   limit,
   label = 'AI-credits',
   iconOnly = false,
+  defaultCompanyName = '',
+  defaultContactName = '',
+  defaultEmail = '',
+  defaultPhone = '',
 }: Props) {
   const safeRemaining = Math.max(0, remaining);
   const safeLimit = Math.max(0, limit);
@@ -83,16 +91,45 @@ export default function AiCreditsInfo({
   const isPremiumPlan = safeLimit > 250 && safeLimit <= 500;
   const isCustomPlan = safeLimit > 500;
 
+  const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const formCardRef = React.useRef<HTMLDivElement | null>(null);
+
   const [selectedPlan, setSelectedPlan] = React.useState<PlanKey | null>(null);
   const [billingCycle, setBillingCycle] = React.useState<BillingCycle>('monthly');
-  const [companyName, setCompanyName] = React.useState('');
-  const [contactName, setContactName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [phone, setPhone] = React.useState('');
+
+  const [companyName, setCompanyName] = React.useState(defaultCompanyName);
+  const [contactName, setContactName] = React.useState(defaultContactName);
+  const [email, setEmail] = React.useState(defaultEmail);
+  const [phone, setPhone] = React.useState(defaultPhone);
   const [message, setMessage] = React.useState('');
+
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitState, setSubmitState] = React.useState<'idle' | 'success' | 'error'>('idle');
   const [submitMessage, setSubmitMessage] = React.useState('');
+
+  React.useEffect(() => {
+    if (!companyName && defaultCompanyName) {
+      setCompanyName(defaultCompanyName);
+    }
+  }, [defaultCompanyName, companyName]);
+
+  React.useEffect(() => {
+    if (!contactName && defaultContactName) {
+      setContactName(defaultContactName);
+    }
+  }, [defaultContactName, contactName]);
+
+  React.useEffect(() => {
+    if (!email && defaultEmail) {
+      setEmail(defaultEmail);
+    }
+  }, [defaultEmail, email]);
+
+  React.useEffect(() => {
+    if (!phone && defaultPhone) {
+      setPhone(defaultPhone);
+    }
+  }, [defaultPhone, phone]);
 
   const selectedPlanMeta = selectedPlan ? getPlanMeta(selectedPlan) : null;
 
@@ -101,10 +138,34 @@ export default function AiCreditsInfo({
     setSubmitMessage('');
   };
 
+  const scrollToForm = () => {
+    requestAnimationFrame(() => {
+      formCardRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    });
+  };
+
   const openPlanForm = (plan: PlanKey) => {
     setSelectedPlan(plan);
     setBillingCycle('monthly');
     resetFormFeedback();
+
+    if (!companyName && defaultCompanyName) {
+      setCompanyName(defaultCompanyName);
+    }
+    if (!contactName && defaultContactName) {
+      setContactName(defaultContactName);
+    }
+    if (!email && defaultEmail) {
+      setEmail(defaultEmail);
+    }
+    if (!phone && defaultPhone) {
+      setPhone(defaultPhone);
+    }
+
+    scrollToForm();
   };
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -158,20 +219,21 @@ export default function AiCreditsInfo({
       setSubmitState('success');
       setSubmitMessage('Aanvraag succesvol verstuurd. Wij nemen zo spoedig mogelijk contact met je op.');
 
-      setCompanyName('');
-      setContactName('');
-      setEmail('');
-      setPhone('');
       setMessage('');
       setSelectedPlan(null);
       setBillingCycle('monthly');
+
+      if (defaultCompanyName) setCompanyName(defaultCompanyName);
+      if (defaultContactName) setContactName(defaultContactName);
+      if (defaultEmail) setEmail(defaultEmail);
+      if (defaultPhone) setPhone(defaultPhone);
     } catch (error) {
-      const message =
+      const messageText =
         error instanceof Error
           ? error.message
           : 'Er ging iets mis bij het versturen van de aanvraag.';
       setSubmitState('error');
-      setSubmitMessage(message);
+      setSubmitMessage(messageText);
     } finally {
       setIsSubmitting(false);
     }
@@ -213,7 +275,7 @@ export default function AiCreditsInfo({
             </DialogTitle>
           </DialogHeader>
 
-          <div className="overflow-y-auto px-6 py-5">
+          <div ref={scrollContainerRef} className="overflow-y-auto px-6 py-5">
             <div className="space-y-6 text-sm leading-relaxed text-slate-700">
               <div>
                 <p>
@@ -405,7 +467,7 @@ export default function AiCreditsInfo({
               </div>
 
               {selectedPlanMeta && (
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
+                <div ref={formCardRef} className="rounded-xl border border-slate-200 bg-slate-50 p-5">
                   <div className="flex flex-col gap-1">
                     <p className="font-medium text-slate-900">Bundel aanvragen</p>
                     <p className="text-sm text-slate-600">
@@ -520,9 +582,7 @@ export default function AiCreditsInfo({
                         </p>
                       )}
 
-                      {selectedPlanMeta.key === 'custom' && (
-                        <p className="mt-2">Prijs op aanvraag</p>
-                      )}
+                      {selectedPlanMeta.key === 'custom' && <p className="mt-2">Prijs op aanvraag</p>}
                     </div>
 
                     <div>
