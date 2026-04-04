@@ -97,12 +97,12 @@ export default function AiCreditsInfo({
 
             <div className="mt-4 space-y-3">
               <div className="flex items-center justify-between rounded-lg border p-3">
-                <span>250 extra credits</span>
+                <span>250 credits</span>
                 <span className="font-medium">€69 per maand</span>
               </div>
 
               <div className="flex items-center justify-between rounded-lg border p-3">
-                <span>500 extra credits</span>
+                <span>500 credits</span>
                 <span className="font-medium">€119 per maand</span>
               </div>
 
