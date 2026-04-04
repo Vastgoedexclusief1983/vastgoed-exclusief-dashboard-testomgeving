@@ -189,7 +189,16 @@ export default async function AgentDashboardPage() {
         </div>
       </section>
 
-      <div className="-mt-14 relative z-10 px-1 md:-mt-20">
+      <AgentWorkflowCard
+        totalProperties={stats.totalProperties}
+        totalValuations={stats.recentProperties}
+        totalMediaItems={0}
+        totalPublishedProperties={0}
+        totalPromotions={0}
+        className="px-1"
+      />
+
+      <div className="relative z-10 px-1">
         <div className="grid gap-6 lg:grid-cols-2">
           <Card className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-[0_24px_70px_rgba(16,44,84,0.12)]">
             <CardHeader className="border-b border-slate-200 bg-white">
