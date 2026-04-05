@@ -458,7 +458,12 @@ export default function AiCreditsInfo({
 
                       <div className="flex shrink-0 flex-col items-start gap-2 sm:items-end">
                         <div className="text-sm font-medium text-slate-900">Op aanvraag</div>
-                        <Button type="button" variant="outline" size="sm" onClick={() => openPlanForm('custom')}>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openPlanForm('custom')}
+                        >
                           <Mail className="mr-2 h-4 w-4" />
                           Aanvragen
                         </Button>
@@ -628,7 +633,7 @@ export default function AiCreditsInfo({
                           Ik verklaar bevoegd te zijn om namens het kantoor deze aanvraag te doen en ga akkoord
                           met de{' '}
                           <a
-                            href="/algemene-voorwaarden"
+                            href="/legal/voorwaarden"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="font-medium text-slate-900 underline underline-offset-2"
@@ -637,7 +642,7 @@ export default function AiCreditsInfo({
                           </a>{' '}
                           en{' '}
                           <a
-                            href="/privacyverklaring"
+                            href="/legal/privacy"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="font-medium text-slate-900 underline underline-offset-2"
