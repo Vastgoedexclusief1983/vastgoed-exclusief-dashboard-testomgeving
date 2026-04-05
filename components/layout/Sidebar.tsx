@@ -202,7 +202,6 @@ export function Sidebar({ role }: SidebarProps) {
     website: '/website',
     legalTerms: '/legal/voorwaarden',
     legalPrivacy: '/legal/privacy',
-    legalDpa: '/legal/verwerkersovereenkomst',
     adminAgents: '/admin/agents',
     adminAccess: '/admin/toegang',
     adminAiUsage: '/admin/ai-usage',
@@ -375,11 +374,6 @@ export function Sidebar({ role }: SidebarProps) {
               href={ROUTES.legalPrivacy}
               label="Privacyverklaring"
               active={isActive(ROUTES.legalPrivacy)}
-            />
-            <UtilityLegalLink
-              href={ROUTES.legalDpa}
-              label="Verwerkersovereenkomst"
-              active={isActive(ROUTES.legalDpa)}
             />
           </UtilityCard>
         </div>
