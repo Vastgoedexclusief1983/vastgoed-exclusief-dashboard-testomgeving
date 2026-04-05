@@ -102,6 +102,7 @@ export default function AiCreditsInfo({
   const [email, setEmail] = React.useState(defaultEmail);
   const [phone, setPhone] = React.useState(defaultPhone);
   const [message, setMessage] = React.useState('');
+  const [acceptedTerms, setAcceptedTerms] = React.useState(false);
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitState, setSubmitState] = React.useState<'idle' | 'success' | 'error'>('idle');
@@ -150,6 +151,7 @@ export default function AiCreditsInfo({
   const openPlanForm = (plan: PlanKey) => {
     setSelectedPlan(plan);
     setBillingCycle('monthly');
+    setAcceptedTerms(false);
     resetFormFeedback();
 
     if (!companyName && defaultCompanyName) {
@@ -183,6 +185,14 @@ export default function AiCreditsInfo({
       return;
     }
 
+    if (!acceptedTerms) {
+      setSubmitState('error');
+      setSubmitMessage(
+        'Je moet akkoord gaan met de algemene voorwaarden en privacyverklaring om de aanvraag te versturen.'
+      );
+      return;
+    }
+
     setIsSubmitting(true);
     resetFormFeedback();
 
@@ -207,6 +217,7 @@ export default function AiCreditsInfo({
           email: email.trim(),
           phone: phone.trim(),
           message: message.trim(),
+          acceptedTerms,
         }),
       });
 
@@ -222,6 +233,7 @@ export default function AiCreditsInfo({
       setMessage('');
       setSelectedPlan(null);
       setBillingCycle('monthly');
+      setAcceptedTerms(false);
 
       if (defaultCompanyName) setCompanyName(defaultCompanyName);
       if (defaultContactName) setContactName(defaultContactName);
@@ -599,6 +611,50 @@ export default function AiCreditsInfo({
                       />
                     </div>
 
+                    <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                      <label className="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          checked={acceptedTerms}
+                          onChange={(e) => {
+                            setAcceptedTerms(e.target.checked);
+                            if (submitState === 'error') {
+                              resetFormFeedback();
+                            }
+                          }}
+                          className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
+                        />
+                        <span className="text-sm leading-relaxed text-slate-700">
+                          Ik verklaar bevoegd te zijn om namens het kantoor deze aanvraag te doen en ga akkoord
+                          met de{' '}
+                          <a
+                            href="/algemene-voorwaarden"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-medium text-slate-900 underline underline-offset-2"
+                          >
+                            algemene voorwaarden
+                          </a>{' '}
+                          en{' '}
+                          <a
+                            href="/privacyverklaring"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-medium text-slate-900 underline underline-offset-2"
+                          >
+                            privacyverklaring
+                          </a>
+                          . Deze aanvraag geldt als zakelijke opdracht voor het geselecteerde pakket en de
+                          bijbehorende kosten.
+                        </span>
+                      </label>
+
+                      <p className="mt-2 pl-7 text-xs text-slate-500">
+                        Door te versturen ga je een betalingsverplichting aan voor het gekozen pakket, na
+                        bevestiging vanuit Vastgoed Exclusief.
+                      </p>
+                    </div>
+
                     {submitState !== 'idle' && (
                       <div
                         className={`rounded-lg px-3 py-2 text-sm ${
@@ -612,7 +668,7 @@ export default function AiCreditsInfo({
                     )}
 
                     <div className="flex flex-wrap items-center gap-3">
-                      <Button type="submit" disabled={isSubmitting}>
+                      <Button type="submit" disabled={isSubmitting || !acceptedTerms}>
                         {isSubmitting ? (
                           <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -631,6 +687,7 @@ export default function AiCreditsInfo({
                         variant="outline"
                         onClick={() => {
                           setSelectedPlan(null);
+                          setAcceptedTerms(false);
                           resetFormFeedback();
                         }}
                       >
