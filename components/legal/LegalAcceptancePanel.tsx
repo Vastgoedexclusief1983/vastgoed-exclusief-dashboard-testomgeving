@@ -84,7 +84,6 @@ export function LegalAcceptancePanel() {
           <ul className="space-y-2 text-sm text-slate-700">
             <li>• Algemene voorwaarden</li>
             <li>• Privacyverklaring</li>
-            <li>• Verwerkersovereenkomst</li>
             <li>• Disclaimer</li>
           </ul>
         </div>
